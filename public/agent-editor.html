@@ -206,7 +206,7 @@
       const healthText = document.getElementById('health-text');
 
       try {
-        let response = await fetch('http://localhost:4000/api/system/health');
+        let response = await fetch('/api/system/health');
         const health = await response.json();
 
         if (health.status === 'ok' || health.status === 'healthy') {
@@ -279,7 +279,7 @@
     async function loadAgents() {
       try {
         setStatus('Loading agents...', 'loading');
-        const response = await fetch('http://localhost:4000/api/agents');
+        const response = await fetch('/api/agents');
         const data = await response.json();
 
         allAgents = data.agents || [];
@@ -366,7 +366,7 @@ promptTemplate: |
     async function displayFullYaml() {
       try {
         setStatus('Loading full agents.yaml...', 'loading');
-        const response = await fetch('http://localhost:4000/agents.yaml');
+        const response = await fetch('/agents.yaml');
         if (response.ok) {
           const yamlContent = await response.text();
           const title = document.getElementById('editorTitle');
@@ -422,7 +422,7 @@ promptTemplate: |
     async function reloadAgents() {
       try {
         setStatus('Reloading agents...', 'loading');
-        const response = await fetch('http://localhost:4000/api/agents/reload', { method: 'POST' });
+        const response = await fetch('/api/agents/reload', { method: 'POST' });
         const result = await response.json();
         if (result.status === 'success') {
           await loadAgents();
