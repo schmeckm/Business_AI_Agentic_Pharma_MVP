@@ -396,27 +396,32 @@ promptTemplate: |
     // ===============================
     // YAML VALIDATION & SAVE
     // ===============================
-
     function validateYaml() {
   const content = editor.getValue();
+  const yamlStatus = document.getElementById('yamlStatus');
+
   if (!content.trim()) {
-    setStatus('⚠️ No content to validate', 'error');
+    yamlStatus.textContent = '⚠️ No content to validate';
+    yamlStatus.style.color = 'orange';
     return;
   }
   try {
     if (content.includes('\t')) {
-      setStatus('❌ Error: Tabs found – use spaces only!', 'error');
+      yamlStatus.textContent = '❌ Error: Tabs found – use spaces only!';
+      yamlStatus.style.color = 'red';
       return;
     }
 
-    // Hier echtes YAML-Parsing
     jsyaml.load(content);
 
-    setStatus('✅ YAML is valid', 'success');
+    yamlStatus.textContent = '✅ YAML is valid';
+    yamlStatus.style.color = 'green';
   } catch (err) {
-    setStatus(`❌ YAML validation error: ${err.message}`, 'error');
+    yamlStatus.textContent = `❌ YAML validation error: ${err.message}`;
+    yamlStatus.style.color = 'red';
   }
 }
+
 
     function saveChanges() {
       const content = editor.getValue();
