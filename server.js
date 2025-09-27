@@ -65,8 +65,11 @@ import { DataManager } from "./src/data/DataManager.js";
 import { AuditLogger } from "./src/audit/AuditLogger.js";
 import { A2AManager } from './src/a2a/A2AManager.js';
 import { createRoutes } from "./src/api/routes/index.js";
-import packageJson from './package.json';
 import { integrateMCPServer } from './src/mcp/MCPServer.js';
+
+import { createRequire } from "module";
+
+
 
 // OEE Simulator import
 import { OEESimulator } from "./src/simulator/OEESimulator.js";
@@ -79,6 +82,10 @@ dotenv.config();
 // ========================================================================
 // SERVER INITIALIZATION
 // ========================================================================
+
+const require = createRequire(import.meta.url);
+const packageJson = require("./package.json");
+
 
 const app = express();
 const PORT = process.env.PORT || 4000;
