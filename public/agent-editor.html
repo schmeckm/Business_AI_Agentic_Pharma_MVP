@@ -403,28 +403,19 @@ function validateYaml() {
     return;
   }
   try {
-    jsyaml.load(content);  // <-- echtes YAML Parsing
-    setStatus('✅ YAML is valid', 'success');
+    if (content.includes('\t')) {
+      setStatus('❌ Error: Tabs found – use spaces only!', 'error');
+      return;
+    }
+    setStatus('✅ YAML appears syntactically correct', 'success');
   } catch (err) {
-    setStatus(`❌ YAML error: ${err.message}`, 'error');
+    setStatus(`❌ Validation error: ${err.message}`, 'error');
   }
 }
 
-      const content = editor.getValue();
-      if (!content.trim()) {
-        setStatus('⚠️ No content to validate', 'error');
-        return;
-      }
-      try {
-        if (content.includes('\t')) {
-          setStatus('❌ Error: Tabs found – use spaces only!', 'error');
-          return;
-        }
-        setStatus('✅ YAML appears syntactically correct', 'success');
-      } catch (err) {
-        setStatus(`❌ Validation error: ${err.message}`, 'error');
-      }
-    }
+
+
+
 
     function saveChanges() {
       const content = editor.getValue();
