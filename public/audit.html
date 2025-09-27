@@ -273,7 +273,7 @@
   // Load version information
   async function loadVersionInfo() {
     try {
-      const response = await fetch('/api/version')');
+      const response = await fetch('/api/version');
       const info = await response.json();
 
       const appVersion = document.getElementById('app-version');
