@@ -4,13 +4,49 @@
  * ========================================================================
  * 
  * Enterprise AI Operations Platform for Pharmaceutical Production
- * MVP Version: 1.2.6 - Winston Logging Integration
+ * MVP Version: 1.2.5 - A2A Integration + Frontend Routes Fixed
  * 
- * @author Markus Schmeckenbecher
- * @contact markus.schmeckenbecher@company.com
- * @repository Business_AI_Agent_Pharma_MVP
- * @version 1.2.6
- * @since 2024
+ * Developer: Markus Schmeckenbecher
+ * Contact: markus.schmeckenbecher@company.com
+ * Repository: Business_AI_Agent_Pharma_MVP
+ * 
+ * ========================================================================
+ * CHANGE LOG
+ * ========================================================================
+ * 
+ * v1.2.5 - 2025-09-26 - Markus Schmeckenbecher
+ * ✅ BUGFIX: Added missing frontend compatibility routes (/templates, /events)
+ * ✅ ENHANCEMENT: Direct root-level routes for frontend integration
+ * ✅ ENHANCEMENT: Server-Sent Events stream for real-time monitoring
+ * ✅ IMPROVEMENT: Frontend 404 errors resolved
+ * 
+ * v1.2.4 - 2025-09-24 - Markus Schmeckenbecher
+ * ✅ VERIFIED: EventBus integration working correctly with eventBusManager
+ * ✅ ENHANCEMENT: Added comprehensive documentation and status reporting
+ * ✅ ENHANCEMENT: Enhanced A2A status endpoint with EventBus integration info
+ * ✅ IMPROVEMENT: Better error handling and component initialization logging
+ * 
+ * v1.2.3 - 2025-09-22 - Markus Schmeckenbecher
+ * ✅ BUGFIX: EventBusManager-AgentManager dependency linking
+ * ✅ Fixed A2A communication errors
+ * ✅ Added proper dependency injection for A2A workflows
+ * 
+ * v1.2.2 - 2025-09-21 - Markus Schmeckenbecher
+ * ✅ ENHANCEMENT: A2A Integration (Phase 1)
+ * ✅ Added A2AManager for Agent-to-Agent Communication
+ * ✅ Enhanced AgentManager with A2A capabilities
+ * ✅ Backward compatible - existing Event system still works
+ * ✅ Added A2A test endpoints alongside existing APIs
+ * ✅ Parallel Event + A2A architecture for gradual migration
+ * 
+ * v1.2.1 - 2025-09-21 - Markus Schmeckenbecher
+ * ✅ MAJOR REFACTORING: Modular Architecture Implementation
+ * ✅ Extracted EventBusManager → src/eventBus/EventBusManager.js
+ * ✅ Extracted AgentManager → src/agents/AgentManager.js
+ * ✅ Extracted DataManager → src/data/DataManager.js
+ * ✅ Extracted AuditLogger → src/audit/AuditLogger.js
+ * ✅ Extracted API Routes → src/api/routes/
+ * 
  * ========================================================================
  */
 
@@ -20,7 +56,6 @@
 
 import express from "express";
 import dotenv from "dotenv";
-import path from "path";
 import { BufferMemory } from "langchain/memory";
 
 // Import modular components
@@ -30,12 +65,13 @@ import { DataManager } from "./src/data/DataManager.js";
 import { AuditLogger } from "./src/audit/AuditLogger.js";
 import { A2AManager } from './src/a2a/A2AManager.js';
 import { createRoutes } from "./src/api/routes/index.js";
-import packageJson from './package.json' assert { type: 'json' };
+import packageJson from './package.json';
 import { integrateMCPServer } from './src/mcp/MCPServer.js';
+
+// OEE Simulator import
 import { OEESimulator } from "./src/simulator/OEESimulator.js";
 
-// Import Winston logger
-import logger from "./src/utils/logger.js";
+// NOTE: EventBusManager instance provides EventEmitter interface - no separate eventBus import needed
 
 // Load environment configuration
 dotenv.config();
@@ -58,55 +94,53 @@ const AGENT_MODE = process.env.AGENT_MODE || "simple";
 const ENABLE_A2A = process.env.ENABLE_A2A !== "false"; // A2A enabled by default
 const ENABLE_OEE_SIMULATOR = process.env.ENABLE_OEE_SIMULATOR === "true"; // Feature Flag
 
-logger.info("System Configuration", {
-  developer: "Markus Schmeckenbecher",
-  useLangChain: USE_LANGCHAIN,
-  useActions: USE_ACTIONS,
-  agentMode: AGENT_MODE,
-  enableA2A: ENABLE_A2A,
-  enableOEESimulator: ENABLE_OEE_SIMULATOR,
-  version: packageJson.version
-});
+console.log(`🔧 System Configuration:`);
+console.log(`   Developer: Markus Schmeckenbecher`);
+console.log(`   USE_LANGCHAIN: ${USE_LANGCHAIN}`);
+console.log(`   USE_ACTIONS: ${USE_ACTIONS}`);
+console.log(`   AGENT_MODE: ${AGENT_MODE}`);
+console.log(`   ENABLE_A2A: ${ENABLE_A2A}`);
+console.log(`   ENABLE_OEE_SIMULATOR: ${ENABLE_OEE_SIMULATOR}`);
 
 // ========================================================================
 // COMPONENT INITIALIZATION (Enhanced with A2A - Correct Order)
 // ========================================================================
 
-logger.info("Initializing system components...");
+console.log("🚀 Initializing system components...");
 
 // 1. Initialize Data Manager (no dependencies)
 const dataManager = new DataManager();
-logger.info("DataManager initialized successfully");
+console.log("✅ DataManager initialized");
 
 // 2. Initialize Audit Logger (minimal dependencies)
 const auditLogger = new AuditLogger();
-logger.info("AuditLogger initialized successfully");
+console.log("✅ AuditLogger initialized");
 
 // 3. Initialize Event Bus Manager (needs audit logger)
 const eventBusManager = new EventBusManager(auditLogger);
-logger.info("EventBusManager initialized successfully");
+console.log("✅ EventBusManager initialized");
 
 // 4. Initialize A2A Manager
 const a2aManager = ENABLE_A2A ? new A2AManager(eventBusManager, auditLogger) : null;
 if (a2aManager) {
-  logger.info("A2A Manager initialized successfully");
+  console.log("✅ A2A Manager initialized");
 } else {
-  logger.info("A2A Manager disabled by configuration");
+  console.log("⚪ A2A Manager disabled by configuration");
 }
 
 // 5. Initialize Agent Manager
 const agentManager = new AgentManager(dataManager, eventBusManager, auditLogger, a2aManager);
-logger.info("AgentManager initialized successfully");
+console.log("✅ AgentManager initialized");
 
 // 6. Integrate MCP Server
-logger.info("Integrating MCP Server...");
+console.log("🔗 Integrating MCP Server...");
 const mcpServer = await integrateMCPServer(app, {
     eventBus: eventBusManager,
     dataManager,
     auditLogger,
     agentManager
 });
-logger.info("MCP Server integrated successfully");
+console.log('✅ MCP Server integrated successfully');
 
 // ========================================================================
 // CRITICAL FIX: Link EventBusManager to AgentManager for A2A
@@ -115,31 +149,25 @@ logger.info("MCP Server integrated successfully");
 try {
   if (typeof eventBusManager.setAgentManager === 'function') {
     eventBusManager.setAgentManager(agentManager);
-    logger.info("EventBusManager linked to AgentManager for A2A communication");
+    console.log("🔗 EventBusManager linked to AgentManager for A2A communication");
   } else {
     eventBusManager.agentManager = agentManager;
-    logger.info("EventBusManager directly linked to AgentManager (fallback method)");
+    console.log("🔗 EventBusManager directly linked to AgentManager (fallback method)");
   }
 } catch (error) {
-  logger.warn("Could not link EventBusManager to AgentManager", { error: error.message });
+  console.warn("⚠️ Could not link EventBusManager to AgentManager:", error.message);
 }
 
 auditLogger.eventBusManager = eventBusManager;
-logger.info("AuditLogger linked to EventBusManager");
+console.log("🔗 AuditLogger linked to EventBusManager");
 
-logger.info("All components initialized successfully");
+console.log("✅ All components initialized successfully");
 
 // ========================================================================
 // MEMORY MANAGEMENT SYSTEM
 // ========================================================================
 
 const agentMemories = new Map();
-
-/**
- * Get or create memory instance for user
- * @param {string} userId - User identifier
- * @returns {BufferMemory} LangChain memory instance
- */
 function getMemory(userId = "default") {
   if (!agentMemories.has(userId)) {
     agentMemories.set(
@@ -159,12 +187,8 @@ function getMemory(userId = "default") {
 // SYSTEM STARTUP & DATA LOADING
 // ========================================================================
 
-/**
- * Initialize system data and configuration
- * @returns {Promise<void>}
- */
 async function initializeSystem() {
-  logger.info("Loading system configuration and data...");
+  console.log("🔄 Loading system configuration and data...");
   
   try {
     await dataManager.loadDataSourceConfig();
@@ -172,19 +196,16 @@ async function initializeSystem() {
     
     const agentsLoaded = agentManager.loadAgents();
     if (!agentsLoaded) {
-      logger.error("Critical: Failed to load agents");
+      console.error("❌ Critical: Failed to load agents");
       process.exit(1);
     }
     
     const dataValidation = dataManager.validateDataIntegrity();
     if (!dataValidation.isValid) {
-      logger.warn("Data integrity validation failed", { 
-        missing: dataValidation.missing,
-        loaded: dataValidation.loaded
-      });
+      console.warn("⚠️ Data integrity warning:", dataValidation.missing);
     }
     
-    logger.info("System initialization completed successfully");
+    console.log("✅ System initialization completed successfully");
     
     auditLogger.logSystemEvent("system_startup", {
       version: packageJson.version,
@@ -195,10 +216,7 @@ async function initializeSystem() {
     });
 
   } catch (error) {
-    logger.error("Critical error during system initialization", { 
-      error: error.message,
-      stack: error.stack
-    });
+    console.error("❌ Critical error during system initialization:", error);
     process.exit(1);
   }
 }
@@ -221,12 +239,12 @@ if (ENABLE_OEE_SIMULATOR) {
     });
 
     await oeeSimulator.start();
-    logger.info("OEE Simulator started and publishing to MQTT");
+    console.log("✅ OEE Simulator started and publishing to MQTT");
   } catch (error) {
-    logger.error("Failed to start OEE Simulator", { error: error.message });
+    console.error("❌ Failed to start OEE Simulator:", error);
   }
 } else {
-  logger.info("OEE Simulator disabled by configuration");
+  console.log("ℹ️ OEE Simulator disabled by configuration");
 }
 
 // ========================================================================
@@ -239,20 +257,17 @@ app.use("/api", apiRoutes);
 // ========================================================================
 // DIRECT OEE ENDPOINT (Shortcut)
 // ========================================================================
-
 app.get("/api/oee", async (req, res) => {
   try {
-    // forceRefresh=true to ensure latest MQTT data
+    // forceRefresh=true, damit immer aktuelle MQTT-Daten kommen
     const data = await dataManager.getCachedData("oee", true);
-    logger.debug("OEE API request served", { dataPoints: data?.length || 0 });
-    
     res.json({
       success: true,
       data,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    logger.error("OEE API error", { error: error.message });
+    console.error("❌ OEE API error:", error.message);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -262,7 +277,7 @@ app.get("/api/oee", async (req, res) => {
 });
 
 // ========================================================================
-// FRONTEND COMPATIBILITY ROUTES (Root-Level)
+// FRONTEND COMPATIBILITY ROUTES (Root-Level) - NEW
 // ========================================================================
 
 /**
@@ -272,28 +287,23 @@ app.get("/api/oee", async (req, res) => {
 app.get('/templates', (req, res) => {
   try {
     const templates = agentManager.getTemplates();
-    logger.debug("Frontend templates request served", { count: templates.length });
-    
+    console.log(`📋 Frontend requested templates: ${templates.length} templates served`);
     res.json({ 
-      templates,
+      templates,                    // ← Fix: Objekt mit templates Property
       count: templates.length,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    logger.error("Templates endpoint error", { error: error.message });
+    console.error("❌ Templates endpoint error:", error.message);
     res.status(500).json({ error: error.message });
   }
 });
-
 /**
  * Frontend Events Route (Server-Sent Events)
  * Provides real-time event stream for frontend monitoring
  */
 app.get('/events', (req, res) => {
-  logger.info("Frontend event stream connection established", {
-    clientIP: req.ip,
-    userAgent: req.get('User-Agent')
-  });
+  console.log("📡 Frontend event stream connection established");
   
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
@@ -316,7 +326,7 @@ app.get('/events', (req, res) => {
     try {
       res.write(`data: ${JSON.stringify(eventData)}\n\n`);
     } catch (error) {
-      logger.warn("Error writing to event stream", { error: error.message });
+      console.warn("⚠️ Error writing to event stream:", error.message);
     }
   };
 
@@ -325,7 +335,7 @@ app.get('/events', (req, res) => {
   // Cleanup on client disconnect
   req.on('close', () => {
     eventBusManager.removeListener('event', eventHandler);
-    logger.info("Event stream client disconnected");
+    console.log("📡 Event stream client disconnected");
   });
 
   // Keep-alive mechanism to prevent timeout
@@ -347,7 +357,7 @@ app.get('/events', (req, res) => {
 
   // Handle client errors
   req.on('error', (error) => {
-    logger.warn("Event stream client error", { error: error.message });
+    console.warn("⚠️ Event stream client error:", error.message);
     clearInterval(keepAlive);
     eventBusManager.removeListener('event', eventHandler);
   });
@@ -361,22 +371,18 @@ app.get('/events', (req, res) => {
  * Version endpoint
  */
 app.get("/api/version", (req, res) => {
-  const versionInfo = {
+  res.json({
     version: packageJson.version,
     name: packageJson.name,
     description: packageJson.description,
     frontendRoutesEnabled: true,
     oeeIntegration: true,
-    a2aEnabled: !!a2aManager,
-    timestamp: new Date().toISOString()
-  };
-  
-  logger.debug("Version info requested", versionInfo);
-  res.json(versionInfo);
+    a2aEnabled: !!a2aManager
+  });
 });
 
 /**
- * Health check endpoint with comprehensive system status
+ * Health check endpoint with frontend route status
  */
 app.get("/api/system/health", (req, res) => {
   try {
@@ -401,15 +407,8 @@ app.get("/api/system/health", (req, res) => {
       timestamp: new Date().toISOString()
     };
     
-    logger.debug("Health check performed", { 
-      status: health.status,
-      uptime: health.uptime,
-      agentCount: health.agents?.loaded || 0
-    });
-    
     res.json(health);
   } catch (error) {
-    logger.error("Health check failed", { error: error.message });
     res.status(500).json({
       status: "unhealthy",
       error: error.message,
@@ -418,16 +417,11 @@ app.get("/api/system/health", (req, res) => {
   }
 });
 
-/**
- * Agents YAML configuration endpoint
- */
 app.get('/agents.yaml', (req, res) => {
   try {
     const yamlPath = path.join(process.cwd(), 'agents.yaml');
-    logger.debug("Agents YAML requested", { path: yamlPath });
     res.sendFile(yamlPath);
   } catch (error) {
-    logger.warn("Agents YAML not found", { error: error.message });
     res.status(404).send('agents.yaml not found');
   }
 });
@@ -436,19 +430,8 @@ app.get('/agents.yaml', (req, res) => {
 // ERROR HANDLING & GRACEFUL SHUTDOWN
 // ========================================================================
 
-/**
- * Global error handler middleware
- */
 app.use((err, req, res, next) => {
-  logger.error("Unhandled application error", {
-    error: err.message,
-    stack: err.stack,
-    url: req.url,
-    method: req.method,
-    userAgent: req.get('User-Agent'),
-    ip: req.ip
-  });
-  
+  console.error("❌ Unhandled error:", err);
   auditLogger.logSystemEvent("error", { 
     message: err.message, 
     stack: err.stack,
@@ -462,49 +445,19 @@ app.use((err, req, res, next) => {
   });
 });
 
-/**
- * Graceful shutdown handler for SIGTERM
- */
+// Simulator cleanup on shutdown
 process.on('SIGTERM', () => {
-  logger.info('SIGTERM received, performing graceful shutdown...');
-  if (oeeSimulator) {
-    oeeSimulator.stop();
-    logger.info('OEE Simulator stopped');
-  }
-  auditLogger.logSystemEvent("system_shutdown", { 
-    reason: "SIGTERM", 
-    version: packageJson.version 
-  });
+  console.log('📋 SIGTERM received, performing graceful shutdown...');
+  if (oeeSimulator) oeeSimulator.stop();
+  auditLogger.logSystemEvent("system_shutdown", { reason: "SIGTERM", version: "1.2.5" });
   process.exit(0);
 });
 
-/**
- * Graceful shutdown handler for SIGINT (Ctrl+C)
- */
 process.on('SIGINT', () => {
-  logger.info('SIGINT received, performing graceful shutdown...');
-  if (oeeSimulator) {
-    oeeSimulator.stop();
-    logger.info('OEE Simulator stopped');
-  }
-  auditLogger.logSystemEvent("system_shutdown", { 
-    reason: "SIGINT", 
-    version: packageJson.version 
-  });
+  console.log('📋 SIGINT received, performing graceful shutdown...');
+  if (oeeSimulator) oeeSimulator.stop();
+  auditLogger.logSystemEvent("system_shutdown", { reason: "SIGINT", version: "1.2.5" });
   process.exit(0);
-});
-
-/**
- * Handle uncaught exceptions
- */
-process.on('uncaughtException', (error) => {
-  console.error('🚨 Uncaught Exception:', error);
-  // Don't exit - keep running
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('🚨 Unhandled Rejection at:', promise, 'reason:', reason);
-  // Don't exit - keep running
 });
 
 // ========================================================================
@@ -512,46 +465,43 @@ process.on('unhandledRejection', (reason, promise) => {
 // ========================================================================
 
 app.listen(PORT, () => {
-  const startupInfo = {
-    version: packageJson.version,
-    port: PORT,
-    developer: "Markus Schmeckenbecher",
-    architecture: "Event-Driven Microservices Pattern + A2A",
-    a2aEnabled: !!a2aManager,
-    endpoints: [
-      "/api/chat", "/api/agents", "/api/data", "/api/events", "/api/audit", 
-      "/api/system", "/api/workflows", "/api/a2a/test", "/api/a2a/status",
-      "/templates", "/events", "/api/oee"
-    ]
-  };
-
-  logger.info("Pharmaceutical Manufacturing Agent System started successfully", startupInfo);
-  
-  // Console output for immediate feedback
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`Version: ${packageJson.version}`);
+  console.log(`🚀 Pharmaceutical Manufacturing Agent System running at http://localhost:${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/api/system/health`);
   console.log(`📡 Events stream: http://localhost:${PORT}/events`);
   console.log(`📋 Templates: http://localhost:${PORT}/templates`);
+  console.log(`📋 API Documentation: http://localhost:${PORT}/api`);
   
   if (a2aManager) {
     console.log(`🔗 A2A Test endpoint: http://localhost:${PORT}/api/a2a/test`);
+    console.log(`🔗 A2A Status: http://localhost:${PORT}/api/a2a/status`);
   }
+  
+  console.log(`👨‍💻 Developer: Markus Schmeckenbecher`);
+  console.log(`📋 EventBus Integration Verified & Enhanced`);
+  console.log(`🎯 Architecture: Event-Driven Microservices Pattern + A2A`);
+  console.log(`✅ EventBus Integration: EventBusManager → MCP Server (Working)`);
+  console.log(`✅ Component Dependencies: All properly initialized`);
+  console.log(`✅ Frontend Routes: /templates and /events activated`);
   
   auditLogger.logSystemEvent("server_started", {
     port: PORT,
-    version: packageJson.version,
+    version: "1.2.5",
     architecture: "modular+a2a",
     a2aEnabled: !!a2aManager,
     eventBusIntegration: "EventBusManager",
     mcpIntegration: "Active",
     frontendRoutesEnabled: true,
-    loggingSystem: "Winston",
-    ...startupInfo
+    endpoints: [
+      "/api/chat", "/api/agents", "/api/data", "/api/events", "/api/audit", 
+      "/api/system", "/api/workflows", "/api/a2a/test", "/api/a2a/status",
+      "/templates", "/events", "/api/oee"
+    ]
   });
 });
 
 /**
  * ========================================================================
- * END OF WINSTON-ENHANCED SERVER.JS
+ * END OF A2A-ENHANCED SERVER.JS (FRONTEND ROUTES INTEGRATED)
  * ========================================================================
  */
