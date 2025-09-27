@@ -1,0 +1,65 @@
+{
+  "name": "pharma-agent-framework",
+  "version": "1.0.3",
+  "type": "module",
+  "description": "Manufacturing Agent System with AI Collaboration",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "start:staging": "NODE_ENV=staging node server.js",
+    "start:production": "NODE_ENV=production node server.js",
+    "dev:staging": "NODE_ENV=staging node --watch server.js",
+    "test": "NODE_ENV=test node --test test/*.test.js",
+    "test:watch": "NODE_ENV=test node --test --watch test/*.test.js",
+    "test:coverage": "NODE_ENV=test c8 node --test test/*.test.js",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "agents:list": "node -e \"import('./src/services/AgentRegistry.js').then(({AgentRegistry}) => console.log(JSON.stringify(new AgentRegistry('./agents.json').all(), null, 2)))\"",
+    "agents:reload": "curl -X POST http://localhost:4000/api/agents/reload",
+    "data:reload": "curl -X POST http://localhost:4000/api/data/reload",
+    "data:overview": "curl http://localhost:4000/api/data",
+    "data:stats": "curl http://localhost:4000/api/data/stats",
+    "health": "curl http://localhost:4000/health",
+    "health:full": "curl http://localhost:4000/api/system/health",
+    "health:status": "curl http://localhost:4000/api/system/status",
+    "events:subscriptions": "curl http://localhost:4000/api/events/subscriptions",
+    "audit:view": "curl http://localhost:4000/api/audit?limit=10",
+    "audit:stats": "curl http://localhost:4000/api/audit/stats",
+    "audit:archive": "curl -X POST http://localhost:4000/api/audit/archive",
+    "system:status": "curl http://localhost:4000/api/system/status"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.63.0",
+    "@langchain/anthropic": "^0.3.28",
+    "@langchain/community": "^0.3.56",
+    "@langchain/core": "^0.3.77",
+    "@modelcontextprotocol/sdk": "^0.5.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "js-yaml": "^4.1.0",
+    "langchain": "^0.3.34",
+    "mqtt": "^5.0.0",
+    "ollama": "^0.6.0",
+    "pino": "^8.21.0",
+    "uuid": "^9.0.1",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "c8": "^8.0.1",
+    "eslint": "^8.56.0",
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "manufacturing",
+    "ai-agents",
+    "automation",
+    "pharma",
+    "nodejs",
+    "modular-architecture",
+    "event-driven",
+    "sap-integration"
+  ]
+}

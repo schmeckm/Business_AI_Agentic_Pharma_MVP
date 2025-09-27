@@ -1,0 +1,25 @@
+{
+  "compliance": [
+    {
+      "batchId": "BATCH-001",
+      "complianceStatus": "compliant",
+      "gmpStatus": "verified",
+      "regulatoryChecks": ["FDA", "EMA"],
+      "lastAudit": "2025-09-15",
+      "issues": []
+    },
+    {
+      "batchId": "BATCH-002", 
+      "complianceStatus": "pending",
+      "gmpStatus": "under_review",
+      "regulatoryChecks": ["FDA"],
+      "lastAudit": "2025-09-10",
+      "issues": ["documentation_incomplete"]
+    }
+  ],
+  "regulations": {
+    "FDA_CFR_211": "active",
+    "ICH_Q7": "active", 
+    "EU_GMP": "active"
+  }
+}

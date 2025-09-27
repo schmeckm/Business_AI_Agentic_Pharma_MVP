@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pharmaceutical Manufacturing Agent Framework - MVP 1.3.0</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .formatted-response { white-space: pre-wrap; font-family: monospace; background: #f8f9fa; border: 1px solid #ddd; padding: 10px; border-radius: 6px; margin-top: 5px; line-height: 1.4; }
+    .response-header { display: flex; justify-content: space-between; align-items: center; background: #eef2f6; padding: 5px 10px; border-bottom: 1px solid #ccc; }
+    .response-actions { margin-top: 8px; }
+    .response-actions .action-btn { margin-right: 5px; padding: 3px 8px; font-size: 12px; cursor: pointer; }
+    .version-info { font-size: 11px; color: #666; margin-top: 10px; padding: 5px; background: #f8f9fa; border-radius: 4px; border: 1px solid #ddd; }
+    .header { position: relative; }
+    
+    /* Universal Header Styles */
+    .header {
+      background: linear-gradient(135deg, #0a2540 0%, #2563eb 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+.phase-badge {
+  background: #2563eb;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 4px 4px;  /* Gleiche Höhe, aber weniger horizontaler Platz */
+  border-radius: 10px;
+  margin-left: 6px;
+  display: inline-block;
+  min-width: auto;
+}
+
+    .health-indicator {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      background: white;
+      color: #333;
+      padding: 5px 10px;
+      border-radius: 15px;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .health-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 5px;
+      font-size: 12px;
+      text-align: center;
+      line-height: 12px;
+    }
+
+    .health-green { color: #28a745; }
+    .health-yellow { color: #ffc107; }
+    .health-red { color: #dc3545; }
+    .health-gray { color: #6c757d; }
+    
+    /* Navigation Styles */
+    .nav-menu { 
+      background: #f8f9fa; 
+      padding: 10px; 
+      margin-bottom: 20px; 
+      border-radius: 6px; 
+      border: 1px solid #ddd; 
+    }
+    .nav-menu h3 { 
+      margin: 0 0 10px 0; 
+      color: #333; 
+      font-size: 14px; 
+    }
+    .nav-links { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 10px; 
+    }
+    .nav-link { 
+      background: #007bff; 
+      color: white; 
+      padding: 6px 12px; 
+      text-decoration: none; 
+      border-radius: 4px; 
+      font-size: 12px; 
+      transition: background-color 0.2s; 
+    }
+    .nav-link:hover { 
+      background: #0056b3; 
+      color: white; 
+    }
+    .nav-link.oee { background: #28a745; }
+    .nav-link.oee:hover { background: #1e7e34; }
+    .nav-link.editor { background: #6f42c1; }
+    .nav-link.editor:hover { background: #5a32a3; }
+    .nav-link.active { background: #1d4ed8 !important; font-weight: 600; }
+
+    /* Neue Styles für Prompt-Hilfen */
+    .prompt-help-section {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      padding: 15px;
+    }
+
+    .prompt-help-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .prompt-help-header h4 {
+      margin: 0;
+      color: #495057;
+      font-size: 14px;
+    }
+
+    .toggle-help {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .quick-prompts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .quick-prompt {
+      background: white;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .quick-prompt:hover {
+      background: #e9ecef;
+      border-color: #007bff;
+    }
+
+    .quick-prompt.oee { border-left: 4px solid #28a745; }
+    .quick-prompt.orders { border-left: 4px solid #007bff; }
+    .quick-prompt.quality { border-left: 4px solid #ffc107; }
+    .quick-prompt.equipment { border-left: 4px solid #dc3545; }
+    .quick-prompt.general { border-left: 4px solid #6f42c1; }
+
+    .example-prompts-dropdown {
+      margin-bottom: 10px;
+    }
+
+    .example-prompts-dropdown select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .help-collapsed {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .help-expanded {
+      max-height: 400px;
+      transition: max-height 0.3s ease-in;
+    }
+
+    /* Fix Layout Issues */
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-section {
+      flex: 0 0 auto; /* Don't shrink */
+    }
+
+    .claude-response-box {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border: 1px solid #dee2e6;
+      flex-shrink: 0; /* Always visible */
+    }
+
+    /* Ensure content doesn't overlap */
+    .output-section {
+      max-height: 60vh;
+      overflow-y: auto;
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Universal Header Template -->
+    <div class="header">
+      <h1>
+        Pharmaceutical Manufacturing Agentic Business Agent - MAR Process
+        <div class="phase-badge">MVP <span id="app-version">1.3.0</span></div>
+      </h1>
+      <div id="health-indicator" class="health-indicator">
+        <div class="health-dot" id="health-dot">●</div>
+        <span id="health-text">Checking...</span>
+      </div>
+      <div style="font-size: 14px; opacity: 0.9;">Enterprise AI Operations Platform - PharmaMinder</div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <div class="nav-menu">
+      <h3>System Tools & Monitoring</h3>
+      <div class="nav-links">
+        <a href="/" class="nav-link active">Dashboard</a>
+        <a href="/oee-test.html" class="nav-link oee">Live OEE Monitor</a>
+        <a href="/agent-editor.html" class="nav-link editor">Agent Configuration Editor</a>
+        <a href="/audit.html" class="nav-link">Audit Log Viewer</a>
+        <a href="/api/system/health" class="nav-link" target="_blank">System Health</a>
+        <a href="/api/data/oee" class="nav-link oee" target="_blank">OEE API</a>
+        <a href="/api/agents" class="nav-link" target="_blank">Agent Registry</a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="input-section">
+        <div class="status" id="status">System Status: Initializing Agent System...</div>
+
+        <div class="gmp-compliance">
+          <div class="gmp-title">GMP Compliance & AI Audit Trail</div>
+          <div class="gmp-indicators">
+            <div class="gmp-indicator"><span>AI Decision Logging:</span><span id="gmp-status">Active</span></div>
+            <div class="gmp-indicator"><span>Data Integrity:</span><span id="data-integrity">Verified</span></div>
+            <div class="gmp-indicator"><span>Audit Trail:</span><span id="audit-trail">Complete</span></div>
+            <div class="gmp-indicator"><span>OEE Integration:</span><span id="oee-status">Real-time</span></div>
+          </div>
+        </div>
+
+        <label for="prompt">Manufacturing Operation Templates</label>
+        <select id="prompt">
+          <option value="">-- Free Text Input --</option>
+        </select>
+
+        <!-- PROMPT HELP SECTION -->
+        <div class="prompt-help-section">
+          <div class="prompt-help-header">
+            <h4>💡 Prompt Help & Examples</h4>
+            <button class="toggle-help" onclick="togglePromptHelp()">Expand</button>
+          </div>
+          
+          <div id="prompt-help-content" class="help-collapsed">
+            <!-- Example Prompts Dropdown -->
+            <div class="example-prompts-dropdown">
+              <select id="example-prompts">
+                <option value="">-- Select an Example Query --</option>
+                <optgroup label="🏭 OEE & Production">
+                  <option value="What is the current OEE for LINE-01?">OEE Status LINE-01</option>
+                  <option value="Show me production efficiency for all lines">Production Efficiency Overview</option>
+                  <option value="Which production line has issues?">Identify Problems</option>
+                  <option value="Equipment downtime analysis for today">Downtime Analysis</option>
+                  <option value="Show me current availability and performance metrics">Performance Metrics</option>
+                </optgroup>
+                <optgroup label="📋 Orders & Batches">
+                  <option value="What orders are scheduled for today?">Today's Orders</option>
+                  <option value="Show me urgent orders">Urgent Orders</option>
+                  <option value="Are there any production delays?">Check Delays</option>
+                  <option value="Batch status for today">Batch Overview</option>
+                  <option value="Material availability check">Material Status</option>
+                </optgroup>
+                <optgroup label="✅ Quality & Compliance">
+                  <option value="Are there any quality issues?">Quality Status</option>
+                  <option value="Compliance status today">Compliance Check</option>
+                  <option value="Quality metrics for this week">Quality KPIs</option>
+                  <option value="Deviation reports overview">Deviations</option>
+                </optgroup>
+                <optgroup label="🔧 Equipment & Maintenance">
+                  <option value="Equipment failures today">Equipment Issues</option>
+                  <option value="Maintenance schedule">Maintenance Plan</option>
+                  <option value="Temperature alerts">Temperature Warnings</option>
+                  <option value="Calibration due dates">Calibration</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <!-- Quick Prompt Buttons -->
+            <div class="quick-prompts">
+              <button class="quick-prompt oee" data-prompt="What is the current OEE?">
+                📊 Check OEE Status
+              </button>
+              <button class="quick-prompt orders" data-prompt="What orders are scheduled today?">
+                📋 Today's Orders
+              </button>
+              <button class="quick-prompt quality" data-prompt="Are there any quality issues?">
+                ✅ Check Quality
+              </button>
+              <button class="quick-prompt equipment" data-prompt="Equipment failures today">
+                🔧 Equipment Status
+              </button>
+              <button class="quick-prompt general" data-prompt="Complete production status">
+                🏭 Full Status
+              </button>
+              <button class="quick-prompt general" data-prompt="Show me all critical alarms">
+                🚨 Critical Alarms
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <label for="message">Manufacturing Command Input</label>
+        <textarea id="message" placeholder="Manufacturing Command Examples:
+- ask-today-orders (URS-compliant planning with OEE optimization)
+- morning-briefing (Executive summary with equipment status)
+- general-assessment (24h release analysis with OEE projections)
+- compliance-check (Regulatory review with equipment standards)
+- system-status (Real-time equipment effectiveness monitoring)
+- help (System navigation with OEE guidance)
+
+Oder verwenden Sie Freitext wie: 'Was ist der aktuelle OEE von LINE-01?'"></textarea>
+
+        <button id="send" class="primary-button">Execute Manufacturing Command</button>
+
+        <div id="claude-response" class="claude-response-box enhanced" style="display:none;">
+          <div class="response-header">
+            <strong>AI Agent Response</strong>
+            <div class="response-meta" id="response-meta"></div>
+          </div>
+          <div class="response-content">
+            <div id="claude-text" class="formatted-response"></div>
+          </div>
+          <div class="response-actions">
+            <button class="action-btn" onclick="copyResponse()">Copy</button>
+            <button class="action-btn" onclick="exportResponse()">Export</button>
+            <button class="action-btn" onclick="clearResponse()">Clear</button>
+          </div>
+        </div>
+
+        <!-- Footer Links Section - Always Visible -->
+        <div class="footer-links">
+          <div style="margin-bottom: 8px;">
+            <strong>Audit & System Links:</strong><br>
+            <a href="/api/audit" target="_blank">View Full Audit Log (JSON)</a> | 
+            <a href="/audit.html" target="_blank">Recent Audit Entries</a> |
+            <a href="/api/system/health" target="_blank">System Health</a>
+          </div>
+          <div class="version-info">
+            <strong>System APIs:</strong><br>
+            <a href="/api/system/status" target="_blank">Detailed Status</a> | 
+            <a href="/api/version" target="_blank">API Version Info</a> | 
+            <a href="/api/data" target="_blank">Data Overview</a> | 
+            <a href="/api/events/subscriptions" target="_blank">Event Mappings</a> | 
+            <a href="/api/agents" target="_blank">Agent Registry</a> |
+            <a href="/api/data/oee" target="_blank">Live OEE Data</a> |
+            <a href="/api/oee" target="_blank">OEE Dashboard</a>
+          </div>
+          <div style="margin-top: 8px; font-size: 11px; color: #888;">
+            <span>System Version: </span><span id="manual-version">1.3.0</span> | 
+            <span>Architecture: Real-time OEE + A2A</span> | 
+            <span>Developer: Markus Schmeckenbecher</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="output-section">
+        <div class="system-response-block">
+          <table style="width: 100%; margin-bottom: 5px;">
+            <tr>
+              <td><label for="out">System Response & Audit Log</label></td>
+              <td style="text-align: right;"><button class="clear-button" onclick="clearOutput()">Clear</button></td>
+            </tr>
+          </table>
+          <pre id="out">Pharmaceutical Manufacturing Agent System Ready...
+MVP 1.3.0 - Real-time OEE Integration
+AI Decision Logging: ENABLED
+GMP Compliance Monitoring: ACTIVE
+Event-Driven Agent System: ACTIVE
+OEE MQTT Integration: LIVE (3s updates)</pre>
+          <div class="metrics" id="metrics">Waiting for operation metrics...</div>
+        </div>
+
+        <div class="event-monitor-block">
+          <table style="width: 100%; margin-bottom: 5px;">
+            <tr>
+              <td><label>Realtime Event Monitor</label></td>
+              <td style="text-align: right;"><button class="clear-button" onclick="clearEvents()">Clear Events</button></td>
+            </tr>
+          </table>
+          <pre id="event-monitor" class="event-monitor">Waiting for events...</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Universal Health Check JavaScript
+    async function updateHealthIndicator() {
+      const healthDot = document.getElementById('health-dot');
+      const healthText = document.getElementById('health-text');
+
+      try {
+        let response = await fetch('http://localhost:4000/api/system/health');
+        const health = await response.json();
+
+        if (health.status === 'ok' || health.status === 'healthy') {
+          healthDot.className = 'health-dot health-green';
+          healthText.textContent = 'System OK';
+        } else if (health.status === 'error' || health.status === 'unhealthy') {
+          healthDot.className = 'health-dot health-red';
+          healthText.textContent = 'Error';
+        } else {
+          healthDot.className = 'health-dot health-yellow';
+          healthText.textContent = 'Warning';
+        }
+
+      } catch (error) {
+        healthDot.className = 'health-dot health-red';
+        healthText.textContent = 'API Error';
+        console.error('Health check failed:', error);
+      }
+    }
+
+    // Load version information
+    async function loadVersionInfo() {
+      try {
+        const response = await fetch('http://localhost:4000/api/version');
+        const info = await response.json();
+
+        const appVersion = document.getElementById('app-version');
+        if (appVersion) appVersion.textContent = info.version;
+
+        const manualVersion = document.getElementById('manual-version');
+        if (manualVersion) manualVersion.textContent = `v${info.version}`;
+
+        const out = document.getElementById('out');
+        if (out) {
+          out.textContent =
+            'Pharmaceutical Manufacturing Agent System Ready...\n' +
+            `MVP ${info.version} - Modular Architecture\n` +
+            'AI Decision Logging: ENABLED\n' +
+            'GMP Compliance Monitoring: ACTIVE\n' +
+            'Event-Driven Agent System: ACTIVE';
+        }
+
+      } catch (error) {
+        console.warn('Could not load version info:', error);
+      }
+    }
+
+    // NEUE FUNKTIONEN FÜR PROMPT-HILFE
+    
+    // Toggle der Prompt-Hilfe
+    function togglePromptHelp() {
+      const content = document.getElementById('prompt-help-content');
+      const button = document.querySelector('.toggle-help');
+      
+      if (content.classList.contains('help-collapsed')) {
+        content.classList.remove('help-collapsed');
+        content.classList.add('help-expanded');
+        button.textContent = 'Einklappen';
+      } else {
+        content.classList.remove('help-expanded');
+        content.classList.add('help-collapsed');
+        button.textContent = 'Ausklappen';
+      }
+    }
+
+    // Initialize universal functions
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadTemplates();
+      updateSystemStatus();
+      updateHealthIndicator();
+      startEventMonitor();
+      loadVersionInfo();
+
+      // Prompt-Hilfe Event Listeners
+      setupPromptHelpers();
+
+      setInterval(updateHealthIndicator, 30000);
+      setInterval(refreshBackgroundData, 30000);
+    });
+
+    // Setup für Prompt-Hilfe Event Listeners
+    function setupPromptHelpers() {
+      // Dropdown Handler
+      document.getElementById('example-prompts').addEventListener('change', function() {
+        const selectedPrompt = this.value;
+        if (selectedPrompt) {
+          document.getElementById('message').value = selectedPrompt;
+          this.value = ''; // Reset dropdown
+        }
+      });
+
+      // Quick-Button Handler
+      document.querySelectorAll('.quick-prompt').forEach(button => {
+        button.addEventListener('click', function() {
+          const prompt = this.getAttribute('data-prompt');
+          document.getElementById('message').value = prompt;
+        });
+      });
+    }
+  </script>
+
+  <!-- Include the original app.js functionality -->
+  <script src="js/app.js"></script>
+</body>
+</html>

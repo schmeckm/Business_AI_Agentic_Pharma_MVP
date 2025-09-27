@@ -1,0 +1,38 @@
+[
+  {
+    "issueId": "ISS-2001",
+    "type": "Equipment",
+    "description": "Filteranlage in Linie 2 blockiert – Wartung erforderlich",
+    "severity": "high",
+    "status": "open",
+    "reportedAt": "2025-09-20T06:45:00Z",
+    "responsibleDept": "Engineering"
+  },
+  {
+    "issueId": "ISS-2002",
+    "type": "Quality",
+    "description": "Batch FG-123 in Quarantäne wegen Partikelverunreinigung",
+    "severity": "critical",
+    "status": "open",
+    "reportedAt": "2025-09-20T07:30:00Z",
+    "responsibleDept": "QA"
+  },
+  {
+    "issueId": "ISS-2003",
+    "type": "Supply Chain",
+    "description": "Verzögerung bei Lieferung von Verpackungsmaterial PM-456",
+    "severity": "medium",
+    "status": "in-progress",
+    "reportedAt": "2025-09-19T18:00:00Z",
+    "responsibleDept": "Procurement"
+  },
+  {
+    "issueId": "ISS-2004",
+    "type": "Deviation",
+    "description": "Temperaturabweichung im Kühlraum um +3°C",
+    "severity": "high",
+    "status": "open",
+    "reportedAt": "2025-09-20T05:10:00Z",
+    "responsibleDept": "Facilities"
+  }
+]

@@ -1,0 +1,749 @@
+# MCP Tools Configuration
+# ========================
+# Detailed tool definitions for pharmaceutical MCP server
+# File: config/mcp-tools.yaml
+
+# Tool Registry
+tools:
+  # 1. AGENT EXECUTION TOOL
+  # ========================
+  execute_agent:
+    name: "execute_agent"
+    description: "Execute a specific pharmaceutical agent with parameters"
+    category: "agent_management"
+    version: "1.0.0"
+    
+    # Input Schema
+    inputSchema:
+      type: "object"
+      properties:
+        agentName:
+          type: "string"
+          description: "Name of the agent to execute"
+          enum: 
+            - "orderAgent"
+            - "briefingAgent" 
+            - "assessmentAgent"
+            - "complianceAgent"
+            - "statusAgent"
+            - "helpAgent"
+          
+        parameters:
+          type: "object"
+          description: "Parameters to pass to the agent"
+          properties:
+            batchId:
+              type: "string"
+              pattern: "^BATCH-[0-9]{3}$"
+              description: "Batch identifier"
+              
+            orderId:
+              type: "string"
+              pattern: "^ORD-[0-9]{4}$"
+              description: "Order identifier"
+              
+            priority:
+              type: "string"
+              enum: ["low", "medium", "high", "critical"]
+              default: "medium"
+              description: "Execution priority"
+              
+            focus:
+              type: "string"
+              description: "Specific focus area for the agent"
+              
+            includeHistory:
+              type: "boolean"
+              default: false
+              description: "Include historical context"
+              
+        async:
+          type: "boolean"
+          default: false
+          description: "Execute agent asynchronously"
+          
+        timeout:
+          type: "integer"
+          minimum: 5
+          maximum: 300
+          default: 30
+          description: "Execution timeout in seconds"
+          
+      required: ["agentName"]
+      
+    # Security & Permissions
+    permissions: ["planner", "builder", "admin"]
+    rateLimit: 30  # per minute
+    auditRequired: true
+    
+    # Execution Settings
+    timeout: 30  # seconds
+    retries: 3
+    retryDelay: 1000  # milliseconds
+    
+    # Output Schema
+    outputSchema:
+      type: "object"
+      properties:
+        success:
+          type: "boolean"
+        agentName:
+          type: "string"
+        executionId:
+          type: "string"
+        result:
+          type: "string"
+        executionTime:
+          type: "number"
+        timestamp:
+          type: "string"
+          format: "date-time"
+
+  # 2. PRODUCTION DATA QUERY TOOL
+  # ==============================
+  query_production_data:
+    name: "query_production_data"
+    description: "Query pharmaceutical production data with advanced filtering"
+    category: "data_access"
+    version: "1.0.0"
+    
+    inputSchema:
+      type: "object"
+      properties:
+        dataSource:
+          type: "string"
+          enum: ["orders", "batches", "compliance", "qa", "issues", "inventory", "bom"]
+          description: "Data source to query"
+          
+        filters:
+          type: "object"
+          description: "Advanced filtering options"
+          properties:
+            # General filters
+            status:
+              type: "string"
+              description: "Status filter"
+              
+            priority:
+              type: "string"
+              enum: ["low", "medium", "high", "critical"]
+              
+            # Date filters
+            dateFrom:
+              type: "string"
+              format: "date-time"
+              description: "Start date for filtering"
+              
+            dateTo:
+              type: "string"
+              format: "date-time"
+              description: "End date for filtering"
+              
+            # ID filters
+            batchId:
+              type: "string"
+              pattern: "^BATCH-[0-9]{3}$"
+              
+            orderId:
+              type: "string"
+              pattern: "^ORD-[0-9]{4}$"
+              
+            productId:
+              type: "string"
+              description: "Product identifier"
+              
+            # Quality filters
+            qualityGrade:
+              type: "string"
+              enum: ["A", "B", "C", "rejected"]
+              
+            # Compliance filters
+            complianceStatus:
+              type: "string"
+              enum: ["compliant", "non_compliant", "under_review"]
+              
+            # Advanced filters
+            customQuery:
+              type: "object"
+              description: "Custom query parameters"
+              
+        # Result configuration
+        limit:
+          type: "integer"
+          minimum: 1
+          maximum: 1000
+          default: 100
+          description: "Maximum number of results"
+          
+        offset:
+          type: "integer"
+          minimum: 0
+          default: 0
+          description: "Result offset for pagination"
+          
+        sortBy:
+          type: "string"
+          description: "Field to sort by"
+          
+        sortOrder:
+          type: "string"
+          enum: ["asc", "desc"]
+          default: "desc"
+          description: "Sort order"
+          
+        includeMetadata:
+          type: "boolean"
+          default: true
+          description: "Include metadata in response"
+          
+      required: ["dataSource"]
+      
+    permissions: ["planner", "builder", "admin"]
+    rateLimit: 60
+    auditRequired: false
+    timeout: 10
+    
+    outputSchema:
+      type: "object"
+      properties:
+        dataSource:
+          type: "string"
+        resultCount:
+          type: "integer"
+        totalCount:
+          type: "integer"
+        data:
+          type: "array"
+        metadata:
+          type: "object"
+
+  # 3. EVENT TRIGGER TOOL
+  # ======================
+  trigger_event:
+    name: "trigger_event"
+    description: "Trigger system events for agent coordination and workflow automation"
+    category: "event_management"
+    version: "1.0.0"
+    
+    inputSchema:
+      type: "object"
+      properties:
+        eventType:
+          type: "string"
+          description: "Type of event to trigger"
+          pattern: "^[a-zA-Z0-9_/]+$"
+          examples:
+            - "batch/started"
+            - "quality/alert"
+            - "compliance/check_required"
+            - "production/milestone_reached"
+            
+        eventData:
+          type: "object"
+          description: "Data payload for the event"
+          properties:
+            batchId:
+              type: "string"
+            orderId:
+              type: "string"
+            severity:
+              type: "string"
+              enum: ["low", "medium", "high", "critical"]
+            message:
+              type: "string"
+            timestamp:
+              type: "string"
+              format: "date-time"
+              
+        targetAgents:
+          type: "array"
+          items:
+            type: "string"
+          description: "Specific agents to notify (empty = all subscribers)"
+          
+        priority:
+          type: "string"
+          enum: ["low", "medium", "high", "critical"]
+          default: "medium"
+          description: "Event priority level"
+          
+        persistent:
+          type: "boolean"
+          default: false
+          description: "Whether event should be stored persistently"
+          
+        delay:
+          type: "integer"
+          minimum: 0
+          default: 0
+          description: "Delay in seconds before triggering event"
+          
+      required: ["eventType"]
+      
+    permissions: ["planner", "admin"]
+    rateLimit: 20
+    auditRequired: true
+    timeout: 5
+
+  # 4. COMPLIANCE CHECK TOOL
+  # =========================
+  check_compliance:
+    name: "check_compliance"
+    description: "Perform comprehensive GMP/GDP compliance checks"
+    category: "compliance"
+    version: "1.0.0"
+    
+    inputSchema:
+      type: "object"
+      properties:
+        # What to check
+        batchId:
+          type: "string"
+          pattern: "^BATCH-[0-9]{3}$"
+          description: "Batch ID to check (optional for system-wide checks)"
+          
+        complianceType:
+          type: "string"
+          enum: ["GMP", "GDP", "CFR_21_Part_11", "ICH_Q7", "ICH_Q10", "FDA_cGMP"]
+          description: "Type of compliance framework"
+          
+        # Check scope
+        scope:
+          type: "string"
+          enum: ["batch", "product", "facility", "system"]
+          default: "batch"
+          description: "Scope of compliance check"
+          
+        checkLevel:
+          type: "string"
+          enum: ["basic", "detailed", "full_audit", "regulatory_submission"]
+          default: "basic"
+          description: "Depth of compliance checking"
+          
+        # Specific areas
+        checkAreas:
+          type: "array"
+          items:
+            type: "string"
+            enum: 
+              - "documentation"
+              - "process_validation"
+              - "equipment_qualification"
+              - "personnel_training"
+              - "quality_control"
+              - "change_control"
+              - "deviation_handling"
+              - "corrective_actions"
+          description: "Specific compliance areas to check"
+          
+        # Options
+        includeRecommendations:
+          type: "boolean"
+          default: true
+          description: "Include improvement recommendations"
+          
+        generateReport:
+          type: "boolean"
+          default: true
+          description: "Generate compliance report"
+          
+        reportFormat:
+          type: "string"
+          enum: ["summary", "detailed", "regulatory"]
+          default: "summary"
+          
+      required: ["complianceType"]
+      
+    permissions: ["planner", "admin"]
+    rateLimit: 10
+    auditRequired: true
+    timeout: 15
+    
+    outputSchema:
+      type: "object"
+      properties:
+        complianceStatus:
+          type: "string"
+          enum: ["compliant", "non_compliant", "requires_attention"]
+        overallScore:
+          type: "number"
+        findings:
+          type: "array"
+        recommendations:
+          type: "array"
+        reportUrl:
+          type: "string"
+
+  # 5. REPORT GENERATION TOOL
+  # ==========================
+  generate_report:
+    name: "generate_report"
+    description: "Generate comprehensive pharmaceutical reports"
+    category: "reporting"
+    version: "1.0.0"
+    
+    inputSchema:
+      type: "object"
+      properties:
+        reportType:
+          type: "string"
+          enum: 
+            - "batch_record"
+            - "quality_summary"
+            - "compliance_audit"
+            - "production_summary"
+            - "deviation_report"
+            - "trend_analysis"
+            - "regulatory_submission"
+          description: "Type of report to generate"
+          
+        parameters:
+          type: "object"
+          properties:
+            # Time range
+            dateRange:
+              type: "object"
+              properties:
+                from:
+                  type: "string"
+                  format: "date-time"
+                to:
+                  type: "string"
+                  format: "date-time"
+                  
+            # Specific IDs
+            batchIds:
+              type: "array"
+              items:
+                type: "string"
+              description: "Specific batches to include"
+              
+            productIds:
+              type: "array"
+              items:
+                type: "string"
+              description: "Specific products to include"
+              
+            # Report options
+            includeCharts:
+              type: "boolean"
+              default: true
+              description: "Include charts and visualizations"
+              
+            includeRawData:
+              type: "boolean"
+              default: false
+              description: "Include raw data tables"
+              
+            confidentialityLevel:
+              type: "string"
+              enum: ["public", "internal", "confidential", "restricted"]
+              default: "internal"
+              
+            # Output format
+            format:
+              type: "string"
+              enum: ["pdf", "excel", "word", "json", "html"]
+              default: "pdf"
+              
+            template:
+              type: "string"
+              description: "Report template to use"
+              
+            language:
+              type: "string"
+              enum: ["en", "de", "fr", "es"]
+              default: "en"
+              
+      required: ["reportType"]
+      
+    permissions: ["planner", "admin"]
+    rateLimit: 5
+    auditRequired: true
+    timeout: 60
+
+  # 6. CONTEXT SHARING TOOL
+  # ========================
+  share_context:
+    name: "share_context"
+    description: "Share context data between pharmaceutical agents"
+    category: "agent_communication"
+    version: "1.0.0"
+    
+    inputSchema:
+      type: "object"
+      properties:
+        contextId:
+          type: "string"
+          description: "Unique context identifier"
+          pattern: "^[a-zA-Z0-9_-]+$"
+          
+        contextType:
+          type: "string"
+          enum: 
+            - "batch_analysis"
+            - "production_status" 
+            - "compliance_check"
+            - "quality_alert"
+            - "resource_allocation"
+          description: "Type of context being shared"
+          
+        contextData:
+          type: "object"
+          description: "Context data payload"
+          properties:
+            # Common fields
+            timestamp:
+              type: "string"
+              format: "date-time"
+            priority:
+              type: "string"
+              enum: ["low", "medium", "high", "critical"]
+            # Specific data varies by context type
+            
+        targetAgents:
+          type: "array"
+          items:
+            type: "string"
+            enum: 
+              - "orderAgent"
+              - "briefingAgent"
+              - "assessmentAgent"
+              - "complianceAgent"
+              - "statusAgent"
+              - "helpAgent"
+          description: "Agents to share context with"
+          
+        # Access control
+        accessLevel:
+          type: "string"
+          enum: ["read", "read_write"]
+          default: "read"
+          description: "Access level for target agents"
+          
+        # Lifecycle
+        expirationTime:
+          type: "string"
+          format: "date-time"
+          description: "When context expires (optional)"
+          
+        persistent:
+          type: "boolean"
+          default: false
+          description: "Store context persistently"
+          
+        # Notifications
+        notifyTargets:
+          type: "boolean"
+          default: true
+          description: "Send notifications to target agents"
+          
+      required: ["contextId", "contextData"]
+      
+    permissions: ["planner", "builder", "admin"]
+    rateLimit: 30
+    auditRequired: true
+    timeout: 5
+
+  # 7. QUALITY ASSESSMENT TOOL
+  # ===========================
+  assess_quality:
+    name: "assess_quality"
+    description: "Comprehensive quality assessment of pharmaceutical products"
+    category: "quality_control"
+    version: "1.0.0"
+    
+    inputSchema:
+      type: "object"
+      properties:
+        # What to assess
+        batchId:
+          type: "string"
+          pattern: "^BATCH-[0-9]{3}$"
+          description: "Batch to assess"
+          
+        productId:
+          type: "string"
+          description: "Product identifier"
+          
+        # Assessment type
+        assessmentType:
+          type: "string"
+          enum: ["in_process", "final_product", "stability", "shelf_life", "comparative"]
+          default: "final_product"
+          
+        # Test data
+        testResults:
+          type: "object"
+          description: "Laboratory test results"
+          properties:
+            physicalTests:
+              type: "object"
+            chemicalTests:
+              type: "object"
+            microbiologicalTests:
+              type: "object"
+            stabilityData:
+              type: "object"
+              
+        # Specifications
+        qualitySpecs:
+          type: "object"
+          description: "Quality specifications to check against"
+          
+        # Assessment options
+        includeStatisticalAnalysis:
+          type: "boolean"
+          default: true
+          
+        includeTrendAnalysis:
+          type: "boolean"
+          default: false
+          
+        compareToHistorical:
+          type: "boolean"
+          default: true
+          
+        generateCertificate:
+          type: "boolean"
+          default: false
+          
+      required: ["batchId"]
+      
+    permissions: ["planner", "admin"]
+    rateLimit: 20
+    auditRequired: true
+    timeout: 20
+
+  # 8. INVENTORY MANAGEMENT TOOL
+  # =============================
+  manage_inventory:
+    name: "manage_inventory"
+    description: "Comprehensive raw material inventory management"
+    category: "inventory_management"
+    version: "1.0.0"
+    
+    inputSchema:
+      type: "object"
+      properties:
+        action:
+          type: "string"
+          enum: 
+            - "check_availability"
+            - "reserve_materials"
+            - "update_stock"
+            - "forecast_needs"
+            - "create_purchase_order"
+            - "track_shipment"
+          description: "Inventory action to perform"
+          
+        # Material specification
+        materialIds:
+          type: "array"
+          items:
+            type: "string"
+          description: "Material IDs to work with"
+          
+        quantities:
+          type: "object"
+          description: "Quantities for each material"
+          
+        # Context
+        orderId:
+          type: "string"
+          pattern: "^ORD-[0-9]{4}$"
+          description: "Associated production order"
+          
+        batchId:
+          type: "string"
+          pattern: "^BATCH-[0-9]{3}$"
+          description: "Associated batch"
+          
+        # Options
+        reservationDuration:
+          type: "integer"
+          minimum: 1
+          maximum: 168  # 1 week in hours
+          default: 24
+          description: "Reservation duration in hours"
+          
+        urgency:
+          type: "string"
+          enum: ["low", "medium", "high", "critical"]
+          default: "medium"
+          
+        supplier:
+          type: "string"
+          description: "Preferred supplier"
+          
+        # Forecasting options
+        forecastPeriod:
+          type: "integer"
+          minimum: 1
+          maximum: 365
+          default: 30
+          description: "Forecast period in days"
+          
+      required: ["action"]
+      
+    permissions: ["planner", "admin"]
+    rateLimit: 40
+    auditRequired: true
+    timeout: 10
+
+# Tool Categories
+categories:
+  agent_management:
+    description: "Tools for managing and executing pharmaceutical agents"
+    tools: ["execute_agent"]
+    
+  data_access:
+    description: "Tools for querying and accessing production data"
+    tools: ["query_production_data"]
+    
+  event_management:
+    description: "Tools for triggering and managing system events"
+    tools: ["trigger_event"]
+    
+  compliance:
+    description: "Tools for compliance checking and regulatory support"
+    tools: ["check_compliance"]
+    
+  reporting:
+    description: "Tools for generating pharmaceutical reports"
+    tools: ["generate_report"]
+    
+  agent_communication:
+    description: "Tools for inter-agent communication and context sharing"
+    tools: ["share_context"]
+    
+  quality_control:
+    description: "Tools for quality assessment and control"
+    tools: ["assess_quality"]
+    
+  inventory_management:
+    description: "Tools for managing raw materials and inventory"
+    tools: ["manage_inventory"]
+
+# Global Tool Settings
+global:
+  # Default timeouts
+  defaultTimeout: 30  # seconds
+  maxTimeout: 300     # seconds
+  
+  # Rate limiting
+  globalRateLimit: 200  # requests per minute across all tools
+  burstLimit: 50       # burst allowance
+  
+  # Error handling
+  maxRetries: 3
+  retryBackoff: "exponential"  # linear, exponential
+  
+  # Validation
+  strictValidation: true
+  allowAdditionalProperties: false
+  
+  # Monitoring
+  collectMetrics: true
+  logExecutions: true
+  profilePerformance: true

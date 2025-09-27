@@ -1,0 +1,14 @@
+[
+  {
+    "material": "FG-123",
+    "batch": "BATCH-001",
+    "quantity": 1200,
+    "expiry": "2026-01-01"
+  },
+  {
+    "material": "FG-456",
+    "batch": "BATCH-002",
+    "quantity": 500,
+    "expiry": "2025-12-15"
+  }
+]

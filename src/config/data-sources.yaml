@@ -1,0 +1,86 @@
+# ========================================================================
+# SIMPLE DATA SOURCES CONFIGURATION
+# ========================================================================
+# 
+# Basic configuration for development environment
+# Uses mock data for all sources by default
+#
+# Developer: Markus Schmeckenbecher
+# Version: 1.3.0
+# ========================================================================
+
+# Environment-based configuration switching
+# Environment-based configuration switching
+environment: development
+
+# Data source mappings per data type
+dataSources:
+  
+  # Orders Data Source (Mock)
+  orders:
+    type: mock
+    file: orders
+    config:
+      basePath: mock-data
+  
+  # Issues Data Source (Mock)
+  issues:
+    type: mock
+    file: issues
+    config:
+      basePath: mock-data
+      
+  # Batches Data Source (Mock)
+  batches:
+    type: mock
+    file: batches
+    config:
+      basePath: mock-data
+      
+  # Compliance Data Source (Mock)
+  compliance:
+    type: mock
+    file: compliance
+    config:
+      basePath: mock-data
+
+  # ========================================================================
+  # ADD THESE THREE MISSING DATA SOURCES:
+  # ========================================================================
+  
+  # BOM Data Source (Mock) - Bill of Materials
+  bom:
+    type: mock
+    file: bom
+    config:
+      basePath: mock-data
+      
+  # Inventory Data Source (Mock) - Stock/Warehouse data
+  inventory:
+    type: mock
+    file: inventory
+    config:
+      basePath: mock-data
+      
+  # QA Data Source (Mock) - Quality Assurance data
+  qa:
+    type: mock
+    file: qa
+    config:
+      basePath: mock-data
+
+  # ========================================================================
+  # 🆕 OEE Data Source (MQTT Realtime)
+  # ========================================================================
+  oee:
+    type: oee
+    config:
+      brokerUrl: ${MQTT_BROKER_URL}
+      topicBase: ${MQTT_TOPIC_BASE:plc}
+
+# For SAP integration, set environment variables:
+# NODE_ENV=production
+# ORDERS_SOURCE_TYPE=sap
+# SAP_API_BASE_URL=your_sap_url
+# SAP_USERNAME=your_username
+# SAP_PASSWORD=your_password

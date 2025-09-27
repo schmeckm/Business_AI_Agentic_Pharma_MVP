@@ -1,0 +1,93 @@
+[
+  {
+    "orderId": "ORD-1001",
+    "material": "FG-123",
+    "qty": 2000,
+    "market": "EU",
+    "status": "created",
+    "startDate": "2025-09-20",
+    "endDate": "2025-09-22",
+    "components": [
+      { "materialId": "API-001", "description": "Active Ingredient", "qty": 20, "uom": "kg" },
+      { "materialId": "EXC-010", "description": "Excipient", "qty": 10, "uom": "kg" }
+    ],
+    "operations": [
+      { "opNo": 10, "description": "Granulation", "workCenter": "LINE-01", "durationPlanned": "5h" },
+      { "opNo": 20, "description": "Compression", "workCenter": "LINE-01", "durationPlanned": "7h" }
+    ]
+  },
+  {
+    "orderId": "ORD-1002",
+    "material": "FG-456",
+    "qty": 1500,
+    "market": "US",
+    "status": "released",
+    "startDate": "2025-09-19",
+    "endDate": "2025-09-20",
+    "components": [
+      { "materialId": "API-002", "description": "API - Antibiotic", "qty": 12, "uom": "kg" },
+      { "materialId": "PACK-100", "description": "Packaging Blisters", "qty": 1500, "uom": "pcs" }
+    ],
+    "operations": [
+      { "opNo": 10, "description": "Weighing", "workCenter": "LINE-02", "durationPlanned": "2h" },
+      { "opNo": 20, "description": "Mixing", "workCenter": "LINE-02", "durationPlanned": "4h" },
+      { "opNo": 30, "description": "Packaging", "workCenter": "LINE-03", "durationPlanned": "3h" }
+    ]
+  },
+  {
+    "orderId": "ORD-1003",
+    "material": "FG-789",
+    "qty": 500,
+    "market": "ROW",
+    "status": "in_progress",
+    "startDate": "2025-09-21",
+    "endDate": "2025-09-23",
+    "components": [
+      { "materialId": "API-003", "description": "API - Painkiller", "qty": 5, "uom": "kg" },
+      { "materialId": "EXC-020", "description": "Excipient Type B", "qty": 2, "uom": "kg" },
+      { "materialId": "PACK-200", "description": "Bottles", "qty": 500, "uom": "pcs" }
+    ],
+    "operations": [
+      { "opNo": 10, "description": "Preparation", "workCenter": "LINE-01", "durationPlanned": "3h" },
+      { "opNo": 20, "description": "Filling", "workCenter": "LINE-02", "durationPlanned": "6h" },
+      { "opNo": 30, "description": "Labeling", "workCenter": "LINE-02", "durationPlanned": "2h" }
+    ]
+  },
+  {
+    "orderId": "ORD-1004",
+    "material": "FG-321",
+    "qty": 3000,
+    "market": "EU",
+    "status": "closed",
+    "startDate": "2025-09-15",
+    "endDate": "2025-09-17",
+    "components": [
+      { "materialId": "API-004", "description": "API - Antiviral", "qty": 25, "uom": "kg" },
+      { "materialId": "EXC-030", "description": "Excipient Type C", "qty": 15, "uom": "kg" },
+      { "materialId": "PACK-300", "description": "Cartons", "qty": 3000, "uom": "pcs" }
+    ],
+    "operations": [
+      { "opNo": 10, "description": "Granulation", "workCenter": "LINE-03", "durationPlanned": "4h" },
+      { "opNo": 20, "description": "Coating", "workCenter": "LINE-03", "durationPlanned": "6h" },
+      { "opNo": 30, "description": "Packaging", "workCenter": "LINE-01", "durationPlanned": "5h" }
+    ]
+  },
+  {
+    "orderId": "ORD-1005",
+    "material": "FG-654",
+    "qty": 1200,
+    "market": "US",
+    "status": "released",
+    "startDate": "2025-09-22",
+    "endDate": "2025-09-24",
+    "components": [
+      { "materialId": "API-005", "description": "API - Antidepressant", "qty": 8, "uom": "kg" },
+      { "materialId": "EXC-040", "description": "Excipient Type D", "qty": 6, "uom": "kg" }
+    ],
+    "operations": [
+      { "opNo": 10, "description": "Mixing", "workCenter": "LINE-02", "durationPlanned": "3h" },
+      { "opNo": 20, "description": "Compression", "workCenter": "LINE-02", "durationPlanned": "7h" },
+      { "opNo": 30, "description": "Packaging", "workCenter": "LINE-03", "durationPlanned": "4h" }
+    ]
+  }
+]

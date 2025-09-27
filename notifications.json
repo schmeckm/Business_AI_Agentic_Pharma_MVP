@@ -1,0 +1,21 @@
+[
+  {
+    "id": "notif-1758400816659",
+    "priority": "normal",
+    "recipients": [
+      "production-team"
+    ],
+    "timestamp": "2025-09-20T20:40:16.659Z",
+    "status": "sent"
+  },
+  {
+    "id": "notif-1758401171158",
+    "message": "Order status update: ORD-1001 is created and scheduled for 2025-09-20 to 2025-09-22. ORD-1002 is released and scheduled for 2025-09-19 to 2025-09-20. ORD-1003 is closed and was scheduled for 2025-09-18 to 2025-09-19.",
+    "priority": "normal",
+    "recipients": [
+      "production-team"
+    ],
+    "timestamp": "2025-09-20T20:46:11.158Z",
+    "status": "sent"
+  }
+]

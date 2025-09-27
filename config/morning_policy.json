@@ -1,0 +1,23 @@
+{
+  "briefing_time": "06:30",
+  "auto_release": {
+    "enabled": true,
+    "max_qty": 50,
+    "allowed_materials": [
+      "FG-321",
+      "FG-111"
+    ],
+    "require_md_active": true,
+    "require_tric_ok": true
+  },
+  "recommendation_rules": {
+    "qc_prioritize_if_missing": true,
+    "create_pr_if_missing_qty_ge": 500
+  },
+  "notify": {
+    "channels": [
+      "ws",
+      "email"
+    ]
+  }
+}

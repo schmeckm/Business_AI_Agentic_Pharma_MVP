@@ -1,0 +1,54 @@
+{
+  "orders": [
+    {
+      "id": "ORD-1001",
+      "material": "FG-123",
+      "qty": 1000,
+      "country": "DE",
+      "status": "pending"
+    },
+    {
+      "id": "ORD-1002",
+      "material": "FG-456",
+      "qty": 500,
+      "country": "US",
+      "status": "pending"
+    },
+    {
+      "id": "ORD-1003",
+      "material": "FG-789",
+      "qty": 200,
+      "country": "EU",
+      "status": "released"
+    }
+  ],
+  "inventory": [
+    { "material": "COMP-A", "qty": 5000 },
+    { "material": "COMP-B", "qty": 2000 },
+    { "material": "COMP-C", "qty": 1000 }
+  ],
+  "bom": {
+    "FG-123": [
+      { "component": "COMP-A", "perFG": 2 },
+      { "component": "COMP-B", "perFG": 1 }
+    ],
+    "FG-456": [
+      { "component": "COMP-B", "perFG": 2 },
+      { "component": "COMP-C", "perFG": 1 }
+    ],
+    "FG-789": [
+      { "component": "COMP-A", "perFG": 3 },
+      { "component": "COMP-C", "perFG": 2 }
+    ]
+  },
+  "rules": [
+    { "material": "FG-123", "country": "DE", "status": "allowed" },
+    { "material": "FG-456", "country": "US", "status": "allowed" },
+    { "material": "FG-789", "country": "EU", "status": "notallowed" }
+  ],
+  "masterdata": {
+    "FG-123": { "status": "Active" },
+    "FG-456": { "status": "Active" },
+    "FG-789": { "status": "Active" }
+  }
+}

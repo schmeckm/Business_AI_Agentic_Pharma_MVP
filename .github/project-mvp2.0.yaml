@@ -1,0 +1,104 @@
+name: "MVP 2.0 Roadmap"
+description: "Pharmaceutical Manufacturing Agent System – MVP 2.0 Upgrade Plan"
+version: 1.0
+
+phases:
+  - name: "Phase 1 – Foundations"
+    goals:
+      - "Refactor backend architecture for modularity"
+      - "Introduce proper configuration management"
+      - "Enhance audit trail to Part 11 & ALCOA+ compliance"
+    tasks:
+      - id: 1
+        title: "Add modular service layer"
+        type: issue
+        labels: ["backend", "architecture"]
+      - id: 2
+        title: "Implement configuration via .yaml instead of hardcoded paths"
+        type: issue
+        labels: ["config", "refactor"]
+      - id: 3
+        title: "Audit log: store user, timestamp, system state"
+        type: issue
+        labels: ["compliance", "audit"]
+
+  - name: "Phase 2 – AI Integration"
+    goals:
+      - "Improve Claude integration with retry/backoff & structured prompts"
+      - "Enable multiple AI providers (Claude + GPT fallback)"
+      - "Extend context memory for ongoing sessions"
+    tasks:
+      - id: 4
+        title: "Introduce AI provider abstraction layer"
+        type: issue
+        labels: ["ai", "claude", "gpt"]
+      - id: 5
+        title: "Implement session memory across chat interactions"
+        type: issue
+        labels: ["ai", "memory"]
+      - id: 6
+        title: "Claude prompt tuning for pharma domain"
+        type: issue
+        labels: ["ai", "domain"]
+
+  - name: "Phase 3 – Operations & Domain Logic"
+    goals:
+      - "Extend manufacturing templates (batch, QA, supply chain)"
+      - "Introduce status workflows (Created → Released → Closed)"
+      - "Link orders.json with real-time data simulation"
+    tasks:
+      - id: 7
+        title: "Add status transitions to orders.json"
+        type: issue
+        labels: ["domain", "orders"]
+      - id: 8
+        title: "Simulate batch workflow with start/end timestamps"
+        type: issue
+        labels: ["workflow", "simulation"]
+      - id: 9
+        title: "Integrate QA prioritization rules"
+        type: issue
+        labels: ["qa", "rules"]
+
+  - name: "Phase 4 – Frontend UX"
+    goals:
+      - "Enhance UI responsiveness (loading spinners, no button shrink)"
+      - "Add dashboard view for orders, batches, QA issues"
+      - "Audit log viewer with filtering"
+    tasks:
+      - id: 10
+        title: "Introduce loading spinner on commands"
+        type: issue
+        labels: ["frontend", "ux"]
+      - id: 11
+        title: "Create dashboard with order status overview"
+        type: issue
+        labels: ["frontend", "dashboard"]
+      - id: 12
+        title: "Audit log filtering by user & date"
+        type: issue
+        labels: ["frontend", "audit"]
+
+  - name: "Phase 5 – Deployment & DevOps"
+    goals:
+      - "Dockerize the entire system"
+      - "Introduce CI/CD with GitHub Actions"
+      - "Deploy to staging server"
+    tasks:
+      - id: 13
+        title: "Create Dockerfile & docker-compose.yml"
+        type: issue
+        labels: ["devops", "docker"]
+      - id: 14
+        title: "Setup GitHub Actions pipeline"
+        type: issue
+        labels: ["devops", "ci/cd"]
+      - id: 15
+        title: "Deploy MVP 2.0 staging"
+        type: issue
+        labels: ["devops", "staging"]
+
+metadata:
+  owner: "markus Schmeckenbecher"
+  repo: "Business_AI_Agent_Pharma_MVP_2.0"
+  created: "2025-09-20"

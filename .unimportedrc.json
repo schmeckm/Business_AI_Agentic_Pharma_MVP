@@ -1,0 +1,13 @@
+{
+    "ignorePatterns":  [
+                           "node_modules/**",
+                           "dist/**",
+                           "build/**"
+                       ],
+    "extensions":  [
+                       ".js"
+                   ],
+    "entry":  [
+                  "server.js"
+              ]
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "material": "FG-123",
+    "description": "Finished Good - Painkiller 500mg",
+    "components": [
+      { "material": "API-001", "qty": 1, "unit": "kg" },
+      { "material": "EXC-010", "qty": 0.5, "unit": "kg" },
+      { "material": "PACK-100", "qty": 2000, "unit": "pcs" }
+    ]
+  },
+  {
+    "material": "FG-456",
+    "description": "Finished Good - Antibiotic 250mg",
+    "components": [
+      { "material": "API-002", "qty": 0.8, "unit": "kg" },
+      { "material": "EXC-011", "qty": 0.3, "unit": "kg" },
+      { "material": "PACK-200", "qty": 1500, "unit": "pcs" }
+    ]
+  }
+]

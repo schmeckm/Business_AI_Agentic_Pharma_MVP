@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  pharma-agent:
+    image: pharma-agent-system:latest
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+      NODE_ENV: development
+      LOG_LEVEL: info
+      USER_API_KEY: user-123
+      ADMIN_API_KEY: admin-123
+      LLM_PROVIDER: ollama
+      CLAUDE_API_KEY: 
+      CLAUDE_MODEL: claude-3-7-sonnet-20250219
+      USE_LANGCHAIN: true
+      OLLAMA_URL: http://136.244.90.128:11434/
+      OLLAMA_MODEL: llama2
+      FEATURE_CLAUDE: true
+      FEATURE_RAG: false
+      FEATURE_MPC: false
+      FEATURE_OAUTH: false
+      ENABLE_AUTONOMOUS_MODE: true
+      COMPLIANCE_LEVEL: STANDARD
+      PREDICTIVE_PERIOD: 7
+      USE_ACTIONS: false
+      AGENT_MODE: langchain
+      MAX_API_CALLS_PER_MINUTE: 5
+      MAX_CONCURRENT_EVENT_CHAINS: 2
+      ENABLE_EVENT_PUBLISHING: true
+      ORDERS_SOURCE_TYPE: mock
+      ISSUES_SOURCE_TYPE: mock
+      BATCHES_SOURCE_TYPE: mock
+      COMPLIANCE_SOURCE_TYPE: mock
+      MQTT_BROKER_URL: mqtt://broker.hivemq.com:1883
+      MQTT_TOPIC_BASE: plc
+      ENABLE_OEE_SIMULATOR: true
+      OEE_LINES: LINE-01,LINE-02,LINE-03
+      OEE_INTERVAL_MS: 3000

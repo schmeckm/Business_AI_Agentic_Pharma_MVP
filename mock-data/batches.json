@@ -1,0 +1,53 @@
+[
+  {
+    "id": "BATCH-001",
+    "material": "FG-123",
+    "quantity": 2000,
+    "status": "in_production",
+    "productionLine": "PCK-01",
+    "startDate": "2025-01-15T08:00:00Z",
+    "expectedCompletion": "2025-01-16T16:00:00Z",
+    "qualityStatus": "pending",
+    "temperature": 22.5,
+    "humidity": 45,
+    "batchRecord": {
+      "operator": "OP-001",
+      "supervisor": "SUP-001",
+      "qaApproval": null
+    }
+  },
+  {
+    "id": "BATCH-002", 
+    "material": "FG-456",
+    "quantity": 1500,
+    "status": "quality_check",
+    "productionLine": "PCK-02",
+    "startDate": "2025-01-14T10:00:00Z",
+    "expectedCompletion": "2025-01-15T18:00:00Z",
+    "qualityStatus": "in_progress",
+    "temperature": 21.8,
+    "humidity": 42,
+    "batchRecord": {
+      "operator": "OP-002",
+      "supervisor": "SUP-001",
+      "qaApproval": null
+    }
+  },
+  {
+    "id": "BATCH-003",
+    "material": "FG-789",
+    "quantity": 3000,
+    "status": "completed",
+    "productionLine": "PCK-01",
+    "startDate": "2025-01-13T06:00:00Z",
+    "expectedCompletion": "2025-01-14T14:00:00Z",
+    "qualityStatus": "approved",
+    "temperature": 22.1,
+    "humidity": 44,
+    "batchRecord": {
+      "operator": "OP-003",
+      "supervisor": "SUP-002",
+      "qaApproval": "QA-001"
+    }
+  }
+]

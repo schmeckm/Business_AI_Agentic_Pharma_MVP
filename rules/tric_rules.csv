@@ -1,0 +1,6 @@
+﻿material,country,requirement,type
+FG-123,EU,"RMSL  60% notwendig","RMSL"
+FG-123,ROW,"RMSL  80% notwendig","RMSL"
+FG-456,US,"Nicht zugelassen (TRIC)","TRIC"
+FG-456,EU,"Zugelassen, RMSL  60%","TRIC"
+Transport,CMO-ADP-01,"48h Vorlaufzeit","Transport"
