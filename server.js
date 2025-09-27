@@ -470,19 +470,36 @@ process.on('SIGINT', () => {
 // ========================================================================
 // SERVER STARTUP
 // ========================================================================
+const HOST = "0.0.0.0";
 
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
   console.log(`Version: ${packageJson.version}`);
-  console.log(`🚀 Pharmaceutical Manufacturing Agent System running at http://localhost:${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/api/system/health`);
-  console.log(`📡 Events stream: http://localhost:${PORT}/events`);
-  console.log(`📋 Templates: http://localhost:${PORT}/templates`);
-  console.log(`📋 API Documentation: http://localhost:${PORT}/api`);
+  console.log(`🚀 Pharmaceutical Manufacturing Agent System running at http://${HOST}:${PORT}`);
+  console.log(`📊 Health check: http://${HOST}:${PORT}/api/system/health`);
+  console.log(`📡 Events stream: http://${HOST}:${PORT}/events`);
+  console.log(`📋 Templates: http://${HOST}:${PORT}/templates`);
+  console.log(`📋 API Documentation: http://${HOST}:${PORT}/api`);
   
   if (a2aManager) {
-    console.log(`🔗 A2A Test endpoint: http://localhost:${PORT}/api/a2a/test`);
-    console.log(`🔗 A2A Status: http://localhost:${PORT}/api/a2a/status`);
+    console.log(`🔗 A2A Test endpoint: http://${HOST}:${PORT}/api/a2a/test`);
+    console.log(`🔗 A2A Status: http://${HOST}:${PORT}/api/a2a/status`);
   }
+
+  auditLogger.logSystemEvent("server_started", {
+    port: PORT,
+    version: "1.2.5",
+    architecture: "modular+a2a",
+    a2aEnabled: !!a2aManager,
+    eventBusIntegration: "EventBusManager",
+    mcpIntegration: "Active",
+    frontendRoutesEnabled: true,
+    endpoints: [
+      "/api/chat", "/api/agents", "/api/data", "/api/events", "/api/audit", 
+      "/api/system", "/api/workflows", "/api/a2a/test", "/api/a2a/status",
+      "/templates", "/events", "/api/oee"
+    ]
+  });
+
   
   console.log(`👨‍💻 Developer: Markus Schmeckenbecher`);
   console.log(`📋 EventBus Integration Verified & Enhanced`);
