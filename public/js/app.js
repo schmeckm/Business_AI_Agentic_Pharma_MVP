@@ -224,7 +224,7 @@ async function updateHealthIndicator() {
 // ===============================
 async function updateSystemStatus() {
   try {
-    const response = await fetch('http://localhost:4000/api/system/health');
+    const response = await fetch('/api/system/health');
     const health = await response.json();
 
     const statusElement = document.getElementById('status');
