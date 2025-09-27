@@ -66,7 +66,7 @@ function togglePromptHelp() {
 // ===============================
 async function loadVersionInfo() {
   try {
-    const response = await fetch('/api/version')');
+    const response = await fetch('/api/version');
     const info = await response.json();
 
     // Badge
