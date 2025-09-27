@@ -102,7 +102,7 @@ async function loadVersionInfo() {
 // ===============================
 async function showSystemInfo() {
   try {
-    const response = await fetch('http://localhost:4000/api/system/status');
+    const response = await fetch('/api/system/status')
     const status = await response.json();
 
     const info = `
@@ -165,7 +165,7 @@ function createVersionElement() {
 // ===============================
 async function loadTemplates() {
   try {
-    const response = await fetch('http://localhost:4000/templates');
+    const response = await fetch('/templates');   // <== das fehlte
     const data = await response.json();
 
     const selectElement = document.getElementById('prompt');
@@ -187,6 +187,7 @@ async function loadTemplates() {
   }
 }
 
+
 // ===============================
 // Update Health Indicator (Ampel) - FIXED!
 // ===============================
@@ -196,7 +197,7 @@ async function updateHealthIndicator() {
 
   try {
     // FIX: Fehlender fetch() hinzugefügt
-    let response = await fetch('http://localhost:4000/api/system/health');
+    let response = await fetch('/api/system/health')
     const health = await response.json();
 
     // Fix: Sowohl 'ok' als auch 'healthy' als gesund bewerten
@@ -281,14 +282,14 @@ document.getElementById("send").addEventListener("click", async () => {
   const startTime = Date.now();
 
   try {
-    const res = await fetch("http://localhost:4000/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: finalMessage,  // Jetzt verwendet es die richtige Priorität
-        user: { id: "frontend-user", name: "Manufacturing Operator", interface: "web" }
-      })
-    });
+const res = await fetch("/api/chat", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    message: finalMessage,  // Jetzt verwendet es die richtige Priorität
+    user: { id: "frontend-user", name: "Manufacturing Operator", interface: "web" }
+  })
+});
 
     const data = await res.json();
     const processingTime = Date.now() - startTime;
