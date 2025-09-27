@@ -8,6 +8,7 @@
   <!-- CodeMirror CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/dracula.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/styles.css">
@@ -395,7 +396,20 @@ promptTemplate: |
     // ===============================
     // YAML VALIDATION & SAVE
     // ===============================
-    function validateYaml() {
+function validateYaml() {
+  const content = editor.getValue();
+  if (!content.trim()) {
+    setStatus('⚠️ No content to validate', 'error');
+    return;
+  }
+  try {
+    jsyaml.load(content);  // <-- echtes YAML Parsing
+    setStatus('✅ YAML is valid', 'success');
+  } catch (err) {
+    setStatus(`❌ YAML error: ${err.message}`, 'error');
+  }
+}
+
       const content = editor.getValue();
       if (!content.trim()) {
         setStatus('⚠️ No content to validate', 'error');
