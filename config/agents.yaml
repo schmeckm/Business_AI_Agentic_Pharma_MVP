@@ -1,6 +1,6 @@
 agents:
   - id: oeeAgent
-    name: "OEE Executive Agent"
+    name: "📊 OEE Executive Agent"
     description: "Provides real-time OEE reports per line, including running orders and historical benchmarks."
     trigger:
       - "oee report"
@@ -8,12 +8,10 @@ agents:
     type: "data-driven"
     priority: "high"
     oeeEnabled: true
-
     dataSource:
-      - "oee_hot"            # neue Hot-API (MQTT Echtzeit)
+      - "oee_hot"
       - "mock-data/orders.json"
-      - "oee_history.json"   # Cold Data (Simulator / Historie)
-
+      - "oee_history.json"
     promptTemplate: |
       ## 📊 OEE Executive Report (Realtime + Orders + Historical Analysis)
 
@@ -31,3 +29,78 @@ agents:
       - Identify lines with declining performance patterns
       - Highlight critical alarms in realtime (if present)
       - Recommend corrective actions and targets
+
+  - id: productionPlanningAgent
+    name: "📅 Production Planning Agent"
+    description: "Optimizes production planning by checking orders, resources and bottlenecks."
+    trigger:
+      - "plan production"
+      - "orders today"
+    type: "planning"
+    priority: "medium"
+    dataSource:
+      - "mock-data/orders.json"
+      - "mock-data/batches.json"
+    promptTemplate: |
+      ## 📅 Production Planning Report
+
+      **1. Orders scheduled today:**
+      {data.orders}
+
+      **2. Batch status and allocations:**
+      {data.batches}
+
+      **3. Planning Recommendations**
+      - Identify bottlenecks
+      - Suggest rescheduling if required
+
+  - id: qualityAgent
+    name: "✅ Quality Assurance Agent"
+    description: "Generates QA compliance report, deviations and CAPA overview."
+    trigger:
+      - "qa report"
+      - "compliance"
+      - "quality status"
+    type: "quality"
+    priority: "medium"
+    dataSource:
+      - "compliance"
+      - "qa"
+      - "issues"
+    promptTemplate: |
+      ## ✅ Quality & Compliance Report
+
+      **1. Compliance Metrics (Batch & Regulatory):**
+      {data.compliance}
+
+      **2. QA Inspection Results:**
+      {data.qa}
+
+      **3. Open Quality / Deviation Issues:**
+      {data.issues}
+
+      **4. Summary & CAPA Suggestions**
+      - Highlight critical deviations
+      - Propose corrective actions
+      - Track follow-ups and pending CAPAs
+
+  - id: equipmentAgent
+    name: "🔧 Equipment Status Agent"
+    description: "Provides overview of equipment failures, maintenance and uptime."
+    trigger:
+      - "equipment status"
+      - "machine health"
+    type: "equipment"
+    priority: "low"
+    dataSource:
+      - "mock-data/equipment.json"
+    promptTemplate: |
+      ## 🔧 Equipment Status Report
+
+      **1. Current Equipment Failures:**
+      {data.equipment}
+
+      **2. Maintenance Due / Calibration Alerts**
+      - Review upcoming tasks
+
+      **3. Uptime & Availability Summary**

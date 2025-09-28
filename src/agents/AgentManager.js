@@ -449,6 +449,106 @@ async enrichAgentDataWithOEE(agent, baseData) {
   return baseData;
 }
 
+  async enrichAgentDataWithOEE(agent, baseData) {
+    if (!agent.oeeEnabled) return baseData;
+
+    try {
+      const oeeData = await this.dataManager.getRealtimeOEEData();
+      if (!oeeData || oeeData.length === 0) {
+        baseData.oee = {
+          status: "unavailable",
+          message: "No OEE metrics received from MQTT.",
+          suggestions: [
+            "Verify MQTT broker connection",
+            "Check if 'oee/updated' topic is publishing",
+            "Ensure DataManager cache refresh is working"
+          ],
+          timestamp: new Date().toISOString()
+        };
+      } else {
+        baseData.oee = {
+          status: "available",
+          data: oeeData,
+          timestamp: new Date().toISOString()
+        };
+      }
+    } catch (error) {
+      baseData.oee = {
+        status: "error",
+        message: `Error retrieving OEE data: ${error.message}`,
+        timestamp: new Date().toISOString()
+      };
+    }
+
+    return baseData;
+  }
+
+  /**
+   * Resolve all configured data sources for an agent (from agents.yaml).
+   * Supports compliance, QA, issues, batches, equipment, orders, etc.
+   */
+  async resolveAgentData(agent) {
+    const resolved = {};
+
+    for (const source of agent.dataSource || []) {
+      // 🔹 OEE Hot Data
+      if (source === "oee_hot") {
+        resolved.oee_hot = await this.dataManager.getCachedData("oee_hot", true);
+      }
+
+      // 🔹 Orders
+      if (source.includes("orders")) {
+        resolved.orders = await this.dataManager.getCachedData("orders", false);
+      }
+
+      // 🔹 OEE History
+      if (source.includes("oee_history")) {
+        resolved.oee_history = await this.dataManager.getCachedData("oee_history", false);
+      }
+
+      // 🔹 Batches
+      if (source.includes("batches")) {
+        resolved.batches = await this.dataManager.getCachedData("batches", false);
+      }
+
+      // 🔹 Equipment
+      if (source.includes("equipment")) {
+        resolved.equipment = await this.dataManager.getCachedData("equipment", false);
+      }
+
+      // 🔹 Compliance
+      if (source === "compliance") {
+        const raw = await this.dataManager.getCachedData("compliance", false);
+        if (raw) {
+          resolved.compliance = raw.compliance || [];
+          resolved.regulations = raw.regulations || {};
+        }
+      }
+
+      // 🔹 QA Inspections
+      if (source === "qa") {
+        const raw = await this.dataManager.getCachedData("qa", false);
+        if (raw) {
+          resolved.qa = raw.map(q =>
+            `${q.material} → Priority: ${q.priority}, Status: ${q.status}`
+          );
+        }
+      }
+
+      // 🔹 Issues
+      if (source === "issues") {
+        const raw = await this.dataManager.getCachedData("issues", false);
+        if (raw) {
+          resolved.issues = raw.map(i =>
+            `[${i.issueId}] ${i.type} – ${i.description} | Severity: ${i.severity} | Status: ${i.status} | Dept: ${i.responsibleDept}`
+          );
+        }
+      }
+    }
+
+    return resolved;
+  }
+
 
   /**
    * Setup A2A (Agent-to-Agent) Workflows
@@ -563,9 +663,9 @@ async enrichAgentDataWithOEE(agent, baseData) {
     }
 
     // Prepare data with OEE enrichment
-    const baseData = this.dataManager.getMockDataForAgent(agent);
-    const enrichedData = await this.enrichAgentDataWithOEE(agent, baseData);
-    
+    const resolvedData = await this.resolveAgentData(agent);
+    const enrichedData = await this.enrichAgentDataWithOEE(agent, resolvedData);
+
     // Build prompt from A2A-specific template or fallback to general template
     let prompt;
     if (agent.a2aPrompts?.[action]) {
@@ -676,6 +776,27 @@ findAgent(message) {
 }
 
 
+replacePlaceholders(template, data) {
+  let output = template;
+
+  // Ersetzt einfache Platzhalter wie {data.compliance}, {data.qa}, {data.issues}
+  for (const [key, value] of Object.entries(data)) {
+    const regex = new RegExp(`\\{data.${key}\\}`, "g");
+    output = output.replace(
+      regex,
+      Array.isArray(value) ? JSON.stringify(value, null, 2) : String(value)
+    );
+  }
+
+  // Fallback: falls {data} benutzt wird → komplettes JSON einsetzen
+  output = output.replace("{data}", JSON.stringify(data, null, 2));
+
+  return output;
+}
+
+
+
+
   /**
    * Process Agent Request
    * 
@@ -686,109 +807,134 @@ findAgent(message) {
    * @param {string} userMessage - User input or trigger message
    * @param {boolean} isAutoTriggered - Whether triggered by system event
    * @returns {string} Agent response text
-   */
+   * * 
+   * 
+/**
+ * Process Agent Request
+ * 
+ * Main entry point for agent processing. Handles rate limiting,
+ * data enrichment, LLM execution, and event publishing.
+ * 
+ * @param {Object} agent - Agent configuration
+ * @param {string} userMessage - User input or trigger message
+ * @param {boolean} isAutoTriggered - Whether triggered by system event
+ * @returns {string} Agent response text
+ */
 async processAgent(agent, userMessage, isAutoTriggered = false) {
-    // Rate limiting check
-    if (!this.rateLimiter.canMakeCall(agent.id)) {
-      const status = this.rateLimiter.getStatus();
-      return `Rate limit exceeded. ${status.callsInWindow}/${status.maxCalls} calls used. Next reset in ${Math.ceil(status.nextResetIn/1000)} seconds.`;
-    }
+  // Rate limiting check
+  if (!this.rateLimiter.canMakeCall(agent.id)) {
+    const status = this.rateLimiter.getStatus();
+    return `Rate limit exceeded. ${status.callsInWindow}/${status.maxCalls} calls used. Next reset in ${Math.ceil(status.nextResetIn/1000)} seconds.`;
+  }
 
-    // LLM availability check
-    if (!this.activeLLM) {
-      return "No active LLM client configured. Please check your LLM provider settings.";
-    }
-    
-    // Performance tracking
-    this.totalApiCalls++;
-    logger.info(`API Call #${this.totalApiCalls} - Agent: ${agent.id} (Auto: ${isAutoTriggered}) (OEE: ${agent.oeeEnabled}) (LLM: ${this.llmProvider.toUpperCase()})`);
+  // LLM availability check
+  if (!this.activeLLM) {
+    return "No active LLM client configured. Please check your LLM provider settings.";
+  }
 
-    // Basisdaten vorbereiten
-    const baseData = this.dataManager.getMockDataForAgent(agent);
-    const enrichedData = await this.enrichAgentDataWithOEE(agent, baseData);
+  // Performance tracking
+  this.totalApiCalls++;
+  logger.info(`API Call #${this.totalApiCalls} - Agent: ${agent.id} (Auto: ${isAutoTriggered}) (OEE: ${agent.oeeEnabled}) (LLM: ${this.llmProvider.toUpperCase()})`);
 
-    // 🔹 Sonderlogik für OEE Executive Agent
-    if (agent.id === "oeeAgent") {
-      if (typeof this.getOEEExecutiveData === "function") {
-        try {
-          const oeeData = await this.getOEEExecutiveData();
-          enrichedData.oee = oeeData.oee_hot || [];
-          enrichedData.orders = oeeData.orders || [];
-          enrichedData.oee_history = oeeData.oee_history || [];
-          logger.info("✅ OEE Executive Data injected into agent prompt");
-        } catch (err) {
-          logger.error(`❌ Failed to load OEE Executive Data: ${err.message}`);
-        }
-      } else {
-        logger.warn("⚠️ getOEEExecutiveData() not implemented in AgentManager");
+  // Basisdaten vorbereiten
+  const baseData = this.dataManager.getMockDataForAgent(agent);
+  const enrichedData = await this.enrichAgentDataWithOEE(agent, baseData);
+
+  // Sonderlogik für OEE Executive Agent
+  if (agent.id === "oeeAgent") {
+    if (typeof this.getOEEExecutiveData === "function") {
+      try {
+        const oeeData = await this.getOEEExecutiveData();
+        enrichedData.oee = oeeData.oee_hot || [];
+        enrichedData.orders = oeeData.orders || [];
+        enrichedData.oee_history = oeeData.oee_history || [];
+        logger.info("✅ OEE Executive Data injected into agent prompt");
+      } catch (err) {
+        logger.error(`❌ Failed to load OEE Executive Data: ${err.message}`);
       }
-    }
-
-    // ---------------- SAFE PROMPT BUILDER ----------------
-    const promptTemplate = agent.promptTemplate || "";
-
-    const safeUserMessage = userMessage && userMessage.trim() !== ""
-      ? userMessage
-      : "No user message provided.";
-
-    const safeData = enrichedData && Object.keys(enrichedData).length > 0
-      ? JSON.stringify(enrichedData, null, 2)
-      : "No system data available.";
-
-    let prompt = promptTemplate
-      .replace('{timestamp}', new Date().toISOString())
-      .replace('{userMessage}', safeUserMessage)
-      .replace('{data}', safeData);
-
-    if (!prompt || prompt.trim() === "") {
-      prompt = `Agent ${agent.id} invoked at ${new Date().toISOString()}.
-UserMessage: ${safeUserMessage}
-Data: ${safeData}`;
-    }
-    // ------------------------------------------------------
-
-    try {
-      let responseText;
-      
-      // Multi-provider LLM execution
-      if (this.llmProvider === 'picollm' && this.picoLLM) {
-        const response = await this.picoLLM.generate(prompt);
-        responseText = response;
-      } else if (this.llmProvider === 'ollama' || (this.llmProvider === 'anthropic' && this.useLangChain)) {
-        const response = await this.llm.invoke(prompt);
-        responseText = response.content || response;
-        
-        if (this.auditLogger.logAgentExecution) {
-          this.auditLogger.logAgentExecution(agent.id, userMessage, responseText);
-        }
-      } else if (this.llmProvider === 'anthropic' && this.anthropic) {
-        const response = await this.anthropic.messages.create({
-          model: this.claudeModel,
-          max_tokens: 500,
-          messages: [{ role: "user", content: prompt }],
-        });
-        responseText = response.content[0].text;
-        
-        if (this.auditLogger.logAgentExecution) {
-          this.auditLogger.logAgentExecution(agent.id, userMessage, responseText);
-        }
-      } else {
-        throw new Error("No active LLM client available");
-      }
-
-      // Events/A2A-Workflows
-      if (agent.events && agent.events.publishes && !isAutoTriggered) {
-        this.isAutoTriggered = isAutoTriggered;
-        await this.publishEventsWithControl(agent, userMessage, responseText);
-      }
-
-      return responseText;
-
-    } catch (error) {
-      logger.error(`LLM API error for ${agent.id}: ${error.message}`);
-      return `Agent processing failed: ${error.message}`;
+    } else {
+      logger.warn("⚠️ getOEEExecutiveData() not implemented in AgentManager");
     }
   }
+
+  // ---------------- SAFE PROMPT BUILDER ----------------
+  const promptTemplate = agent.promptTemplate || "";
+
+  const safeUserMessage = userMessage && userMessage.trim() !== ""
+    ? userMessage
+    : "No user message provided.";
+
+  // Hilfsfunktion: ersetzt {data} und {data.xyz}
+  const replacePlaceholders = (template, data) => {
+    let result = template;
+
+    // Komplettes JSON für {data}
+    result = result.replace(/{data}/g, JSON.stringify(data, null, 2));
+
+    // Einzelne Keys für {data.xyz}
+    result = result.replace(/{data\.([a-zA-Z0-9_]+)}/g, (match, key) => {
+      if (data && data[key] !== undefined) {
+        if (typeof data[key] === "object") {
+          return JSON.stringify(data[key], null, 2);
+        }
+        return String(data[key]);
+      }
+      return "(no data)";
+    });
+
+    return result;
+  };
+
+  let prompt = replacePlaceholders(promptTemplate, enrichedData);
+
+  if (!prompt || prompt.trim() === "") {
+    prompt = `Agent ${agent.id} invoked at ${new Date().toISOString()}.
+UserMessage: ${safeUserMessage}
+Data: ${JSON.stringify(enrichedData, null, 2)}`;
+  }
+  // ------------------------------------------------------
+
+  try {
+    let responseText;
+
+    // Multi-provider LLM execution
+    if (this.llmProvider === 'picollm' && this.picoLLM) {
+      const response = await this.picoLLM.generate(prompt);
+      responseText = response;
+    } else if (this.llmProvider === 'ollama' || (this.llmProvider === 'anthropic' && this.useLangChain)) {
+      const response = await this.llm.invoke(prompt);
+      responseText = response.content || response;
+      if (this.auditLogger.logAgentExecution) {
+        this.auditLogger.logAgentExecution(agent.id, userMessage, responseText);
+      }
+    } else if (this.llmProvider === 'anthropic' && this.anthropic) {
+      const response = await this.anthropic.messages.create({
+        model: this.claudeModel,
+        max_tokens: 500,
+        messages: [{ role: "user", content: prompt }],
+      });
+      responseText = response.content[0].text;
+      if (this.auditLogger.logAgentExecution) {
+        this.auditLogger.logAgentExecution(agent.id, userMessage, responseText);
+      }
+    } else {
+      throw new Error("No active LLM client available");
+    }
+
+    // Events/A2A-Workflows
+    if (agent.events && agent.events.publishes && !isAutoTriggered) {
+      this.isAutoTriggered = isAutoTriggered;
+      await this.publishEventsWithControl(agent, userMessage, responseText);
+    }
+
+    return responseText;
+
+  } catch (error) {
+    logger.error(`LLM API error for ${agent.id}: ${error.message}`);
+    return `Agent processing failed: ${error.message}`;
+  }
+}
+
 
   
   /**
@@ -1068,60 +1214,77 @@ Data: ${safeData}`;
    * @param {string} userMessage - User query
    * @returns {string} LLM response based on system data
    */
+/**
+ * Process Generic Query
+ * 
+ * Handles free-form queries that don't match specific agent triggers.
+ * Uses correlated data (OEE Hot + History + Orders + QA + Inventory).
+ * 
+ * @param {string} userMessage - User query
+ * @returns {string} LLM response based on correlated system data
+ */
 async processGenericQuery(userMessage) {
   if (!this.activeLLM) {
     return "No LLM client configured for generic queries.";
   }
 
-  // 🔥 Alle Daten vom DataManager holen
-  const allData = await this.dataManager.getAllAvailableData();
-const constrainedPrompt = `
-You are a pharmaceutical manufacturing AI assistant.
+  try {
+    // === KORRELATIONSDATEN LADEN ===
+    const correlatedData = await this.dataManager.getCorrelatedData();
 
-Available System Data (live snapshot):
-- Current OEE (Hot data via MQTT): ${JSON.stringify(allData.oee_hot, null, 2)}
-- Historical OEE (Cold data): ${JSON.stringify(allData.oee_history, null, 2)}
-- Orders: ${JSON.stringify(allData.orders, null, 2)}
-- Issues: ${JSON.stringify(allData.issues, null, 2)}
-- Batches: ${JSON.stringify(allData.batches, null, 2)}
-- Compliance: ${JSON.stringify(allData.compliance, null, 2)}
-- QA: ${JSON.stringify(allData.qa, null, 2)}
-- BOM: ${JSON.stringify(allData.bom, null, 2)}
-- Inventory: ${JSON.stringify(allData.inventory, null, 2)}
+    // Constrained Prompt mit allen verfügbaren Daten
+    const constrainedPrompt = `You are a pharmaceutical manufacturing AI assistant.
+
+CRITICAL CONSTRAINT: You may ONLY use the data provided below. Do NOT use external knowledge. 
+If the provided data doesn't contain the answer, explicitly say: 
+"This information is not available in the current system data."
 
 User Query: ${userMessage}
 
-Instructions:
-- If the user asks about "current OEE", extract the values from **Current OEE (Hot data via MQTT)**.
-- Report per line the OEE % with Availability, Performance, and Quality.
-- If asked for trends, use Historical OEE.
-- If asked for other context (orders, issues, etc.), use the respective section.
-- Do NOT say "not available" if data exists in oee_hot.
-Current Time: ${new Date().toISOString()}
-`;
+Available Correlated System Data:
+${JSON.stringify(correlatedData, null, 2)}
 
-  let responseText;
-  try {
-    if (this.llmProvider === "ollama" || (this.llmProvider === "anthropic" && this.useLangChain)) {
+Instructions:
+- Answer ONLY based on the provided data
+- Correlate OEE Hot (realtime), Orders, QA, Inventory and OEE History
+- If something is missing, clearly state "Not available in system data"
+- Reference specific lines, orders, or batches where possible
+- Focus on pharmaceutical manufacturing context
+- Provide clear KPIs and summaries when relevant
+
+Current Time: ${new Date().toISOString()}`;
+
+    // === LLM-Ausführung (alle Provider unterstützt) ===
+    let responseText;
+
+    if (this.llmProvider === 'picollm' && this.picoLLM) {
+      const response = await this.picoLLM.generate(constrainedPrompt);
+      responseText = response;
+    } else if (this.llmProvider === 'ollama' || (this.llmProvider === 'anthropic' && this.useLangChain)) {
       const response = await this.llm.invoke(constrainedPrompt);
       responseText = response.content || response;
-    } else if (this.llmProvider === "anthropic" && this.anthropic) {
+    } else if (this.llmProvider === 'anthropic' && this.anthropic) {
       const response = await this.anthropic.messages.create({
         model: this.claudeModel,
-        max_tokens: 800,
+        max_tokens: 600,
         messages: [{ role: "user", content: constrainedPrompt }],
       });
       responseText = response.content[0].text;
     } else {
       throw new Error("No active LLM client available");
     }
-  } catch (error) {
-    responseText = `Error: ${error.message}`;
-  }
 
-  this.totalApiCalls++;
-  return responseText;
+    this.totalApiCalls++;
+    logger.info(`Generic query processed with correlated data (Query: "${userMessage}")`);
+
+    return responseText;
+
+  } catch (error) {
+    logger.error(`Generic LLM processing failed: ${error.message}`);
+    return `I'm sorry, I encountered an error processing your request: ${error.message}`;
+  }
 }
+
 
 }
 

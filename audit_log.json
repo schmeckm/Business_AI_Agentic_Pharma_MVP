@@ -15330,5 +15330,1772 @@
     },
     "timestamp": "2025-09-28T17:30:17.395Z",
     "auditId": "AUD-1759080617395-fgc0bl"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T17:31:50.569Z",
+    "auditId": "AUD-1759080710569-xamuzk"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:31:52.954Z",
+    "auditId": "AUD-1759080712954-6z6nw4"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:31:52.976Z",
+    "auditId": "AUD-1759080712976-5e0wmi"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T17:33:44.434Z",
+    "auditId": "AUD-1759080824434-mt9lxd"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T17:33:47.360Z",
+    "auditId": "AUD-1759080827360-z1ijkp"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:33:47.410Z",
+    "auditId": "AUD-1759080827410-zmsz7c"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:33:47.429Z",
+    "auditId": "AUD-1759080827429-pt9rar"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T17:37:03.296Z",
+    "auditId": "AUD-1759081023296-1uxgss"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T17:37:06.598Z",
+    "auditId": "AUD-1759081026599-qunubq"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:37:06.658Z",
+    "auditId": "AUD-1759081026658-hqrdie"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:37:06.679Z",
+    "auditId": "AUD-1759081026679-1zsp66"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T17:41:16.630Z",
+    "auditId": "AUD-1759081276630-vs7vcc"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T17:43:13.535Z",
+    "auditId": "AUD-1759081393535-yt7n82"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:43:13.605Z",
+    "auditId": "AUD-1759081393605-w7bgqh"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:43:13.633Z",
+    "auditId": "AUD-1759081393633-y6stua"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T17:45:04.182Z",
+    "auditId": "AUD-1759081504182-i2fj0a"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T17:45:23.519Z",
+    "auditId": "AUD-1759081523519-xs2y7g"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:45:23.602Z",
+    "auditId": "AUD-1759081523602-my6sof"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:45:23.628Z",
+    "auditId": "AUD-1759081523629-yu6y1i"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T17:45:57.370Z",
+    "auditId": "AUD-1759081557370-2vwcx0"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T17:46:00.591Z",
+    "auditId": "AUD-1759081560591-ve2tut"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:46:00.652Z",
+    "auditId": "AUD-1759081560652-cfwqs0"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:46:00.670Z",
+    "auditId": "AUD-1759081560670-66drso"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T17:49:42.425Z",
+    "auditId": "AUD-1759081782425-1krl4j"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T17:52:00.850Z",
+    "auditId": "AUD-1759081920850-1atlhr"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:52:00.904Z",
+    "auditId": "AUD-1759081920904-dho07o"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:52:00.925Z",
+    "auditId": "AUD-1759081920925-60x9us"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T17:54:20.177Z",
+    "auditId": "AUD-1759082060177-8tk1i9"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T17:56:41.073Z",
+    "auditId": "AUD-1759082201073-kfveyl"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:56:41.147Z",
+    "auditId": "AUD-1759082201147-dagl2y"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:56:41.177Z",
+    "auditId": "AUD-1759082201177-z16y3z"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T17:58:56.345Z",
+    "auditId": "AUD-1759082336345-fts0a8"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T17:58:59.492Z",
+    "auditId": "AUD-1759082339492-cr94yg"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:58:59.555Z",
+    "auditId": "AUD-1759082339555-43la6w"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T17:58:59.579Z",
+    "auditId": "AUD-1759082339579-1fahvc"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T17:59:55.572Z",
+    "auditId": "AUD-1759082395572-skzzho"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T18:00:15.306Z",
+    "auditId": "AUD-1759082415306-eozofs"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:00:15.386Z",
+    "auditId": "AUD-1759082415386-t38qlz"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:00:15.411Z",
+    "auditId": "AUD-1759082415411-vlpl1p"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T18:03:06.743Z",
+    "auditId": "AUD-1759082586743-sia9ob"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T18:03:25.894Z",
+    "auditId": "AUD-1759082605894-1s9u5k"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:03:28.859Z",
+    "auditId": "AUD-1759082608859-1zbnlr"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:03:28.882Z",
+    "auditId": "AUD-1759082608882-jm59ox"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T18:04:39.456Z",
+    "auditId": "AUD-1759082679456-12ypx5"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T18:04:42.425Z",
+    "auditId": "AUD-1759082682425-4hqom7"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:04:42.477Z",
+    "auditId": "AUD-1759082682477-28fg2i"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:04:42.498Z",
+    "auditId": "AUD-1759082682498-vbefut"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T18:07:57.878Z",
+    "auditId": "AUD-1759082877878-hw5a7q"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T18:08:00.622Z",
+    "auditId": "AUD-1759082880622-3rvzvi"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:08:04.054Z",
+    "auditId": "AUD-1759082884054-7opv8t"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:08:04.076Z",
+    "auditId": "AUD-1759082884076-xzjzb4"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T18:10:52.103Z",
+    "auditId": "AUD-1759083052103-mwhg7z"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T18:10:54.858Z",
+    "auditId": "AUD-1759083054859-ato1xz"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:10:57.929Z",
+    "auditId": "AUD-1759083057929-96ztff"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:10:57.950Z",
+    "auditId": "AUD-1759083057950-lldvh2"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T18:15:49.074Z",
+    "auditId": "AUD-1759083349074-soue7r"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T18:18:22.303Z",
+    "auditId": "AUD-1759083502303-lhenky"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:18:25.631Z",
+    "auditId": "AUD-1759083505631-4v00os"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:18:25.652Z",
+    "auditId": "AUD-1759083505652-t6x61j"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T18:22:38.959Z",
+    "auditId": "AUD-1759083758959-0emrzl"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T18:22:41.658Z",
+    "auditId": "AUD-1759083761658-m7ginj"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:22:44.896Z",
+    "auditId": "AUD-1759083764896-f2y30b"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:22:44.928Z",
+    "auditId": "AUD-1759083764928-u46mtb"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T18:24:01.985Z",
+    "auditId": "AUD-1759083841985-b1senr"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T18:27:22.940Z",
+    "auditId": "AUD-1759084042940-d0f3un"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:27:26.504Z",
+    "auditId": "AUD-1759084046504-hpqh53"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:27:26.528Z",
+    "auditId": "AUD-1759084046528-87qv47"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T18:30:37.570Z",
+    "auditId": "AUD-1759084237570-778inz"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T18:30:40.839Z",
+    "auditId": "AUD-1759084240839-0bovzj"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:30:44.304Z",
+    "auditId": "AUD-1759084244304-ap2smt"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:30:44.327Z",
+    "auditId": "AUD-1759084244327-vukckt"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T18:33:47.541Z",
+    "auditId": "AUD-1759084427541-3zjjky"
+  },
+  {
+    "type": "system",
+    "event": "system_startup",
+    "details": {
+      "version": "1.0.3",
+      "components": [
+        "EventBusManager",
+        "AgentManager",
+        "DataManager",
+        "AuditLogger",
+        "A2AManager",
+        "MCPServer"
+      ],
+      "configuration": {
+        "USE_LANGCHAIN": true,
+        "USE_ACTIONS": false,
+        "AGENT_MODE": "langchain",
+        "ENABLE_A2A": true
+      },
+      "eventBusIntegration": "Working - EventBusManager provides EventEmitter interface",
+      "mcpIntegration": "Successful"
+    },
+    "timestamp": "2025-09-28T18:33:50.403Z",
+    "auditId": "AUD-1759084430403-wn8pw9"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:33:50.479Z",
+    "auditId": "AUD-1759084430479-xwh7eh"
+  },
+  {
+    "type": "system",
+    "event": "server_started",
+    "details": {
+      "port": "4000",
+      "version": "1.2.5",
+      "architecture": "modular+a2a",
+      "a2aEnabled": true,
+      "eventBusIntegration": "EventBusManager",
+      "mcpIntegration": "Active",
+      "frontendRoutesEnabled": true,
+      "endpoints": [
+        "/api/chat",
+        "/api/agents",
+        "/api/data",
+        "/api/events",
+        "/api/audit",
+        "/api/system",
+        "/api/workflows",
+        "/api/a2a/test",
+        "/api/a2a/status",
+        "/templates",
+        "/events",
+        "/api/oee"
+      ]
+    },
+    "timestamp": "2025-09-28T18:33:50.501Z",
+    "auditId": "AUD-1759084430501-kopod9"
+  },
+  {
+    "type": "system",
+    "event": "system_shutdown",
+    "details": {
+      "reason": "SIGINT",
+      "version": "1.2.5"
+    },
+    "timestamp": "2025-09-28T18:35:51.132Z",
+    "auditId": "AUD-1759084551132-r6b92z"
   }
 ]

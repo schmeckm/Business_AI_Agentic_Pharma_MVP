@@ -222,23 +222,83 @@ async getAllAvailableData() {
   };
 }
 
+/**
+ * ========================================================================
+ * Correlated Data API
+ * ========================================================================
+ * 
+ * Liefert verknüpfte Daten (OEE Hot + OEE History + Orders + QA + Inventory)
+ * für eine bestimmte Zeitspanne oder Linie.
+ * 
+ * @param {Object} options - Filteroptionen
+ *   @param {string} [options.line] - Optional: Linie filtern (z.B. "LINE-01")
+ *   @param {string} [options.orderId] - Optional: Order-ID filtern
+ *   @param {string} [options.batchId] - Optional: Batch-ID filtern
+ *   @param {Date|string} [options.since] - Optional: nur Daten nach diesem Datum
+ * 
+ * @returns {Promise<Object>} - Korreliertes JSON
+ */
+
 
 
   // ------------------------------------------------------------------------
   // Realtime OEE Zugriff (Hot Data)
   // ------------------------------------------------------------------------
-  getRealtimeOEEData() {
-    const oeeSource = this.dataSources.get("oee");
-    if (oeeSource && oeeSource.data) {
-      const data = Array.from(oeeSource.data.values());
-      return data.filter((item) => {
-        if (!item.receivedAt) return true;
-        const age = Date.now() - new Date(item.receivedAt).getTime();
-        return age < 600000; // 10 min
-      });
+async getRealtimeOEEData() {
+    try {
+      const source = this.dataSources.get("oee");
+      if (!source) {
+        logger.warn("⚠️ No OEE data source configured");
+        return [];
+      }
+
+      const data = await source.fetchData();
+      return Array.isArray(data) ? data : [];
+    } catch (err) {
+      logger.error(`❌ Failed to get realtime OEE data: ${err.message}`);
+      return [];
     }
-    return [];
   }
+
+  /**
+   * ------------------------------------------------------------------------
+   * Korrelierte Daten (Hot + Cold + Orders + QA + Issues)
+   * ------------------------------------------------------------------------
+   */
+  async getCorrelatedData() {
+    try {
+      const hot = await this.getRealtimeOEEData();
+      const history = await this.getOEEHistoryForAPI(100);
+      const orders = await this.getCachedData("orders").catch(() => []);
+      const batches = await this.getCachedData("batches").catch(() => []);
+      const compliance = await this.getCachedData("compliance").catch(() => []);
+      const issues = await this.getCachedData("issues").catch(() => []);
+
+      let qaEvents = [];
+      if (this.sourceConfigs.has("qa_events")) {
+        try {
+          qaEvents = await this.getCachedData("qa_events");
+        } catch (e) {
+          logger.warn(`⚠️ QA Events not available: ${e.message}`);
+        }
+      }
+
+      return {
+        oee_hot: hot || [],
+        oee_history: history || [],
+        orders: orders || [],
+        batches: batches || [],
+        compliance: compliance || [],
+        issues: issues || [],
+        qa_events: qaEvents,
+        timestamp: new Date().toISOString()
+      };
+    } catch (err) {
+      logger.error(`❌ Error in getCorrelatedData: ${err.message}`);
+      return { error: err.message, timestamp: new Date().toISOString() };
+    }
+  }
+
 
   // ------------------------------------------------------------------------
   // OEE-History (Cold Data - Simulator File)
@@ -381,39 +441,65 @@ async getAllAvailableData() {
   // ------------------------------------------------------------------------
   // Data Integrity Validation
   // ------------------------------------------------------------------------
-  validateDataIntegrity(requiredFiles = ["orders", "issues", "batches", "compliance", "oee"]) {
-    const missing = requiredFiles.filter((file) => !this.dataCache.has(file));
-    const isValid = missing.length === 0;
+validateDataIntegrity(requiredFiles = ['orders', 'issues', 'batches', 'compliance', 'oee']) {
+  const missing = requiredFiles.filter(file => !this.dataCache.has(file));
+  const isValid = missing.length === 0;
 
-    let oeeStatus = "not_required";
-    if (requiredFiles.includes("oee")) {
-      const oeeData = this.getRealtimeOEEData();
-      if (oeeData.length === 0) {
-        oeeStatus = "no_data";
-      } else {
-        const oldestData = Math.max(
-          ...oeeData.map((d) => {
-            if (!d.receivedAt) return 0;
-            return Date.now() - new Date(d.receivedAt).getTime();
-          })
-        );
-        oeeStatus = oldestData < 300000 ? "fresh" : "stale";
-      }
+  // Check OEE data freshness if required
+  let oeeStatus = 'not_required';
+  if (requiredFiles.includes('oee')) {
+    let oeeData = [];
+    try {
+      oeeData = this.getRealtimeOEEData
+        ? this.safeArray(this.getRealtimeOEEData())
+        : [];
+    } catch (e) {
+      logger.warn(`⚠️ validateDataIntegrity: Failed to fetch OEE data: ${e.message}`);
+      oeeData = [];
     }
 
-    return {
-      isValid,
-      missing,
-      loaded: Array.from(this.dataCache.keys()),
-      sources: Object.fromEntries(
-        Array.from(this.sourceConfigs.entries()).map(([key, config]) => [key, config.type])
-      ),
-      oeeStatus,
-      oeeConnection: this.getOEEConnectionStatus(),
-      timestamp: new Date().toISOString(),
-    };
+    if (oeeData.length === 0) {
+      oeeStatus = 'no_data';
+    } else {
+      const oldestData = Math.max(
+        ...oeeData
+          .filter(d => d && d.receivedAt)
+          .map(d => Date.now() - new Date(d.receivedAt).getTime())
+      );
+      oeeStatus = oldestData < 300000 ? 'fresh' : 'stale'; // 5 min
+    }
   }
+
+  return {
+    isValid,
+    missing,
+    loaded: Array.from(this.dataCache.keys()),
+    sources: Object.fromEntries(
+      Array.from(this.sourceConfigs.entries()).map(([key, config]) => [key, config.type])
+    ),
+    oeeStatus,
+    oeeConnection: this.getOEEConnectionStatus ? this.getOEEConnectionStatus() : "unknown",
+    timestamp: new Date().toISOString()
+  };
 }
+
+
+   /**
+   * Utility: Always return an array
+   * - If input is null/undefined → []
+   * - If input is already array → same array
+   * - If input is object → [object]
+   * - If input is primitive → [value]
+   */
+  safeArray(input) {
+    if (!input) return [];
+    if (Array.isArray(input)) return input;
+    return [input];
+  }
+
+}
+
+
 
 export { DataManager };
 export default DataManager;

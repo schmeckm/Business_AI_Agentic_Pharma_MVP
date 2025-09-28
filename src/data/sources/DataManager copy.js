@@ -727,7 +727,7 @@ export class DataManager {
    * Uses mock data sources for all standard data types
    */
   setDefaultConfig() {
-    const defaultSources = ['orders', 'issues', 'batches', 'compliance', 'bom', 'inventory', 'qa'];
+    const defaultSources = ["orders", "issues", "batches", "compliance", "bom", "inventory", "qa", "qa_events"];
     defaultSources.forEach(source => {
       this.sourceConfigs.set(source, {
         type: 'mock',
@@ -1239,7 +1239,7 @@ export class DataManager {
       
       // Sortiere nach Timestamp (neueste zuerst) und limitiere
       const sortedHistory = historyArray
-        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+        .toSorted((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
         .slice(0, limit);
       
       logger.info(`✅ Converted ${sortedHistory.length} OEE history records from simulator file`);

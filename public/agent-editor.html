@@ -397,34 +397,49 @@ promptTemplate: |
     // YAML VALIDATION & SAVE
     // ===============================
 function validateYaml() {
-  const content = editor.getValue();
+  let content = editor.getValue();
+
   if (!content.trim()) {
     setStatus('⚠️ No content to validate', 'error');
-    return;
+    return false;
   }
+
   try {
     if (content.includes('\t')) {
       setStatus('❌ Error: Tabs found – use spaces only!', 'error');
-      return;
+      return false;
     }
 
-    jsyaml.load(content);
+    // 🛠 promptTemplate block neutralisieren
+    let safeContent = content.replace(
+      /(promptTemplate:\s*\|[\s\S]*?)(\n\s*\w+:|$)/,
+      "promptTemplate: |\n  DUMMY_PROMPT$2"
+    );
+
+    // 🚀 nur Struktur validieren
+    jsyaml.load(safeContent, { schema: jsyaml.FAILSAFE_SCHEMA });
 
     setStatus('✅ YAML is valid', 'success');
+    return true;
   } catch (err) {
     setStatus(`❌ YAML validation error: ${err.message}`, 'error');
+    return false;
   }
 }
 
+function saveChanges() {
+  const content = editor.getValue();
 
+  // ✅ Nur speichern, wenn die YAML valide ist
+  if (!validateYaml()) {
+    setStatus('❌ Save aborted: YAML not valid', 'error');
+    return;
+  }
 
-
-    function saveChanges() {
-      const content = editor.getValue();
-      console.log("💾 Saving:", content);
-      setStatus('💾 Changes saved (Demo)', 'success');
-      document.getElementById('saveBtn').disabled = true;
-    }
+  console.log("💾 Saving:", content);
+  setStatus('💾 Changes saved (Demo)', 'success');
+  document.getElementById('saveBtn').disabled = true;
+}
 
     async function reloadAgents() {
       try {
