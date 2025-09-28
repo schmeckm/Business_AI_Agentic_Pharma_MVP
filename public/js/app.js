@@ -500,28 +500,118 @@ async function refreshBackgroundData() {
 }
 
 // ===============================
-// Event Monitor (SSE)
+// Event Monitor (SSE) mit Auto-Reconnect & Heartbeat
 // ===============================
 let allEvents = [];
+let evtSource = null;
+let reconnectTimeout = null;
 
 function startEventMonitor() {
-  const evtSource = new EventSource("/events");
+  if (evtSource) {
+    evtSource.close();
+  }
 
-  evtSource.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    allEvents.push(data);
+  console.log("🔌 Connecting to Event Stream...");
+  evtSource = new EventSource("/events");
+
+  evtSource.onopen = () => {
+    console.log("✅ Event stream connected");
+    allEvents.push({
+      type: "connection",
+      timestamp: new Date().toISOString(),
+      payload: { message: "✅ Event stream connected" }
+    });
     renderEvents();
   };
 
+  evtSource.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data);
+      allEvents.push(data);
+      renderEvents();
+    } catch (err) {
+      console.warn("⚠️ Invalid SSE event:", event.data);
+    }
+  };
+
   evtSource.onerror = () => {
+    console.warn("⚠️ Event stream error, will reconnect in 5s...");
     allEvents.push({
       type: "error",
       timestamp: new Date().toISOString(),
       payload: { message: "⚠️ Event stream disconnected" }
     });
     renderEvents();
+
+    // Verbindung schließen und nach 5s neu versuchen
+    evtSource.close();
+    clearTimeout(reconnectTimeout);
+    reconnectTimeout = setTimeout(startEventMonitor, 5000);
   };
 }
+
+// Events rendern mit Highlighting
+function renderEvents() {
+  const monitor = document.getElementById("event-monitor");
+  if (!monitor) return;
+
+  monitor.innerHTML = "";
+
+  allEvents.forEach(data => {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("event-line");
+
+    const icon = {
+      received: "📥",
+      published: "📤",
+      "agent-action": "🤖",
+      "agent_event": "🔄",
+      "auto_triggered_agent": "⚡",
+      audit: "📝",
+      chat: "💬",
+      tool: "🔧",
+      error: "⚠️",
+      connection: "🔌",
+      success: "✅",
+      failure: "❌",
+      heartbeat: "❤️"
+    }[data.type] || "ℹ️";
+
+    // Farbliche Hervorhebung je nach Typ
+    if (data.type === "error") wrapper.style.color = "red";
+    if (data.type === "success") wrapper.style.color = "green";
+    if (data.type === "connection") wrapper.style.color = "blue";
+    if (data.type === "heartbeat") wrapper.style.color = "gray";
+
+    const ts = data.timestamp
+      ? new Date(data.timestamp).toLocaleTimeString()
+      : new Date().toLocaleTimeString();
+    wrapper.textContent = `[${ts}] ${icon} ${data.type.toUpperCase()} | ${data.topic || data.agent || ""} | ${JSON.stringify(data.payload || {})}`;
+
+    monitor.appendChild(wrapper);
+  });
+
+  monitor.scrollTop = monitor.scrollHeight;
+}
+
+// Events leeren
+function clearEvents() {
+  allEvents = [];
+  renderEvents();
+}
+
+// ===============================
+// Heartbeat-Mechanismus
+// ===============================
+setInterval(() => {
+  allEvents.push({
+    type: "heartbeat",
+    timestamp: new Date().toISOString(),
+    payload: { message: "💓 Connection alive" }
+  });
+  renderEvents();
+}, 15000); // alle 15s ein Heartbeat ins Log
+
 
 function renderEvents() {
   const monitor = document.getElementById("event-monitor");

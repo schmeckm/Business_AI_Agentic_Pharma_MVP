@@ -9030,5 +9030,2401 @@
     },
     "alarms": [],
     "timestamp": "2025-09-28T18:34:55.581Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "stopped",
+    "batchId": "BATCH-100",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 23.26069700008283,
+      "pressure": 1.0648930639585217
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:43:17.559Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "idle",
+    "batchId": "BATCH-101",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 21.00109284468622,
+      "pressure": 1.085642097781276
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:43:17.564Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "stopped",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 22.890504995704948,
+      "pressure": 1.0420356087205707
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:43:17.581Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-100",
+    "counters": {
+      "plannedProductionTime": 13,
+      "operatingTime": 2,
+      "goodCount": 5,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 15.38,
+      "performance": 250,
+      "quality": 100,
+      "oee": 15.38
+    },
+    "parameters": {
+      "temperature": 21.87913166814491,
+      "pressure": 1.0920267476414367
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:44:17.610Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-101",
+    "counters": {
+      "plannedProductionTime": 13,
+      "operatingTime": 4,
+      "goodCount": 8,
+      "badCount": 1
+    },
+    "metrics": {
+      "availability": 30.77,
+      "performance": 225,
+      "quality": 88.89,
+      "oee": 27.35
+    },
+    "parameters": {
+      "temperature": 20.92442817591767,
+      "pressure": 1.0144207219371868
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:44:17.614Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "stopped",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 13,
+      "operatingTime": 3,
+      "goodCount": 7,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 23.08,
+      "performance": 233.33,
+      "quality": 100,
+      "oee": 23.08
+    },
+    "parameters": {
+      "temperature": 20.63188004393171,
+      "pressure": 1.031276304495367
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:44:17.632Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-101",
+    "counters": {
+      "plannedProductionTime": 2,
+      "operatingTime": 1,
+      "goodCount": 1,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 50,
+      "performance": 100,
+      "quality": 100,
+      "oee": 50
+    },
+    "parameters": {
+      "temperature": 20.591472173326746,
+      "pressure": 1.0617560515817173
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:45:17.695Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "idle",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 5,
+      "operatingTime": 1,
+      "goodCount": 3,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 20,
+      "performance": 300,
+      "quality": 100,
+      "oee": 20
+    },
+    "parameters": {
+      "temperature": 22.730845504049952,
+      "pressure": 1.0155384111914874
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:45:17.701Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "idle",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 2,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 22.253913359101546,
+      "pressure": 1.0800058463667295
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:45:17.718Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "stopped",
+    "batchId": "BATCH-101",
+    "counters": {
+      "plannedProductionTime": 14,
+      "operatingTime": 5,
+      "goodCount": 6,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 35.71,
+      "performance": 120,
+      "quality": 100,
+      "oee": 35.71
+    },
+    "parameters": {
+      "temperature": 23.957822349772854,
+      "pressure": 1.0811718857705757
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:46:17.762Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "running",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 17,
+      "operatingTime": 5,
+      "goodCount": 8,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 29.41,
+      "performance": 160,
+      "quality": 100,
+      "oee": 29.41
+    },
+    "parameters": {
+      "temperature": 23.934685824224854,
+      "pressure": 1.0215299078923523
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:46:17.767Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "stopped",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 14,
+      "operatingTime": 1,
+      "goodCount": 3,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 7.14,
+      "performance": 300,
+      "quality": 100,
+      "oee": 7.14
+    },
+    "parameters": {
+      "temperature": 20.12421185154066,
+      "pressure": 1.0130982798018666
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:46:17.785Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "error",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 2,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 24.663127830905353,
+      "pressure": 1.013348897223046
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:47:17.864Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 7,
+      "operatingTime": 1,
+      "goodCount": 2,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 14.29,
+      "performance": 200,
+      "quality": 100,
+      "oee": 14.29
+    },
+    "parameters": {
+      "temperature": 24.980504004691003,
+      "pressure": 1.0250472987727721
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:47:17.869Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "stopped",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 2,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 24.696699328233706,
+      "pressure": 1.054027115187874
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:47:17.887Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "error",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 14,
+      "operatingTime": 4,
+      "goodCount": 9,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 28.57,
+      "performance": 225,
+      "quality": 100,
+      "oee": 28.57
+    },
+    "parameters": {
+      "temperature": 21.87305901716269,
+      "pressure": 1.0003727462484029
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:48:17.934Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 19,
+      "operatingTime": 5,
+      "goodCount": 10,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 26.32,
+      "performance": 200,
+      "quality": 100,
+      "oee": 26.32
+    },
+    "parameters": {
+      "temperature": 24.21281441023342,
+      "pressure": 1.026500274827673
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:48:17.939Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "running",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 14,
+      "operatingTime": 2,
+      "goodCount": 6,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 14.29,
+      "performance": 300,
+      "quality": 100,
+      "oee": 14.29
+    },
+    "parameters": {
+      "temperature": 20.696987166901717,
+      "pressure": 1.0001939483102809
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:48:17.958Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 2,
+      "operatingTime": 1,
+      "goodCount": 1,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 50,
+      "performance": 100,
+      "quality": 100,
+      "oee": 50
+    },
+    "parameters": {
+      "temperature": 20.83858161275744,
+      "pressure": 1.0873705220536123
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:49:17.983Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "stopped",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 7,
+      "operatingTime": 2,
+      "goodCount": 2,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 28.57,
+      "performance": 100,
+      "quality": 100,
+      "oee": 28.57
+    },
+    "parameters": {
+      "temperature": 21.767377449220213,
+      "pressure": 1.0907694964747296
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:49:17.988Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "error",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 26,
+      "operatingTime": 4,
+      "goodCount": 11,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 15.38,
+      "performance": 275,
+      "quality": 100,
+      "oee": 15.38
+    },
+    "parameters": {
+      "temperature": 21.45192702428456,
+      "pressure": 1.0088372414343385
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:49:18.005Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "running",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 14,
+      "operatingTime": 3,
+      "goodCount": 5,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 21.43,
+      "performance": 166.67,
+      "quality": 100,
+      "oee": 21.43
+    },
+    "parameters": {
+      "temperature": 23.32315388833778,
+      "pressure": 1.0208524745485348
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:50:18.054Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 19,
+      "operatingTime": 4,
+      "goodCount": 6,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 21.05,
+      "performance": 150,
+      "quality": 100,
+      "oee": 21.05
+    },
+    "parameters": {
+      "temperature": 20.84248867213623,
+      "pressure": 1.0000220613744681
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:50:18.059Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "stopped",
+    "batchId": "BATCH-105",
+    "counters": {
+      "plannedProductionTime": 11,
+      "operatingTime": 2,
+      "goodCount": 3,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 18.18,
+      "performance": 150,
+      "quality": 100,
+      "oee": 18.18
+    },
+    "parameters": {
+      "temperature": 23.93163293287838,
+      "pressure": 1.066409269368684
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:50:18.078Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 2,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 21.57464701666323,
+      "pressure": 1.0695482354414052
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:51:18.155Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "stopped",
+    "batchId": "BATCH-105",
+    "counters": {
+      "plannedProductionTime": 7,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 20.17397849242007,
+      "pressure": 1.0768792881553024
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:51:18.160Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "running",
+    "batchId": "BATCH-106",
+    "counters": {
+      "plannedProductionTime": 0,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 23.25248388670679,
+      "pressure": 1.0254779896007349
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:51:18.178Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 14,
+      "operatingTime": 5,
+      "goodCount": 7,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 35.71,
+      "performance": 140,
+      "quality": 100,
+      "oee": 35.71
+    },
+    "parameters": {
+      "temperature": 20.73116875739888,
+      "pressure": 1.0323987697232295
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:52:18.241Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "running",
+    "batchId": "BATCH-105",
+    "counters": {
+      "plannedProductionTime": 19,
+      "operatingTime": 2,
+      "goodCount": 5,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 10.53,
+      "performance": 250,
+      "quality": 100,
+      "oee": 10.53
+    },
+    "parameters": {
+      "temperature": 22.054873165982716,
+      "pressure": 1.0586061745489357
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:52:18.246Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "error",
+    "batchId": "BATCH-106",
+    "counters": {
+      "plannedProductionTime": 12,
+      "operatingTime": 3,
+      "goodCount": 5,
+      "badCount": 2
+    },
+    "metrics": {
+      "availability": 25,
+      "performance": 233.33,
+      "quality": 71.43,
+      "oee": 17.86
+    },
+    "parameters": {
+      "temperature": 20.429955821079552,
+      "pressure": 1.0314577782797871
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:52:18.264Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "running",
+    "batchId": "BATCH-105",
+    "counters": {
+      "plannedProductionTime": 5,
+      "operatingTime": 2,
+      "goodCount": 4,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 40,
+      "performance": 200,
+      "quality": 100,
+      "oee": 40
+    },
+    "parameters": {
+      "temperature": 22.251112364733267,
+      "pressure": 1.0238317233877892
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:53:18.335Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "idle",
+    "batchId": "BATCH-106",
+    "counters": {
+      "plannedProductionTime": 8,
+      "operatingTime": 2,
+      "goodCount": 4,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 25,
+      "performance": 200,
+      "quality": 100,
+      "oee": 25
+    },
+    "parameters": {
+      "temperature": 22.945090596882004,
+      "pressure": 1.0289663589491214
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:53:18.339Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "running",
+    "batchId": "BATCH-107",
+    "counters": {
+      "plannedProductionTime": 4,
+      "operatingTime": 1,
+      "goodCount": 2,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 25,
+      "performance": 200,
+      "quality": 100,
+      "oee": 25
+    },
+    "parameters": {
+      "temperature": 21.651298850496453,
+      "pressure": 1.0969156590264462
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:53:18.356Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "running",
+    "batchId": "BATCH-105",
+    "counters": {
+      "plannedProductionTime": 17,
+      "operatingTime": 4,
+      "goodCount": 9,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 23.53,
+      "performance": 225,
+      "quality": 100,
+      "oee": 23.53
+    },
+    "parameters": {
+      "temperature": 21.209193357411163,
+      "pressure": 1.0490558613200212
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:54:18.409Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-106",
+    "counters": {
+      "plannedProductionTime": 20,
+      "operatingTime": 3,
+      "goodCount": 7,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 15,
+      "performance": 233.33,
+      "quality": 100,
+      "oee": 15
+    },
+    "parameters": {
+      "temperature": 23.753862966294644,
+      "pressure": 1.037292616291356
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:54:18.415Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "error",
+    "batchId": "BATCH-107",
+    "counters": {
+      "plannedProductionTime": 16,
+      "operatingTime": 6,
+      "goodCount": 14,
+      "badCount": 1
+    },
+    "metrics": {
+      "availability": 37.5,
+      "performance": 250,
+      "quality": 93.33,
+      "oee": 35
+    },
+    "parameters": {
+      "temperature": 21.350259569874858,
+      "pressure": 1.0532706617293153
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:54:18.432Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "stopped",
+    "batchId": "BATCH-106",
+    "counters": {
+      "plannedProductionTime": 8,
+      "operatingTime": 3,
+      "goodCount": 6,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 37.5,
+      "performance": 200,
+      "quality": 100,
+      "oee": 37.5
+    },
+    "parameters": {
+      "temperature": 24.372568880319566,
+      "pressure": 1.0634771882559062
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:55:18.518Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "idle",
+    "batchId": "BATCH-107",
+    "counters": {
+      "plannedProductionTime": 9,
+      "operatingTime": 1,
+      "goodCount": 1,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 11.11,
+      "performance": 100,
+      "quality": 100,
+      "oee": 11.11
+    },
+    "parameters": {
+      "temperature": 22.85959945057379,
+      "pressure": 1.0517838770584966
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:55:18.522Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "running",
+    "batchId": "BATCH-108",
+    "counters": {
+      "plannedProductionTime": 5,
+      "operatingTime": 1,
+      "goodCount": 2,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 20,
+      "performance": 200,
+      "quality": 100,
+      "oee": 20
+    },
+    "parameters": {
+      "temperature": 23.91724281614347,
+      "pressure": 1.096467748860014
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:55:18.539Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-106",
+    "counters": {
+      "plannedProductionTime": 20,
+      "operatingTime": 4,
+      "goodCount": 9,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 20,
+      "performance": 225,
+      "quality": 100,
+      "oee": 20
+    },
+    "parameters": {
+      "temperature": 23.72735785358766,
+      "pressure": 1.011435828880798
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:56:18.606Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "running",
+    "batchId": "BATCH-107",
+    "counters": {
+      "plannedProductionTime": 21,
+      "operatingTime": 4,
+      "goodCount": 6,
+      "badCount": 2
+    },
+    "metrics": {
+      "availability": 19.05,
+      "performance": 200,
+      "quality": 75,
+      "oee": 14.29
+    },
+    "parameters": {
+      "temperature": 21.167749371042426,
+      "pressure": 1.0483378678004114
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:56:18.611Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "idle",
+    "batchId": "BATCH-108",
+    "counters": {
+      "plannedProductionTime": 17,
+      "operatingTime": 3,
+      "goodCount": 4,
+      "badCount": 1
+    },
+    "metrics": {
+      "availability": 17.65,
+      "performance": 166.67,
+      "quality": 80,
+      "oee": 14.12
+    },
+    "parameters": {
+      "temperature": 20.348653467034378,
+      "pressure": 1.0952146613359794
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:56:18.628Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "running",
+    "batchId": "BATCH-107",
+    "counters": {
+      "plannedProductionTime": 10,
+      "operatingTime": 4,
+      "goodCount": 6,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 40,
+      "performance": 150,
+      "quality": 100,
+      "oee": 40
+    },
+    "parameters": {
+      "temperature": 21.57018221770557,
+      "pressure": 1.089257904434715
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:57:18.680Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-108",
+    "counters": {
+      "plannedProductionTime": 11,
+      "operatingTime": 2,
+      "goodCount": 2,
+      "badCount": 1
+    },
+    "metrics": {
+      "availability": 18.18,
+      "performance": 150,
+      "quality": 66.67,
+      "oee": 12.12
+    },
+    "parameters": {
+      "temperature": 23.928346292947143,
+      "pressure": 1.0682563787634973
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:57:18.685Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "error",
+    "batchId": "BATCH-109",
+    "counters": {
+      "plannedProductionTime": 7,
+      "operatingTime": 2,
+      "goodCount": 5,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 28.57,
+      "performance": 250,
+      "quality": 100,
+      "oee": 28.57
+    },
+    "parameters": {
+      "temperature": 24.422782278619795,
+      "pressure": 1.0155424675892952
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:57:18.704Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "running",
+    "batchId": "BATCH-107",
+    "counters": {
+      "plannedProductionTime": 22,
+      "operatingTime": 7,
+      "goodCount": 12,
+      "badCount": 1
+    },
+    "metrics": {
+      "availability": 31.82,
+      "performance": 185.71,
+      "quality": 92.31,
+      "oee": 29.37
+    },
+    "parameters": {
+      "temperature": 22.884294834614742,
+      "pressure": 1.0643234351416002
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:58:18.746Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "stopped",
+    "batchId": "BATCH-108",
+    "counters": {
+      "plannedProductionTime": 23,
+      "operatingTime": 5,
+      "goodCount": 6,
+      "badCount": 2
+    },
+    "metrics": {
+      "availability": 21.74,
+      "performance": 160,
+      "quality": 75,
+      "oee": 16.3
+    },
+    "parameters": {
+      "temperature": 21.880159694834692,
+      "pressure": 1.065654978054522
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:58:18.751Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "error",
+    "batchId": "BATCH-109",
+    "counters": {
+      "plannedProductionTime": 19,
+      "operatingTime": 5,
+      "goodCount": 11,
+      "badCount": 2
+    },
+    "metrics": {
+      "availability": 26.32,
+      "performance": 260,
+      "quality": 84.62,
+      "oee": 22.27
+    },
+    "parameters": {
+      "temperature": 23.287226709419393,
+      "pressure": 1.0479348640667034
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:58:18.770Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-108",
+    "counters": {
+      "plannedProductionTime": 11,
+      "operatingTime": 4,
+      "goodCount": 10,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 36.36,
+      "performance": 250,
+      "quality": 100,
+      "oee": 36.36
+    },
+    "parameters": {
+      "temperature": 22.77153258729157,
+      "pressure": 1.0532632176833505
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:59:18.852Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-109",
+    "counters": {
+      "plannedProductionTime": 11,
+      "operatingTime": 1,
+      "goodCount": 1,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 9.09,
+      "performance": 100,
+      "quality": 100,
+      "oee": 9.09
+    },
+    "parameters": {
+      "temperature": 21.97737854362829,
+      "pressure": 1.0948940126832165
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T18:59:18.857Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "stopped",
+    "batchId": "BATCH-110",
+    "counters": {
+      "plannedProductionTime": 9,
+      "operatingTime": 2,
+      "goodCount": 5,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 22.22,
+      "performance": 250,
+      "quality": 100,
+      "oee": 22.22
+    },
+    "parameters": {
+      "temperature": 20.525286233845446,
+      "pressure": 1.0048417204392974
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T18:59:18.873Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-108",
+    "counters": {
+      "plannedProductionTime": 23,
+      "operatingTime": 7,
+      "goodCount": 18,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 30.43,
+      "performance": 257.14,
+      "quality": 100,
+      "oee": 30.43
+    },
+    "parameters": {
+      "temperature": 22.87329986657606,
+      "pressure": 1.0834334591579027
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:00:18.923Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-110",
+    "counters": {
+      "plannedProductionTime": 0,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 23.0036368602058,
+      "pressure": 1.0004304129233808
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T19:00:18.928Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "running",
+    "batchId": "BATCH-110",
+    "counters": {
+      "plannedProductionTime": 21,
+      "operatingTime": 6,
+      "goodCount": 13,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 28.57,
+      "performance": 216.67,
+      "quality": 100,
+      "oee": 28.57
+    },
+    "parameters": {
+      "temperature": 24.40142097947231,
+      "pressure": 1.0343057934391926
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:00:18.944Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "running",
+    "batchId": "BATCH-109",
+    "counters": {
+      "plannedProductionTime": 11,
+      "operatingTime": 2,
+      "goodCount": 4,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 18.18,
+      "performance": 200,
+      "quality": 100,
+      "oee": 18.18
+    },
+    "parameters": {
+      "temperature": 24.436994109658578,
+      "pressure": 1.0891819945158696
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:01:19.044Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "running",
+    "batchId": "BATCH-110",
+    "counters": {
+      "plannedProductionTime": 12,
+      "operatingTime": 7,
+      "goodCount": 15,
+      "badCount": 1
+    },
+    "metrics": {
+      "availability": 58.33,
+      "performance": 228.57,
+      "quality": 93.75,
+      "oee": 54.69
+    },
+    "parameters": {
+      "temperature": 23.745980876375132,
+      "pressure": 1.096697612449683
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:01:19.048Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "running",
+    "batchId": "BATCH-111",
+    "counters": {
+      "plannedProductionTime": 8,
+      "operatingTime": 3,
+      "goodCount": 8,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 37.5,
+      "performance": 266.67,
+      "quality": 100,
+      "oee": 37.5
+    },
+    "parameters": {
+      "temperature": 22.214261064563257,
+      "pressure": 1.0208406624506652
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:01:19.065Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "stopped",
+    "batchId": "BATCH-109",
+    "counters": {
+      "plannedProductionTime": 23,
+      "operatingTime": 5,
+      "goodCount": 9,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 21.74,
+      "performance": 180,
+      "quality": 100,
+      "oee": 21.74
+    },
+    "parameters": {
+      "temperature": 24.17806380413502,
+      "pressure": 1.0252261070618351
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:02:19.126Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "stopped",
+    "batchId": "BATCH-111",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 21.43372639989526,
+      "pressure": 1.0602257802956032
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:02:19.131Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "error",
+    "batchId": "BATCH-111",
+    "counters": {
+      "plannedProductionTime": 20,
+      "operatingTime": 6,
+      "goodCount": 12,
+      "badCount": 1
+    },
+    "metrics": {
+      "availability": 30,
+      "performance": 216.67,
+      "quality": 92.31,
+      "oee": 27.69
+    },
+    "parameters": {
+      "temperature": 24.52363674544582,
+      "pressure": 1.0014172535782426
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T19:02:19.148Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-110",
+    "counters": {
+      "plannedProductionTime": 11,
+      "operatingTime": 3,
+      "goodCount": 7,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 27.27,
+      "performance": 233.33,
+      "quality": 100,
+      "oee": 27.27
+    },
+    "parameters": {
+      "temperature": 21.512882025724583,
+      "pressure": 1.02661057373686
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:03:19.246Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "stopped",
+    "batchId": "BATCH-111",
+    "counters": {
+      "plannedProductionTime": 13,
+      "operatingTime": 3,
+      "goodCount": 5,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 23.08,
+      "performance": 166.67,
+      "quality": 100,
+      "oee": 23.08
+    },
+    "parameters": {
+      "temperature": 24.837667465923516,
+      "pressure": 1.0140453417117739
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:03:19.252Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "idle",
+    "batchId": "BATCH-112",
+    "counters": {
+      "plannedProductionTime": 9,
+      "operatingTime": 1,
+      "goodCount": 2,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 11.11,
+      "performance": 200,
+      "quality": 100,
+      "oee": 11.11
+    },
+    "parameters": {
+      "temperature": 20.391624086694264,
+      "pressure": 1.0720650620373895
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:03:19.269Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-111",
+    "counters": {
+      "plannedProductionTime": 0,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 22.112042311346187,
+      "pressure": 1.030100768226161
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:04:19.302Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-112",
+    "counters": {
+      "plannedProductionTime": 2,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 22.31666307999307,
+      "pressure": 1.0418138290716423
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T19:04:19.307Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "stopped",
+    "batchId": "BATCH-112",
+    "counters": {
+      "plannedProductionTime": 21,
+      "operatingTime": 4,
+      "goodCount": 8,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 19.05,
+      "performance": 200,
+      "quality": 100,
+      "oee": 19.05
+    },
+    "parameters": {
+      "temperature": 22.07915694983197,
+      "pressure": 1.0605965566463114
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:04:19.327Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "stopped",
+    "batchId": "BATCH-100",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 23.416868619238617,
+      "pressure": 1.0732975407539458
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:04:41.683Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "running",
+    "batchId": "BATCH-101",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 1,
+      "goodCount": 1,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 100,
+      "performance": 100,
+      "quality": 100,
+      "oee": 100
+    },
+    "parameters": {
+      "temperature": 20.23266360077561,
+      "pressure": 1.083773609809294
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:04:41.688Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "idle",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 23.846053742617226,
+      "pressure": 1.0126645970268071
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:04:41.705Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "running",
+    "batchId": "BATCH-100",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 1,
+      "goodCount": 1,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 100,
+      "performance": 100,
+      "quality": 100,
+      "oee": 100
+    },
+    "parameters": {
+      "temperature": 21.306264442675545,
+      "pressure": 1.0867765072814035
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:26:44.036Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "idle",
+    "batchId": "BATCH-101",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 21.09075467120843,
+      "pressure": 1.0862201959212139
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:26:44.042Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "running",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 1,
+      "goodCount": 1,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 100,
+      "performance": 100,
+      "quality": 100,
+      "oee": 100
+    },
+    "parameters": {
+      "temperature": 22.691222262630287,
+      "pressure": 1.0680982153828107
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:26:44.062Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-100",
+    "counters": {
+      "plannedProductionTime": 13,
+      "operatingTime": 4,
+      "goodCount": 6,
+      "badCount": 1
+    },
+    "metrics": {
+      "availability": 30.77,
+      "performance": 175,
+      "quality": 85.71,
+      "oee": 26.37
+    },
+    "parameters": {
+      "temperature": 22.396727543637112,
+      "pressure": 1.0473655913823148
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:27:44.091Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-101",
+    "counters": {
+      "plannedProductionTime": 13,
+      "operatingTime": 1,
+      "goodCount": 1,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 7.69,
+      "performance": 100,
+      "quality": 100,
+      "oee": 7.69
+    },
+    "parameters": {
+      "temperature": 24.112180603851236,
+      "pressure": 1.0894075037596413
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T19:27:44.096Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "error",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 13,
+      "operatingTime": 5,
+      "goodCount": 8,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 38.46,
+      "performance": 160,
+      "quality": 100,
+      "oee": 38.46
+    },
+    "parameters": {
+      "temperature": 21.949594135717785,
+      "pressure": 1.0285541504447786
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T19:27:44.113Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-101",
+    "counters": {
+      "plannedProductionTime": 3,
+      "operatingTime": 2,
+      "goodCount": 2,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 66.67,
+      "performance": 100,
+      "quality": 100,
+      "oee": 66.67
+    },
+    "parameters": {
+      "temperature": 22.579359874715074,
+      "pressure": 1.058599630209954
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:28:44.206Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "running",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 1,
+      "goodCount": 1,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 100,
+      "performance": 100,
+      "quality": 100,
+      "oee": 100
+    },
+    "parameters": {
+      "temperature": 24.707510410007714,
+      "pressure": 1.0387092547872214
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:28:44.212Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "running",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 2,
+      "operatingTime": 1,
+      "goodCount": 3,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 50,
+      "performance": 300,
+      "quality": 100,
+      "oee": 50
+    },
+    "parameters": {
+      "temperature": 20.042352623796578,
+      "pressure": 1.059913041827117
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:28:44.229Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "stopped",
+    "batchId": "BATCH-101",
+    "counters": {
+      "plannedProductionTime": 15,
+      "operatingTime": 5,
+      "goodCount": 8,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 33.33,
+      "performance": 160,
+      "quality": 100,
+      "oee": 33.33
+    },
+    "parameters": {
+      "temperature": 23.595715879692037,
+      "pressure": 1.0807357601706862
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:29:44.293Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "idle",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 13,
+      "operatingTime": 3,
+      "goodCount": 3,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 23.08,
+      "performance": 100,
+      "quality": 100,
+      "oee": 23.08
+    },
+    "parameters": {
+      "temperature": 24.840051257929275,
+      "pressure": 1.0251410940406305
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:29:44.300Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "idle",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 14,
+      "operatingTime": 5,
+      "goodCount": 9,
+      "badCount": 2
+    },
+    "metrics": {
+      "availability": 35.71,
+      "performance": 220,
+      "quality": 81.82,
+      "oee": 29.22
+    },
+    "parameters": {
+      "temperature": 21.16940039388837,
+      "pressure": 1.0708834761685695
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:29:44.320Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "stopped",
+    "batchId": "BATCH-101",
+    "counters": {
+      "plannedProductionTime": 27,
+      "operatingTime": 10,
+      "goodCount": 19,
+      "badCount": 1
+    },
+    "metrics": {
+      "availability": 37.04,
+      "performance": 200,
+      "quality": 95,
+      "oee": 35.19
+    },
+    "parameters": {
+      "temperature": 23.75364696263891,
+      "pressure": 1.0274387755099001
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:30:44.391Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 2,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 22.371379878576263,
+      "pressure": 1.0390349940033674
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T19:30:44.396Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "stopped",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 4,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 23.033392994229956,
+      "pressure": 1.0991848313944317
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:30:44.414Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "stopped",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 11,
+      "operatingTime": 3,
+      "goodCount": 6,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 27.27,
+      "performance": 200,
+      "quality": 100,
+      "oee": 27.27
+    },
+    "parameters": {
+      "temperature": 24.511313941074484,
+      "pressure": 1.0282127521053956
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:31:44.448Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "running",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 14,
+      "operatingTime": 2,
+      "goodCount": 3,
+      "badCount": 1
+    },
+    "metrics": {
+      "availability": 14.29,
+      "performance": 200,
+      "quality": 75,
+      "oee": 10.71
+    },
+    "parameters": {
+      "temperature": 22.601986518372346,
+      "pressure": 1.0212927880868718
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:31:44.455Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "stopped",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 16,
+      "operatingTime": 3,
+      "goodCount": 3,
+      "badCount": 1
+    },
+    "metrics": {
+      "availability": 18.75,
+      "performance": 133.33,
+      "quality": 75,
+      "oee": 14.06
+    },
+    "parameters": {
+      "temperature": 22.978673802057124,
+      "pressure": 1.0523729022502575
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:31:44.474Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 23,
+      "operatingTime": 5,
+      "goodCount": 10,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 21.74,
+      "performance": 200,
+      "quality": 100,
+      "oee": 21.74
+    },
+    "parameters": {
+      "temperature": 24.455435391166446,
+      "pressure": 1.0383804851308547
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:32:44.550Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 2,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 21.566648078368747,
+      "pressure": 1.0543783085217628
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T19:32:44.555Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "running",
+    "batchId": "BATCH-105",
+    "counters": {
+      "plannedProductionTime": 6,
+      "operatingTime": 2,
+      "goodCount": 6,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 33.33,
+      "performance": 300,
+      "quality": 100,
+      "oee": 33.33
+    },
+    "parameters": {
+      "temperature": 24.886587390437086,
+      "pressure": 1.0524565496031166
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:32:44.577Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "error",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 8,
+      "operatingTime": 1,
+      "goodCount": 3,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 12.5,
+      "performance": 300,
+      "quality": 100,
+      "oee": 12.5
+    },
+    "parameters": {
+      "temperature": 21.840690348032272,
+      "pressure": 1.0745235271304
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T19:33:44.636Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "running",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 14,
+      "operatingTime": 1,
+      "goodCount": 2,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 7.14,
+      "performance": 200,
+      "quality": 100,
+      "oee": 7.14
+    },
+    "parameters": {
+      "temperature": 21.126078951458297,
+      "pressure": 1.0621221756366177
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:33:44.642Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "error",
+    "batchId": "BATCH-105",
+    "counters": {
+      "plannedProductionTime": 18,
+      "operatingTime": 5,
+      "goodCount": 11,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 27.78,
+      "performance": 220,
+      "quality": 100,
+      "oee": 27.78
+    },
+    "parameters": {
+      "temperature": 20.697379938777484,
+      "pressure": 1.052305366708344
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T19:33:44.664Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "stopped",
+    "batchId": "BATCH-103",
+    "counters": {
+      "plannedProductionTime": 20,
+      "operatingTime": 2,
+      "goodCount": 4,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 10,
+      "performance": 200,
+      "quality": 100,
+      "oee": 10
+    },
+    "parameters": {
+      "temperature": 24.846376544392413,
+      "pressure": 1.0658938945955208
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:34:44.724Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-105",
+    "counters": {
+      "plannedProductionTime": 4,
+      "operatingTime": 2,
+      "goodCount": 3,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 50,
+      "performance": 150,
+      "quality": 100,
+      "oee": 50
+    },
+    "parameters": {
+      "temperature": 22.754309979479697,
+      "pressure": 1.0289952038654464
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T19:34:44.728Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "idle",
+    "batchId": "BATCH-106",
+    "counters": {
+      "plannedProductionTime": 5,
+      "operatingTime": 1,
+      "goodCount": 2,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 20,
+      "performance": 200,
+      "quality": 100,
+      "oee": 20
+    },
+    "parameters": {
+      "temperature": 22.15282896626649,
+      "pressure": 1.0487666601065033
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:34:44.746Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "running",
+    "batchId": "BATCH-104",
+    "counters": {
+      "plannedProductionTime": 10,
+      "operatingTime": 5,
+      "goodCount": 7,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 50,
+      "performance": 140,
+      "quality": 100,
+      "oee": 50
+    },
+    "parameters": {
+      "temperature": 22.972275202240915,
+      "pressure": 1.076919696693988
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:35:44.839Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "idle",
+    "batchId": "BATCH-105",
+    "counters": {
+      "plannedProductionTime": 16,
+      "operatingTime": 5,
+      "goodCount": 9,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 31.25,
+      "performance": 180,
+      "quality": 100,
+      "oee": 31.25
+    },
+    "parameters": {
+      "temperature": 23.163493516324362,
+      "pressure": 1.0893023075861408
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:35:44.845Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "stopped",
+    "batchId": "BATCH-106",
+    "counters": {
+      "plannedProductionTime": 17,
+      "operatingTime": 3,
+      "goodCount": 6,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 17.65,
+      "performance": 200,
+      "quality": 100,
+      "oee": 17.65
+    },
+    "parameters": {
+      "temperature": 22.455108291179847,
+      "pressure": 1.025286602234802
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:35:44.864Z"
+  },
+  {
+    "line": "LINE-01",
+    "status": "idle",
+    "batchId": "BATCH-100",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 24.67544650797,
+      "pressure": 1.0703190577002177
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:36:43.109Z"
+  },
+  {
+    "line": "LINE-02",
+    "status": "error",
+    "batchId": "BATCH-101",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 20.969515765463235,
+      "pressure": 1.0559764621999017
+    },
+    "alarms": [
+      "Critical fault detected"
+    ],
+    "timestamp": "2025-09-28T19:36:43.115Z"
+  },
+  {
+    "line": "LINE-03",
+    "status": "stopped",
+    "batchId": "BATCH-102",
+    "counters": {
+      "plannedProductionTime": 1,
+      "operatingTime": 0,
+      "goodCount": 0,
+      "badCount": 0
+    },
+    "metrics": {
+      "availability": 0,
+      "performance": 0,
+      "quality": 0,
+      "oee": 0
+    },
+    "parameters": {
+      "temperature": 20.02534269166234,
+      "pressure": 1.0186160376376876
+    },
+    "alarms": [],
+    "timestamp": "2025-09-28T19:36:43.134Z"
   }
 ]
