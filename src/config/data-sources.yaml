@@ -10,7 +10,6 @@
 # ========================================================================
 
 # Environment-based configuration switching
-# Environment-based configuration switching
 environment: development
 
 # Data source mappings per data type
@@ -44,10 +43,6 @@ dataSources:
     config:
       basePath: mock-data
 
-  # ========================================================================
-  # ADD THESE THREE MISSING DATA SOURCES:
-  # ========================================================================
-  
   # BOM Data Source (Mock) - Bill of Materials
   bom:
     type: mock
@@ -70,13 +65,22 @@ dataSources:
       basePath: mock-data
 
   # ========================================================================
-  # 🆕 OEE Data Source (MQTT Realtime)
+  # OEE Data Sources
   # ========================================================================
+  
+  # Real-time OEE Data Source (MQTT)
   oee:
     type: oee
     config:
       brokerUrl: ${MQTT_BROKER_URL}
       topicBase: ${MQTT_TOPIC_BASE:plc}
+
+  # Historical OEE Data Source (Root file)
+  oee_history:
+    type: mock
+    file: oee_history
+    config:
+      basePath: ""  # Root directory
 
 # For SAP integration, set environment variables:
 # NODE_ENV=production

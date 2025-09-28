@@ -1,91 +1,82 @@
 /**
  * ========================================================================
- * API ROUTES - COMPREHENSIVE ROUTING SYSTEM
+ * DATEI: src/api/routes/index.js - VEREINFACHTE MIGRATION
  * ========================================================================
  * 
- * Complete routing system for pharmaceutical manufacturing agent framework
- * Supports frontend integration, OEE monitoring, and A2A workflows
- * Includes Server-Sent Events for real-time monitoring
- * 
- * Features:
- * - Modular route organization for maintainability
- * - Frontend compatibility routes (/templates, /events)
- * - Real-time event streaming for monitoring dashboard
- * - OEE data integration and analytics endpoints
- * - A2A workflow management endpoints
- * - Comprehensive audit logging endpoints
- * - System health and status monitoring
- * - GMP compliance and validation endpoints
- * 
- * Developer: Markus Schmeckenbecher
- * Version: 2.1.0 - Frontend Integration + OEE Support
+ * Schrittweise Migration: Verwendet Ihre bestehende routes.js Logik
+ * mit den neuen OEE-Features, ohne alle Module auf einmal zu erstellen
  * ========================================================================
  */
 
 import express from "express";
 import { readFileSync } from "fs";
 
-// Dynamic versioning from package.json
+// Package version
 let packageJson;
 try {
   packageJson = JSON.parse(readFileSync('./package.json', 'utf8'));
 } catch (error) {
-  packageJson = { version: "2.1.0" }; // Fallback version
+  packageJson = { version: "2.1.0" };
 }
 
-// ========================================================================
-// MAIN ROUTER FACTORY
-// ========================================================================
-
 /**
- * Creates the complete API routing structure
- * Registers all route modules with proper middleware and error handling
- * 
- * @param {AgentManager} agentManager - Agent lifecycle and execution manager
- * @param {DataManager} dataManager - Data source and cache manager
- * @param {EventBusManager} eventBusManager - Event-driven communication manager
- * @param {AuditLogger} auditLogger - GMP compliance audit logging
- * @returns {express.Router} Complete API router
+ * Hauptfunktion für API-Routen (Ersetzt createRoutes)
+ * Kombiniert Ihre bestehende Logik mit neuen OEE-Features
  */
-export function createRoutes(agentManager, dataManager, eventBusManager, auditLogger) {
+export function createAPIRoutes(agentManager, dataManager, eventBusManager, auditLogger, a2aManager) {
   const router = express.Router();
 
-  // Register modular route systems
+  // Chat Routes - Ihre bestehende Logik
   router.use("/chat", createChatRoutes(agentManager, auditLogger, eventBusManager));
+  
+  // Agent Routes - Ihre bestehende Logik
   router.use("/agents", createAgentRoutes(agentManager));
-  router.use("/data", createDataRoutes(dataManager));
+  
+  // Data Routes - Erweitert mit OEE
+  router.use("/data", createDataRoutes(dataManager, eventBusManager));
+  
+  // Neue dedizierte OEE Routes
+  router.use("/oee", createOEERoutes(dataManager, eventBusManager));
+  
+  // Event Routes - Ihre bestehende Logik
   router.use("/events", createEventRoutes(eventBusManager));
+  
+  // Audit Routes - Ihre bestehende Logik
   router.use("/audit", createAuditRoutes(auditLogger));
+  
+  // System Routes - Ihre bestehende Logik
   router.use("/system", createSystemRoutes(agentManager, dataManager, eventBusManager));
+  
+  // Workflow Routes - Ihre bestehende Logik
   router.use("/workflows", createWorkflowRoutes(agentManager));
+  
+  // A2A Routes - Ihre bestehende Logik
   router.use("/a2a", createA2ARoutes(agentManager));
-  router.use("/oee", createOEERoutes(dataManager, eventBusManager)); // NEW: Dedicated OEE endpoints
 
   return router;
 }
 
 /**
- * Creates root-level routes for frontend compatibility
- * Provides direct access to frequently used endpoints without /api prefix
- * 
- * @param {AgentManager} agentManager - Agent manager instance
- * @param {EventBusManager} eventBusManager - Event manager for real-time streams
- * @returns {express.Router} Root-level router
+ * Root-Level Routen für Frontend-Kompatibilität
  */
 export function createRootRoutes(agentManager, eventBusManager) {
   const router = express.Router();
 
-  // Frontend compatibility routes
+  // Frontend Templates
   router.get("/templates", (req, res) => {
     try {
       const templates = agentManager.getTemplates();
-      res.json(templates);
+      res.json({ 
+        templates,
+        count: templates.length,
+        timestamp: new Date().toISOString()
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   });
 
-  // Server-Sent Events stream for frontend real-time monitoring
+  // Server-Sent Events
   router.get("/events", (req, res) => {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
@@ -95,27 +86,23 @@ export function createRootRoutes(agentManager, eventBusManager) {
       'Access-Control-Allow-Headers': 'Cache-Control'
     });
 
-    // Send initial connection confirmation
     res.write(`data: ${JSON.stringify({
       type: 'connection',
       message: 'Real-time event stream connected',
       timestamp: new Date().toISOString()
     })}\n\n`);
 
-    // Register event listener for all system events
     const eventHandler = (eventData) => {
       res.write(`data: ${JSON.stringify(eventData)}\n\n`);
     };
 
     eventBusManager.on('event', eventHandler);
 
-    // Cleanup on client disconnect
     req.on('close', () => {
       eventBusManager.removeListener('event', eventHandler);
       console.log('Event stream client disconnected');
     });
 
-    // Keep-alive mechanism to prevent timeout
     const keepAlive = setInterval(() => {
       res.write(`data: ${JSON.stringify({
         type: 'ping',
@@ -123,66 +110,36 @@ export function createRootRoutes(agentManager, eventBusManager) {
       })}\n\n`);
     }, 30000);
 
-    // Clear keep-alive on disconnect
-    req.on('close', () => {
-      clearInterval(keepAlive);
-    });
+    req.on('close', () => clearInterval(keepAlive));
   });
 
   return router;
 }
 
-export default createRoutes;
-
 // ========================================================================
-// CHAT ROUTES - Agent Interaction Interface
+// CHAT ROUTES - Ihre bestehende Logik
 // ========================================================================
 
-/**
- * Creates chat-related routes for agent interaction
- * Handles user commands and triggers appropriate agents
- * 
- * @param {AgentManager} agentManager - Agent execution manager
- * @param {AuditLogger} auditLogger - Audit logging for GMP compliance
- * @param {EventBusManager} eventBusManager - Event system for agent communication
- * @returns {express.Router} Chat router
- */
 function createChatRoutes(agentManager, auditLogger, eventBusManager) {
   const router = express.Router();
 
-  /**
-   * POST /api/chat
-   * Main chat interface for processing user commands
-   * Finds appropriate agent and executes manufacturing commands
-   * 
-   * Request Body:
-   * - message: Manufacturing command (e.g., "ask-today-orders")
-   * - user: User identifier for audit logging
-   * 
-   * Response:
-   * - response: Agent-generated response text
-   * - agentUsed: ID of agent that processed the command
-   * - eventChainTriggered: Array of events published by the agent
-   * - timestamp: ISO timestamp of processing
-   */
   router.post("/", async (req, res) => {
     const { message, user } = req.body;
     let agentUsed = null;
     let responseText = "";
 
     try {
-      // Find agent capable of handling the command
       const agent = agentManager.findAgent(message);
 
-if (agent) {
-  agentUsed = agent.id;
-  responseText = await agentManager.processAgent(agent, message);
-} else {
-  // Fallback für Freitext mit Daten-Constraint
-  console.log(`No specific agent found for: "${message}" - using constrained generic LLM`);
-  responseText = await agentManager.processGenericQuery(message);
-  agentUsed = "generic-constrained";
-}
+      if (agent) {
+        agentUsed = agent.id;
+        responseText = await agentManager.processAgent(agent, message);
+      } else {
+        console.log(`No specific agent found for: "${message}" - using constrained generic LLM`);
+        responseText = await agentManager.processGenericQuery(message);
+        agentUsed = "generic-constrained";
+      }
+
       res.json({ 
         response: responseText, 
         agentUsed, 
@@ -203,45 +160,66 @@ if (agent) {
     }
   });
 
-  /**
-   * GET /api/chat/history
-   * Retrieves recent chat interactions for audit purposes
-   */
-  router.get("/history", (req, res) => {
-    const limit = parseInt(req.query.limit) || 50;
-    try {
-      const history = auditLogger.getChatHistory(limit);
-      res.json({
-        history,
-        count: history.length,
-        timestamp: new Date().toISOString()
-      });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+router.get("/history", async (req, res) => {
+  try {
+    const { limit = 100, lineId, startDate, endDate } = req.query;
+    let historyData = [];
+
+    // 1) Versuche EventBus
+    if (eventBusManager && typeof eventBusManager.getOEEEventHistory === 'function') {
+      historyData = eventBusManager.getOEEEventHistory(parseInt(limit));
     }
-  });
+
+    // 2) Fallback: oee_history.json lesen
+    if (!historyData || historyData.length === 0) {
+      const filePath = path.join(process.cwd(), "oee_history.json");
+      if (fs.existsSync(filePath)) {
+        const raw = fs.readFileSync(filePath, "utf8");
+        const fileData = JSON.parse(raw);
+        historyData = fileData.slice(-limit); // nur die letzten n Einträge
+        console.log(`📂 Loaded ${historyData.length} OEE records from oee_history.json`);
+      }
+    }
+
+    // Filter anwenden
+    if (lineId) {
+      historyData = historyData.filter(item =>
+        item.line === lineId || item.lineId === lineId
+      );
+    }
+    if (startDate) {
+      const start = new Date(startDate);
+      historyData = historyData.filter(item => new Date(item.timestamp) >= start);
+    }
+    if (endDate) {
+      const end = new Date(endDate);
+      historyData = historyData.filter(item => new Date(item.timestamp) <= end);
+    }
+
+    res.json({
+      success: true,
+      history: historyData,
+      count: historyData.length,
+      parameters: { limit: parseInt(limit), lineId, startDate, endDate },
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error("❌ OEE History endpoint error:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
   return router;
 }
 
 // ========================================================================
-// AGENT ROUTES - Agent Management and Configuration
+// AGENT ROUTES - Ihre bestehende Logik
 // ========================================================================
 
-/**
- * Creates agent management routes
- * Provides agent registry, templates, and configuration endpoints
- * 
- * @param {AgentManager} agentManager - Agent lifecycle manager
- * @returns {express.Router} Agent management router
- */
 function createAgentRoutes(agentManager) {
   const router = express.Router();
 
-  /**
-   * GET /api/agents
-   * Returns complete agent registry with capabilities and statistics
-   */
   router.get("/", (req, res) => {
     try {
       const agents = agentManager.getAllAgents();
@@ -262,10 +240,6 @@ function createAgentRoutes(agentManager) {
     }
   });
 
-  /**
-   * GET /api/agents/templates
-   * Returns agent command templates for frontend dropdown
-   */
   router.get("/templates", (req, res) => {
     try {
       const templates = agentManager.getTemplates();
@@ -280,10 +254,6 @@ function createAgentRoutes(agentManager) {
     }
   });
 
-  /**
-   * GET /api/agents/oee
-   * Returns OEE-enabled agents and their capabilities
-   */
   router.get("/oee", (req, res) => {
     try {
       const oeeAgents = agentManager.getOEEEnabledAgents();
@@ -303,10 +273,6 @@ function createAgentRoutes(agentManager) {
     }
   });
 
-  /**
-   * POST /api/agents/reload
-   * Reloads agent configuration from agents.yaml
-   */
   router.post("/reload", (req, res) => {
     try {
       console.log('Reloading agent configuration...');
@@ -327,10 +293,6 @@ function createAgentRoutes(agentManager) {
     }
   });
 
-  /**
-   * POST /api/agents/:agentId/oee
-   * Toggle OEE integration for specific agent
-   */
   router.post("/:agentId/oee", (req, res) => {
     const { agentId } = req.params;
     const { enabled } = req.body;
@@ -353,23 +315,12 @@ function createAgentRoutes(agentManager) {
 }
 
 // ========================================================================
-// DATA ROUTES - Data Management and Analytics
+// DATA ROUTES - ERWEITERT MIT OEE
 // ========================================================================
 
-/**
- * Creates data management routes
- * Provides access to production data, OEE metrics, and analytics
- * 
- * @param {DataManager} dataManager - Data source manager
- * @returns {express.Router} Data management router
- */
-function createDataRoutes(dataManager) {
+function createDataRoutes(dataManager, eventBusManager) {
   const router = express.Router();
 
-  /**
-   * GET /api/data
-   * Returns data overview and statistics
-   */
   router.get("/", (req, res) => {
     try {
       const includeFullData = req.query.full === 'true';
@@ -380,10 +331,6 @@ function createDataRoutes(dataManager) {
     }
   });
 
-  /**
-   * GET /api/data/stats
-   * Returns detailed data statistics and cache status
-   */
   router.get("/stats", (req, res) => {
     try {
       res.json({
@@ -396,47 +343,6 @@ function createDataRoutes(dataManager) {
     }
   });
 
-  /**
-   * GET /api/data/validate
-   * Validates data integrity and completeness
-   */
-  router.get("/validate", (req, res) => {
-    try {
-      const requiredFiles = req.query.required ? req.query.required.split(',') : undefined;
-      const validation = dataManager.validateDataIntegrity(requiredFiles);
-      res.json(validation);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-  /**
-   * POST /api/data/reload
-   * Reloads all data sources from files
-   */
-  router.post("/reload", (req, res) => {
-    try {
-      console.log('Reloading data sources...');
-      const success = dataManager.reloadData();
-      res.json({
-        status: success ? "success" : "failed",
-        loaded: dataManager.getLoadedDataKeys(),
-        message: success ? "Data reloaded successfully" : "Failed to reload data",
-        timestamp: new Date().toISOString()
-      });
-    } catch (error) {
-      res.status(500).json({
-        status: "error",
-        message: error.message,
-        timestamp: new Date().toISOString()
-      });
-    }
-  });
-
-  /**
-   * GET /api/data/oee
-   * Returns current OEE metrics and equipment status
-   */
   router.get("/oee", async (req, res) => {
     try {
       const data = await dataManager.getCachedData("oee", true);
@@ -455,10 +361,16 @@ function createDataRoutes(dataManager) {
     }
   });
 
-  /**
-   * GET /api/data/orders-oee
-   * Returns production orders enriched with OEE data
-   */
+  // DER GESUCHTE ENDPUNKT!
+  router.get("/oee_history", (req, res) => {
+    // Redirect zum neuen OEE History Endpunkt
+    const queryString = new URLSearchParams(req.query).toString();
+    const redirectUrl = `/api/oee/history${queryString ? '?' + queryString : ''}`;
+    
+    console.log(`Redirecting /api/data/oee_history to ${redirectUrl}`);
+    res.redirect(redirectUrl);
+  });
+
   router.get("/orders-oee", async (req, res) => {
     try {
       const data = await dataManager.getOrdersWithOEE();
@@ -479,27 +391,131 @@ function createDataRoutes(dataManager) {
     }
   });
 
+  router.post("/reload", (req, res) => {
+    try {
+      console.log('Reloading data sources...');
+      const success = dataManager.reloadData();
+      res.json({
+        status: success ? "success" : "failed",
+        loaded: dataManager.getLoadedDataKeys(),
+        message: success ? "Data reloaded successfully" : "Failed to reload data",
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: "error",
+        message: error.message,
+        timestamp: new Date().toISOString()
+      });
+    }
+  });
+
   return router;
 }
 
 // ========================================================================
-// EVENT ROUTES - Real-time Event Management
+// NEUE OEE ROUTES - IHR GESUCHTER ENDPUNKT
 // ========================================================================
 
-/**
- * Creates event management routes
- * Provides event subscriptions, history, and real-time monitoring
- * 
- * @param {EventBusManager} eventBusManager - Event system manager
- * @returns {express.Router} Event management router
- */
+function createOEERoutes(dataManager, eventBusManager) {
+  const router = express.Router();
+
+  router.get("/history", async (req, res) => {
+    try {
+      const { limit = 100, lineId, startDate, endDate } = req.query;
+      let historyData = [];
+
+      // 1) EventBus versuchen
+      if (eventBusManager && typeof eventBusManager.getOEEEventHistory === "function") {
+        historyData = eventBusManager.getOEEEventHistory(parseInt(limit));
+        console.log(`Loaded ${historyData.length} OEE events from EventBus`);
+      }
+
+      // 2) Fallback: Datei oee_history.json einlesen
+      if (!historyData || historyData.length === 0) {
+        const filePath = path.join(process.cwd(), "oee_history.json");
+        if (fs.existsSync(filePath)) {
+          const raw = fs.readFileSync(filePath, "utf8");
+          const fileData = JSON.parse(raw);
+          historyData = Array.isArray(fileData) ? fileData.slice(-limit) : [];
+          console.log(`📂 Loaded ${historyData.length} OEE records from oee_history.json`);
+        }
+      }
+
+      // 3) Wenn immer noch leer → Mockdaten
+      if (!historyData || historyData.length === 0) {
+        historyData = generateOEEHistory(parseInt(limit), lineId);
+        console.log(`Generated ${historyData.length} mock OEE history records`);
+      }
+
+      // Filter anwenden
+      if (lineId && historyData.length > 0) {
+        historyData = historyData.filter(item => item.line === lineId || item.lineId === lineId);
+      }
+      if (startDate && historyData.length > 0) {
+        const start = new Date(startDate);
+        historyData = historyData.filter(item => new Date(item.timestamp) >= start);
+      }
+      if (endDate && historyData.length > 0) {
+        const end = new Date(endDate);
+        historyData = historyData.filter(item => new Date(item.timestamp) <= end);
+      }
+
+      res.json({
+        success: true,
+        history: historyData,
+        count: historyData.length,
+        parameters: { limit: parseInt(limit), lineId, startDate, endDate },
+        timestamp: new Date().toISOString()
+      });
+
+    } catch (error) {
+      console.error("❌ OEE History endpoint error:", error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        endpoint: "/api/oee/history",
+        timestamp: new Date().toISOString()
+      });
+    }
+  });
+
+  return router;
+}
+
+// Helper function für Mock OEE History
+function generateOEEHistory(limit, lineId) {
+  const mockData = [];
+  const lines = lineId ? [lineId] : ['LINE-01', 'LINE-02', 'LINE-03'];
+  
+  for (let i = 0; i < limit; i++) {
+    const selectedLine = lines[i % lines.length];
+    const minutesAgo = i * 3;
+    
+    mockData.push({
+      timestamp: new Date(Date.now() - (minutesAgo * 60000)).toISOString(),
+      lineId: selectedLine,
+      lineName: `Production Line ${selectedLine.split('-')[1]}`,
+      oee: Math.round((85 + Math.random() * 10) * 100) / 100,
+      availability: Math.round((90 + Math.random() * 8) * 100) / 100,
+      performance: Math.round((88 + Math.random() * 10) * 100) / 100,
+      quality: Math.round((95 + Math.random() * 4) * 100) / 100,
+      status: Math.random() > 0.9 ? 'maintenance' : 'running',
+      eventType: 'oee_update',
+      source: 'mock_generator'
+    });
+  }
+  
+  return mockData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+}
+
+// ========================================================================
+// ALLE ANDEREN ROUTES - Ihre bestehende Logik
+// ========================================================================
+
 function createEventRoutes(eventBusManager) {
   const router = express.Router();
 
-  /**
-   * GET /api/events/subscriptions
-   * Returns event subscription mappings and agent assignments
-   */
   router.get("/subscriptions", (req, res) => {
     try {
       const subscriptions = eventBusManager.getEventSubscriptions();
@@ -509,10 +525,6 @@ function createEventRoutes(eventBusManager) {
     }
   });
 
-  /**
-   * GET /api/events/oee
-   * Returns OEE event history and analytics
-   */
   router.get("/oee", (req, res) => {
     try {
       const limit = parseInt(req.query.limit) || 20;
@@ -523,10 +535,6 @@ function createEventRoutes(eventBusManager) {
     }
   });
 
-  /**
-   * GET /api/events/oee/stats
-   * Returns OEE event statistics and trends
-   */
   router.get("/oee/stats", (req, res) => {
     try {
       const stats = eventBusManager.getOEEStatistics();
@@ -536,10 +544,6 @@ function createEventRoutes(eventBusManager) {
     }
   });
 
-  /**
-   * POST /api/events/oee
-   * Publishes OEE event to trigger agent workflows
-   */
   router.post("/oee", async (req, res) => {
     try {
       const { eventType, oeeData, sourceAgent } = req.body;
@@ -565,10 +569,6 @@ function createEventRoutes(eventBusManager) {
     }
   });
 
-  /**
-   * DELETE /api/events/oee/history
-   * Clears OEE event history for maintenance
-   */
   router.delete("/oee/history", (req, res) => {
     try {
       const clearedCount = eventBusManager.clearOEEHistory();
@@ -586,135 +586,36 @@ function createEventRoutes(eventBusManager) {
   return router;
 }
 
-// ========================================================================
-// OEE ROUTES - Dedicated Equipment Effectiveness Endpoints
-// ========================================================================
-
-/**
- * Creates dedicated OEE management routes
- * Provides specialized endpoints for equipment effectiveness monitoring
- * 
- * @param {DataManager} dataManager - Data source manager
- * @param {EventBusManager} eventBusManager - Event system for OEE updates
- * @returns {express.Router} OEE management router
- */
-function createOEERoutes(dataManager, eventBusManager) {
-  const router = express.Router();
-
-  /**
-   * GET /api/oee
-   * Returns current OEE dashboard data
-   */
-  router.get("/", async (req, res) => {
-    try {
-      const oeeData = await dataManager.getCachedData("oee", true);
-      const oeeStats = eventBusManager.getOEEStatistics();
-      
-      res.json({
-        success: true,
-        metrics: oeeData,
-        statistics: oeeStats,
-        dashboard: {
-          totalEquipment: Array.isArray(oeeData) ? oeeData.length : 0,
-          activeEvents: oeeStats.totalOEEEvents,
-          subscribers: oeeStats.oeeSubscriberCount
-        },
-        timestamp: new Date().toISOString()
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        error: error.message,
-        timestamp: new Date().toISOString()
-      });
-    }
-  });
-
-  /**
-   * POST /api/oee/refresh
-   * Forces refresh of OEE data cache
-   */
-  router.post("/refresh", (req, res) => {
-    try {
-      // Trigger data refresh if method exists
-      if (typeof dataManager.refreshOEECache === 'function') {
-        dataManager.refreshOEECache();
-      }
-      
-      // Publish refresh event
-      eventBusManager.publishOEEEvent('cache_refreshed', {
-        triggeredBy: 'api',
-        timestamp: new Date().toISOString()
-      }, 'system');
-      
-      res.json({
-        success: true,
-        message: "OEE cache refresh triggered",
-        timestamp: new Date().toISOString()
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        error: error.message,
-        timestamp: new Date().toISOString()
-      });
-    }
-  });
-
-  return router;
-}
-
-// ========================================================================
-// AUDIT ROUTES - GMP Compliance and Audit Logging
-// ========================================================================
-
-/**
- * Creates audit and compliance routes
- * Provides GMP-compliant audit trails and validation reports
- * 
- * @param {AuditLogger} auditLogger - Audit logging system
- * @returns {express.Router} Audit management router
- */
 function createAuditRoutes(auditLogger) {
   const router = express.Router();
 
-  /**
-   * GET /api/audit
-   * Returns audit log entries with filtering options
-   */
-router.get("/", (req, res) => {
-  try {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 100;
-    const filter = {};
+  router.get("/", (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit) : 100;
+      const filter = {};
 
-    if (req.query.type) filter.type = req.query.type;
-    if (req.query.agent) filter.agent = req.query.agent;
-    if (req.query.startDate) filter.startDate = req.query.startDate;
-    if (req.query.endDate) filter.endDate = req.query.endDate;
+      if (req.query.type) filter.type = req.query.type;
+      if (req.query.agent) filter.agent = req.query.agent;
+      if (req.query.startDate) filter.startDate = req.query.startDate;
+      if (req.query.endDate) filter.endDate = req.query.endDate;
 
-    // 👉 Nutze die Methode, die dein AuditLogger wirklich hat
-    const auditLog = auditLogger.getAuditLog(
-      Object.keys(filter).length > 0 ? filter : null,
-      limit
-    );
+      const auditLog = auditLogger.getAuditLog(
+        Object.keys(filter).length > 0 ? filter : null,
+        limit
+      );
 
-    res.json({
-      entries: auditLog,
-      count: auditLog.length,
-      filters: { ...filter, limit },
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error("❌ Audit route error:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
+      res.json({
+        entries: auditLog,
+        count: auditLog.length,
+        filters: { ...filter, limit },
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error("Audit route error:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
 
-
-  /**
-   * GET /api/audit/summary
-   * Returns audit summary and compliance metrics
-   */
   router.get("/summary", (req, res) => {
     try {
       const summary = auditLogger.getAuditSummary();
@@ -727,26 +628,9 @@ router.get("/", (req, res) => {
   return router;
 }
 
-// ========================================================================
-// SYSTEM ROUTES - Health and Status Monitoring
-// ========================================================================
-
-/**
- * Creates system monitoring routes
- * Provides health checks, status monitoring, and version information
- * 
- * @param {AgentManager} agentManager - Agent system manager
- * @param {DataManager} dataManager - Data system manager
- * @param {EventBusManager} eventBusManager - Event system manager
- * @returns {express.Router} System monitoring router
- */
 function createSystemRoutes(agentManager, dataManager, eventBusManager) {
   const router = express.Router();
 
-  /**
-   * GET /api/system/health
-   * Returns comprehensive system health status
-   */
   router.get("/health", (req, res) => {
     try {
       const health = {
@@ -775,10 +659,6 @@ function createSystemRoutes(agentManager, dataManager, eventBusManager) {
     }
   });
 
-  /**
-   * GET /api/system/status
-   * Returns detailed system status and configuration
-   */
   router.get("/status", (req, res) => {
     try {
       res.json({
@@ -815,24 +695,9 @@ function createSystemRoutes(agentManager, dataManager, eventBusManager) {
   return router;
 }
 
-// ========================================================================
-// WORKFLOW ROUTES - A2A Workflow Management
-// ========================================================================
-
-/**
- * Creates A2A workflow management routes
- * Provides endpoints for Agent-to-Agent workflow execution
- * 
- * @param {AgentManager} agentManager - Agent system with A2A capabilities
- * @returns {express.Router} Workflow management router
- */
 function createWorkflowRoutes(agentManager) {
   const router = express.Router();
 
-  /**
-   * GET /api/workflows
-   * Returns available A2A workflows and their status
-   */
   router.get("/", (req, res) => {
     try {
       const workflows = {
@@ -857,24 +722,9 @@ function createWorkflowRoutes(agentManager) {
   return router;
 }
 
-// ========================================================================
-// A2A ROUTES - Agent-to-Agent Communication
-// ========================================================================
-
-/**
- * Creates A2A communication routes
- * Provides direct Agent-to-Agent communication endpoints
- * 
- * @param {AgentManager} agentManager - Agent system with A2A support
- * @returns {express.Router} A2A communication router
- */
 function createA2ARoutes(agentManager) {
   const router = express.Router();
 
-  /**
-   * GET /api/a2a/registry
-   * Returns A2A service registry and capabilities
-   */
   router.get("/registry", (req, res) => {
     try {
       const registry = agentManager.getA2AServiceRegistry();
@@ -888,10 +738,6 @@ function createA2ARoutes(agentManager) {
     }
   });
 
-  /**
-   * POST /api/a2a/request
-   * Executes A2A request between agents
-   */
   router.post("/request", async (req, res) => {
     try {
       const { agentId, action, params } = req.body;

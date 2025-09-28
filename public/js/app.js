@@ -81,6 +81,9 @@ function updatePerformanceDisplay(responseTime, agentUsed, eventChain) {
 // Schätze Data Sources basierend auf Agent
 function estimateDataSources(agentUsed) {
   const agentDataSources = {
+    'oeeAgent': '3 files + MQTT (real-time)',
+    'plannerAgent': '3-5 files (optimized)',
+    'qaAgent': '3-5 files (compliance)',
     'orderAgent': '3-7 files (optimized)',
     'briefingAgent': '7 files (cached)',
     'assessmentAgent': '3-5 files (optimized)',
@@ -146,10 +149,34 @@ function updateHeaderPerformanceBadge() {
 }
 
 // ===============================
-// NEUE FUNKTION: Setup für Prompt-Hilfe Event Listeners
+// ENHANCED: Setup für Prompt-Hilfe Event Listeners mit Template Support
 // ===============================
 function setupPromptHelpers() {
-  // Dropdown Handler
+  // Template Dropdown Handler (Manufacturing Operation Templates)
+  const templateSelect = document.getElementById('prompt');
+  if (templateSelect) {
+    templateSelect.addEventListener('change', function() {
+      const selectedTemplate = this.value;
+      const messageField = document.getElementById('message');
+      
+      const templates = {
+        'oee_executive': 'Show me the current OEE status for all production lines including historical comparison and management recommendations.',
+        'production_planning': 'Provide production planning optimization recommendations based on current orders and OEE data.',
+        'quality_assurance': 'Give me a quality assurance status report including compliance metrics and any issues.',
+        'equipment_status': 'Show me current equipment status, maintenance schedules, and any critical alerts.',
+        'compliance_check': 'Perform a comprehensive compliance check including GMP requirements and audit trail.',
+        'batch_analysis': 'Analyze current batch status including quality metrics and release readiness.'
+      };
+      
+      if (selectedTemplate && templates[selectedTemplate]) {
+        messageField.value = templates[selectedTemplate];
+        // Dropdown zurücksetzen nach Auswahl
+        this.value = '';
+      }
+    });
+  }
+
+  // Example Prompts Dropdown Handler
   const examplePromptsSelect = document.getElementById('example-prompts');
   if (examplePromptsSelect) {
     examplePromptsSelect.addEventListener('change', function() {
@@ -215,10 +242,11 @@ async function loadVersionInfo() {
     if (out) {
       out.textContent =
         'Pharmaceutical Manufacturing Agent System Ready...\n' +
-        `MVP ${info.version} - Modular Architecture\n` +
+        `MVP ${info.version} - Real-time OEE Integration\n` +
         'AI Decision Logging: ENABLED\n' +
         'GMP Compliance Monitoring: ACTIVE\n' +
-        'Event-Driven Agent System: ACTIVE';
+        'Event-Driven Agent System: ACTIVE\n' +
+        'OEE MQTT Integration: LIVE (3s updates)';
     }
 
   } catch (error) {
@@ -290,29 +318,19 @@ function createVersionElement() {
 }
 
 // ===============================
-// Load templates from backend YAML
+// Load templates from backend YAML (existing functionality)
 // ===============================
 async function loadTemplates() {
   try {
     const response = await fetch('/templates');
     const data = await response.json();
 
-    const selectElement = document.getElementById('prompt');
-    while (selectElement.children.length > 1) {
-      selectElement.removeChild(selectElement.lastChild);
-    }
-
-    data.templates.forEach(template => {
-      const option = document.createElement('option');
-      option.value = template.value;
-      option.textContent = template.text;
-      if (template.description) option.title = template.description;
-      selectElement.appendChild(option);
-    });
-
-    console.log(`✅ Loaded ${data.count} templates from agents.yaml`);
+    // Dieser Code lädt die Templates vom Backend, aber wir verwenden jetzt
+    // statische Templates in setupPromptHelpers() für bessere Kontrolle
+    console.log(`✅ Templates endpoint available with ${data.count || 0} templates`);
   } catch (error) {
-    console.error('❌ Failed to load templates:', error);
+    console.warn('❌ Templates endpoint not available:', error);
+    // Kein Problem - wir verwenden statische Templates
   }
 }
 
@@ -355,9 +373,9 @@ async function updateSystemStatus() {
 
     const statusElement = document.getElementById('status');
     if (statusElement) {
-      const mode = health.agentMode || 'simple';
+      const mode = health.agentMode || 'enhanced';
       const actions = health.useActions ? 'enabled' : 'disabled';
-      statusElement.textContent = `System Status: Ready - Mode: ${mode} | Actions: ${actions}`;
+      statusElement.textContent = `System Status: Ready - Mode: ${mode} | Actions: ${actions} | OEE: Live`;
     }
 
   } catch (error) {
@@ -370,14 +388,15 @@ async function updateSystemStatus() {
 // ===============================
 function clearOutput() {
   const manualVersion = document.getElementById('manual-version');
-  const version = manualVersion ? manualVersion.textContent.replace(/^v/, '') : '...';
+  const version = manualVersion ? manualVersion.textContent.replace(/^v/, '') : '1.4.0';
 
   document.getElementById('out').textContent = 
     'Pharmaceutical Manufacturing Agent System Ready...\n' +
-    `MVP ${version} - Modular Architecture\n` +
+    `MVP ${version} - Real-time OEE Integration\n` +
     'AI Decision Logging: ENABLED\n' +
     'GMP Compliance Monitoring: ACTIVE\n' +
-    'Event-Driven Agent System: ACTIVE';
+    'Event-Driven Agent System: ACTIVE\n' +
+    'OEE MQTT Integration: LIVE (3s updates)';
 
   document.getElementById('claude-response').style.display = 'none';
 }
@@ -390,11 +409,12 @@ document.getElementById("send").addEventListener("click", async () => {
   const promptSelect = document.getElementById("prompt").value;
   const messageInput = document.getElementById("message").value.trim();
 
-  // Priorisiere Freitext über Dropdown
+  // Priorisiere Freitext über Dropdown (Templates sind nur zum Befüllen da)
   let finalMessage = "";
   if (messageInput) {
     finalMessage = messageInput;
   } else if (promptSelect) {
+    // Fallback falls kein Text im Input-Feld steht
     finalMessage = promptSelect;
   } else {
     alert("Please enter a message or select a template");

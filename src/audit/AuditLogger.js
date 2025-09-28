@@ -7,7 +7,7 @@
  * Maintains complete audit log for regulatory compliance
  * 
  * Developer: Markus Schmeckenbecher
- * Version: 1.2.0
+ * Version: 1.2.1
  * 
  * Features:
  * - GMP-compliant audit trail
@@ -212,6 +212,39 @@ export class AuditLogger {
     return this.appendAudit({
       type: "system",
       event,
+      details,
+    });
+  }
+
+  /**
+   * 🔥 Generic Logging Methods (compatibility layer)
+   */
+  logInfo(event, message, details = {}) {
+    return this.appendAudit({
+      type: "system",
+      level: "info",
+      event,
+      message,
+      details,
+    });
+  }
+
+  logWarn(event, message, details = {}) {
+    return this.appendAudit({
+      type: "system",
+      level: "warn",
+      event,
+      message,
+      details,
+    });
+  }
+
+  logError(event, message, details = {}) {
+    return this.appendAudit({
+      type: "system",
+      level: "error",
+      event,
+      message,
       details,
     });
   }

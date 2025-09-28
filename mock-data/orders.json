@@ -5,8 +5,8 @@
     "qty": 2000,
     "market": "EU",
     "status": "created",
-    "startDate": "2025-09-20",
-    "endDate": "2025-09-22",
+    "startDate": "2025-09-28",
+    "endDate": "2025-10-16",
     "components": [
       { "materialId": "API-001", "description": "Active Ingredient", "qty": 20, "uom": "kg" },
       { "materialId": "EXC-010", "description": "Excipient", "qty": 10, "uom": "kg" }
@@ -22,8 +22,8 @@
     "qty": 1500,
     "market": "US",
     "status": "released",
-    "startDate": "2025-09-19",
-    "endDate": "2025-09-20",
+    "startDate": "2025-09-28",
+    "endDate": "2025-10-16",
     "components": [
       { "materialId": "API-002", "description": "API - Antibiotic", "qty": 12, "uom": "kg" },
       { "materialId": "PACK-100", "description": "Packaging Blisters", "qty": 1500, "uom": "pcs" }
@@ -40,8 +40,8 @@
     "qty": 500,
     "market": "ROW",
     "status": "in_progress",
-    "startDate": "2025-09-21",
-    "endDate": "2025-09-23",
+    "startDate": "2025-09-29",
+    "endDate": "2025-10-16",
     "components": [
       { "materialId": "API-003", "description": "API - Painkiller", "qty": 5, "uom": "kg" },
       { "materialId": "EXC-020", "description": "Excipient Type B", "qty": 2, "uom": "kg" },
@@ -59,8 +59,8 @@
     "qty": 3000,
     "market": "EU",
     "status": "closed",
-    "startDate": "2025-09-15",
-    "endDate": "2025-09-17",
+    "startDate": "2025-09-29",
+    "endDate": "2025-10-16",
     "components": [
       { "materialId": "API-004", "description": "API - Antiviral", "qty": 25, "uom": "kg" },
       { "materialId": "EXC-030", "description": "Excipient Type C", "qty": 15, "uom": "kg" },
@@ -78,8 +78,8 @@
     "qty": 1200,
     "market": "US",
     "status": "released",
-    "startDate": "2025-09-22",
-    "endDate": "2025-09-24",
+    "startDate": "2025-09-30",
+    "endDate": "2025-10-16",
     "components": [
       { "materialId": "API-005", "description": "API - Antidepressant", "qty": 8, "uom": "kg" },
       { "materialId": "EXC-040", "description": "Excipient Type D", "qty": 6, "uom": "kg" }

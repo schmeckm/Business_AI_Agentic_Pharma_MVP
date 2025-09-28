@@ -64,8 +64,9 @@ import { AgentManager } from "./src/agents/AgentManager.js";
 import { DataManager } from "./src/data/DataManager.js";
 import { AuditLogger } from "./src/audit/AuditLogger.js";
 import { A2AManager } from './src/a2a/A2AManager.js';
-import { createRoutes } from "./src/api/routes/index.js";
+import { createAPIRoutes, createRootRoutes } from "./src/api/routes/index.js";
 import { integrateMCPServer } from './src/mcp/MCPServer.js';
+import path from "path";
 
 import { createRequire } from "module";
 
@@ -193,13 +194,15 @@ function getMemory(userId = "default") {
 // ========================================================================
 // SYSTEM STARTUP & DATA LOADING
 // ========================================================================
-
 async function initializeSystem() {
   console.log("🔄 Loading system configuration and data...");
   
   try {
     await dataManager.loadDataSourceConfig();
     await dataManager.loadAllData();
+    
+    // OEE History INNERHALB des try-catch Blocks laden
+    await dataManager.loadOEEHistory();
     
     const agentsLoaded = agentManager.loadAgents();
     if (!agentsLoaded) {
@@ -208,10 +211,14 @@ async function initializeSystem() {
     }
     
     const dataValidation = dataManager.validateDataIntegrity();
-    if (!dataValidation.isValid) {
-      console.warn("⚠️ Data integrity warning:", dataValidation.missing);
-    }
-    
+if (typeof dataManager.validateDataIntegrity === "function") {
+  const dataValidation = dataManager.validateDataIntegrity();
+  if (!dataValidation.isValid) {
+    console.warn("⚠️ Data integrity warning:", dataValidation.missing);
+  }
+} else {
+  console.warn("⚠️ DataManager.validateDataIntegrity() not implemented");
+}
     console.log("✅ System initialization completed successfully");
     
     auditLogger.logSystemEvent("system_startup", {
@@ -258,16 +265,15 @@ if (ENABLE_OEE_SIMULATOR) {
 // API ROUTES SETUP (Enhanced with A2A)
 // ========================================================================
 
-const apiRoutes = createRoutes(agentManager, dataManager, eventBusManager, auditLogger, a2aManager);
-app.use("/api", apiRoutes);
+app.use("/api", createAPIRoutes(agentManager, dataManager, eventBusManager, auditLogger, a2aManager));
+app.use("/", createRootRoutes(agentManager, eventBusManager));
 
 // ========================================================================
 // DIRECT OEE ENDPOINT (Shortcut)
 // ========================================================================
 app.get("/api/oee", async (req, res) => {
   try {
-    // forceRefresh=true, damit immer aktuelle MQTT-Daten kommen
-    const data = await dataManager.getCachedData("oee", true);
+    const data = dataManager.getRealtimeOEEData();
     res.json({
       success: true,
       data,
@@ -283,95 +289,58 @@ app.get("/api/oee", async (req, res) => {
   }
 });
 
-// ========================================================================
-// FRONTEND COMPATIBILITY ROUTES (Root-Level) - NEW
-// ========================================================================
-
-/**
- * Frontend Templates Route
- * Provides agent templates for frontend dropdown without /api prefix
- */
-app.get('/templates', (req, res) => {
+app.get("/api/oee/hot", (req, res) => {
   try {
-    const templates = agentManager.getTemplates();
-    console.log(`📋 Frontend requested templates: ${templates.length} templates served`);
-    res.json({ 
-      templates,                    // ← Fix: Objekt mit templates Property
-      count: templates.length,
+    if (typeof dataManager.getRealtimeOEEData !== "function") {
+      return res.status(500).json({
+        success: false,
+        error: "Realtime OEE function not implemented in DataManager",
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    const data = dataManager.getRealtimeOEEData();
+    res.json({
+      success: true,
+      type: "hot",
+      entries: data.length,
+      data,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    console.error("❌ Templates endpoint error:", error.message);
-    res.status(500).json({ error: error.message });
+    console.error("❌ OEE Hot API error:", error.message);
+    res.status(500).json({ success: false, error: error.message });
   }
 });
-/**
- * Frontend Events Route (Server-Sent Events)
- * Provides real-time event stream for frontend monitoring
- */
-app.get('/events', (req, res) => {
-  console.log("📡 Frontend event stream connection established");
-  
-  res.writeHead(200, {
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Cache-Control'
-  });
 
-  // Send initial connection confirmation
-  res.write(`data: ${JSON.stringify({
-    type: 'connection',
-    message: 'Real-time event stream connected',
-    version: packageJson.version,
-    timestamp: new Date().toISOString()
-  })}\n\n`);
-
-  // Register event listener for all system events
-  const eventHandler = (eventData) => {
-    try {
-      res.write(`data: ${JSON.stringify(eventData)}\n\n`);
-    } catch (error) {
-      console.warn("⚠️ Error writing to event stream:", error.message);
-    }
-  };
-
-  eventBusManager.on('event', eventHandler);
-
-  // Cleanup on client disconnect
-  req.on('close', () => {
-    eventBusManager.removeListener('event', eventHandler);
-    console.log("📡 Event stream client disconnected");
-  });
-
-  // Keep-alive mechanism to prevent timeout
-  const keepAlive = setInterval(() => {
-    try {
-      res.write(`data: ${JSON.stringify({
-        type: 'ping',
+// COLD DATA (Persistierte OEE History)
+app.get("/api/oee/cold", async (req, res) => {
+  try {
+    if (typeof dataManager.getOEEHistoryForAPI !== "function") {
+      return res.status(500).json({
+        success: false,
+        error: "OEE history function not implemented in DataManager",
         timestamp: new Date().toISOString()
-      })}\n\n`);
-    } catch (error) {
-      clearInterval(keepAlive);
+      });
     }
-  }, 30000);
 
-  // Clear keep-alive on disconnect
-  req.on('close', () => {
-    clearInterval(keepAlive);
-  });
-
-  // Handle client errors
-  req.on('error', (error) => {
-    console.warn("⚠️ Event stream client error:", error.message);
-    clearInterval(keepAlive);
-    eventBusManager.removeListener('event', eventHandler);
-  });
+    const limit = parseInt(req.query.limit || "50", 10);
+    const data = await dataManager.getOEEHistoryForAPI(limit);
+    res.json({
+      success: true,
+      type: "cold",
+      entries: data.length,
+      data,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error("❌ OEE Cold API error:", error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 // ========================================================================
-// ADDITIONAL API ENDPOINTS
+// FRONTEND COMPATIBILITY ROUTES (Root-Level) - NEW
 // ========================================================================
 
 /**
@@ -425,12 +394,12 @@ app.get("/api/system/health", (req, res) => {
 });
 
 app.get('/agents.yaml', (req, res) => {
-  try {
-    const yamlPath = path.join(process.cwd(), 'agents.yaml');
-    res.sendFile(yamlPath);
-  } catch (error) {
-    res.status(404).send('agents.yaml not found');
-  }
+  const yamlPath = path.join(process.cwd(), 'agents.yaml');
+  res.sendFile(yamlPath, err => {
+    if (err) {
+      res.status(404).send('agents.yaml not found');
+    }
+  });
 });
 
 // ========================================================================
