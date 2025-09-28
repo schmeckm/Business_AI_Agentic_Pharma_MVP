@@ -1,0 +1,21 @@
+summary:
+  overall_status: "GREEN|YELLOW|RED"
+  production_readiness: "percentage"
+  critical_alerts: "integer"
+  oee_performance: "percentage"
+
+sections:
+  production_orders:
+    total: "integer"
+    status_distribution: "object"
+    oee_correlation: "string"
+  
+  critical_issues:
+    - issue: "string"
+      severity: "CRITICAL|HIGH|MEDIUM"
+      oee_impact: "string"
+  
+  action_plan:
+    immediate: ["string"]
+    short_term: ["string"]
+    oee_actions: ["string"]

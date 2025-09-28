@@ -411,7 +411,9 @@ textarea {
     transition: background 0.2s;
     min-width: 260px; 
     text-align: center;
+    margin-left: 20px;   /* <-- Einrücken von links */
 }
+
 
 .primary-button:hover {
     background: #1d4ed8;

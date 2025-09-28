@@ -1,0 +1,18 @@
+# Micro-Prompts für kritische Validierungen
+safety_validation: |
+  CRITICAL SAFETY CHECK:
+  Does this recommendation ensure patient safety?
+  If ANY uncertainty: Return "SAFETY_REVIEW_REQUIRED"
+  Priority: Patient safety > efficiency
+
+compliance_validation: |
+  REGULATORY COMPLIANCE CHECK:
+  Does this violate GMP/FDA/EMA requirements?
+  If violation detected: Flag "COMPLIANCE_RISK" + regulation
+  Reference: Current regulatory framework
+
+oee_impact_analysis: |
+  OEE CORRELATION ANALYSIS:
+  Assess impact on: Availability | Performance | Quality
+  Provide: Specific improvement recommendations
+  Include: Timeline and expected benefits
