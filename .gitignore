@@ -49,4 +49,7 @@ temp/
 Thumbs.db
 desktop.ini
 
+.env*
+oee_history.json
+
 # IDE & E
