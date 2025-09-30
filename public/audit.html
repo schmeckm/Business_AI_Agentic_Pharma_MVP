@@ -1,223 +1,915 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Audit Log Viewer</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit Log Viewer - ALCOA+ Compliance</title>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
-    /* --- deine Styles bleiben unverändert --- */
-    .header { background: linear-gradient(135deg, #0a2540 0%, #2563eb 100%); color: white; padding: 20px; text-align: center; position: relative; }
-    .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
-    .phase-badge { background: #2563eb; color: #fff; font-size: 10px; font-weight: bold; padding: 4px 4px; border-radius: 10px; margin-left: 6px; display: inline-block; }
-    .health-indicator { position: absolute; top: 15px; right: 20px; display: flex; align-items: center; font-size: 12px; background: white; color: #333; padding: 5px 10px; border-radius: 15px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .health-dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; font-size: 12px; text-align: center; line-height: 12px; }
-    .health-green { color: #28a745; } .health-yellow { color: #ffc107; } .health-red { color: #dc3545; } .health-gray { color: #6c757d; }
-    .nav-menu { background: #f8f9fa; padding: 10px; margin-bottom: 20px; border-radius: 6px; border: 1px solid #ddd; }
-    .nav-menu h3 { margin: 0 0 10px 0; color: #333; font-size: 14px; }
-    .nav-links { display: flex; flex-wrap: wrap; gap: 10px; }
-    .nav-link { background: #007bff; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 12px; transition: background-color 0.2s; }
-    .nav-link:hover { background: #0056b3; color: white; }
-    .nav-link.oee { background: #28a745; } .nav-link.oee:hover { background: #1e7e34; }
-    .nav-link.editor { background: #6f42c1; } .nav-link.editor:hover { background: #5a32a3; }
-    .nav-link.active { background: #1d4ed8 !important; font-weight: 600; }
-    .content-area { padding: 20px; }
-    table { border-collapse: collapse; width: 100%; background: white; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    th, td { padding: 12px; border: 1px solid #d1d5db; text-align: left; vertical-align: top; color: #1f2937; }
-    th { background: #f3f4f6; color: #374151; font-weight: 600; text-transform: uppercase; font-size: 13px; }
-    tr:nth-child(even) { background: #f9fafb; }
-    .timestamp { font-size: 11px; color: #6b7280; font-family: monospace; }
-    .response { white-space: pre-wrap; font-family: monospace; font-size: 0.9em; background: #fcfdfe; max-width: 300px; overflow: hidden; text-overflow: ellipsis; }
-    .status-success { color: #059669; font-weight: 600; }
-    .status-error { color: #dc2626; font-weight: 600; }
-    .status-info { color: #2563eb; font-weight: 600; }
-    .status-warning { color: #f59e0b; font-weight: 600; }
-    .status-default { color: #6b7280; }
-    .loading { display: inline-block; width: 12px; height: 12px; border: 2px solid #d1d5db; border-top: 2px solid #2563eb; border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1800px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+    }
+
+    /* Universal Header Styles */
+    .header {
+      background: linear-gradient(135deg, #0a2540 0%, #2563eb 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .phase-badge {
+      background: #2563eb;
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 10px;
+      margin-left: 6px;
+      display: inline-block;
+    }
+
+    .header-subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 5px;
+    }
+
+    .health-indicator {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      background: white;
+      color: #333;
+      padding: 5px 10px;
+      border-radius: 15px;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .health-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 5px;
+      font-size: 12px;
+      text-align: center;
+      line-height: 12px;
+    }
+
+    .health-green { color: #28a745; }
+    .health-yellow { color: #ffc107; }
+    .health-red { color: #dc3545; }
+    .health-gray { color: #6c757d; }
+    
+    /* Navigation Styles */
+    .nav-menu { 
+      background: #f8f9fa; 
+      padding: 10px 20px;
+      border-bottom: 2px solid #dee2e6;
+    }
+    
+    .nav-links { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 10px; 
+    }
+    
+    .nav-link { 
+      background: #007bff; 
+      color: white; 
+      padding: 6px 12px; 
+      text-decoration: none; 
+      border-radius: 4px; 
+      font-size: 12px; 
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .nav-link:hover { 
+      background: #0056b3; 
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .nav-link.oee { background: #28a745; }
+    .nav-link.oee:hover { background: #1e7e34; }
+    .nav-link.editor { background: #6f42c1; }
+    .nav-link.editor:hover { background: #5a32a3; }
+.nav-link.active { 
+  background: #1d4ed8 !important; 
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+    /* Page Header */
+    .page-header {
+      margin: 20px 20px 0 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e9ecef;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .page-header-text h2 {
+      margin: 0;
+      color: #0a2540;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .page-header-text p {
+      margin: 5px 0 0 0;
+      color: #666;
+      font-size: 13px;
+    }
+
+    .page-header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* Statistics Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #6c757d;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0a2540;
+    }
+
+    .stat-card.success .stat-value { color: #28a745; }
+    .stat-card.error .stat-value { color: #dc3545; }
+    .stat-card.warning .stat-value { color: #ffc107; }
+    .stat-card.info .stat-value { color: #007bff; }
+
+    /* Filter Bar */
+    .filter-bar {
+      background: #f8f9fa;
+      padding: 15px 20px;
+      border-bottom: 1px solid #dee2e6;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .filter-select, .filter-input {
+      padding: 6px 10px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 13px;
+      background: white;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0056b3;
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #218838;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    .btn-warning {
+      background: #ffc107;
+      color: #333;
+    }
+
+    .btn-warning:hover {
+      background: #e0a800;
+    }
+
+    /* Table Styles */
+    .table-container {
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    th {
+      background: #f8f9fa;
+      color: #495057;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    tr:hover {
+      background: #f8f9fa;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .timestamp {
+      font-size: 11px;
+      color: #6c757d;
+      font-family: 'Courier New', monospace;
+    }
+
+    .user-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      background: #e7f3ff;
+      color: #0066cc;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .message-cell {
+      max-width: 300px;
+      word-wrap: break-word;
+    }
+
+    .response-cell {
+      max-width: 400px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: #495057;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .status-warning {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-info {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .status-default {
+      background: #e9ecef;
+      color: #495057;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6c757d;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 15px;
+      opacity: 0.5;
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-row {
+      text-align: center;
+      padding: 40px;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      background: #f8f9fa;
+      border-top: 1px solid #dee2e6;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .status-message {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-text {
+      color: #6c757d;
+      font-style: italic;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .health-indicator {
+        position: static;
+        margin-top: 10px;
+        justify-content: center;
+      }
+
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filter-group {
+        width: 100%;
+      }
+
+      .filter-select, .filter-input {
+        flex: 1;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Universal Header -->
     <div class="header">
       <h1>
         Pharmaceutical Manufacturing Agentic Business Agent - MAR Process
-        <div class="phase-badge">MVP <span id="app-version">1.3.0</span></div>
+        <span class="phase-badge">MVP <span id="app-version">1.3.0</span></span>
       </h1>
       <div id="health-indicator" class="health-indicator">
         <div class="health-dot" id="health-dot">●</div>
         <span id="health-text">Checking...</span>
       </div>
-      <div style="font-size: 14px; opacity: 0.9;">Enterprise AI Operations Platform - PharmaMinder</div>
+      <p class="header-subtitle">Enterprise AI Operations Platform - PharmaMinder</p>
     </div>
 
-    <div class="nav-menu">
-      <h3>System Tools & Monitoring</h3>
-      <div class="nav-links">
-        <a href="/" class="nav-link">Dashboard</a>
-        <a href="/oee-test.html" class="nav-link oee">Live OEE Monitor</a>
-        <a href="/agent-editor.html" class="nav-link editor">Agent Configuration Editor</a>
-        <a href="/audit.html" class="nav-link active">Audit Log Viewer</a>
-        <a href="/api/system/health" class="nav-link" target="_blank">System Health</a>
-        <a href="/api/data/oee" class="nav-link oee" target="_blank">OEE API</a>
-        <a href="/api/agents" class="nav-link" target="_blank">Agent Registry</a>
+    <!-- Navigation Menu -->
+<div class="nav-menu">
+  <div class="nav-links">
+    <a href="/" class="nav-link">Dashboard</a>
+    <a href="/oee-test.html" class="nav-link oee">Live OEE Monitor</a>
+    <a href="/agent-editor.html" class="nav-link editor">Agent Configuration Editor</a>
+    <a href="/audit.html" class="nav-link">Audit Log Viewer</a>
+    <a href="/api/health" class="nav-link" target="_blank">System Health</a>
+    <a href="/api/data/oee" class="nav-link oee" target="_blank">OEE API</a>
+  </div>
+</div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <h2><i class="fas fa-clipboard-check"></i> Audit Log Viewer (Part 11 / ALCOA+)</h2>
+        <p>GMP-compliant audit trail for pharmaceutical manufacturing operations</p>
+      </div>
+      <div class="page-header-actions">
+        <button class="btn btn-success" onclick="exportAuditLog()">
+          <i class="fas fa-download"></i> Export CSV
+        </button>
+        <button class="btn btn-primary" onclick="refreshAuditLog()">
+          <i class="fas fa-sync-alt"></i> Refresh
+        </button>
       </div>
     </div>
 
-    <div style="margin-bottom: 20px; padding: 0 20px;">
-      <h2 style="margin: 0; color: #0a2540;">Audit Log Viewer (Part 11 / ALCOA+)</h2>
-      <p style="margin: 5px 0; color: #666;">GMP-compliant audit trail for pharmaceutical manufacturing operations</p>
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Entries</div>
+        <div class="stat-value" id="stat-total">-</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">Successful</div>
+        <div class="stat-value" id="stat-success">-</div>
+      </div>
+      <div class="stat-card error">
+        <div class="stat-label">Errors</div>
+        <div class="stat-value" id="stat-errors">-</div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-label">Warnings</div>
+        <div class="stat-value" id="stat-warnings">-</div>
+      </div>
+      <div class="stat-card info">
+        <div class="stat-label">Last Update</div>
+        <div class="stat-value" id="stat-updated" style="font-size: 14px;">-</div>
+      </div>
     </div>
 
-    <div class="content-area">
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label class="filter-label">Type:</label>
+        <select class="filter-select" id="filter-type" onchange="applyFilters()">
+          <option value="">All Types</option>
+          <option value="success">Success</option>
+          <option value="error">Error</option>
+          <option value="warning">Warning</option>
+          <option value="info">Info</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">User:</label>
+        <select class="filter-select" id="filter-user" onchange="applyFilters()">
+          <option value="">All Users</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Search:</label>
+        <input type="text" class="filter-input" id="filter-search" placeholder="Search messages..." oninput="applyFilters()">
+      </div>
+
+      <button class="btn btn-secondary" onclick="clearFilters()">
+        <i class="fas fa-times"></i> Clear Filters
+      </button>
+
+      <div class="filter-group" style="margin-left: auto;">
+        <label class="filter-label">Show:</label>
+        <select class="filter-select" id="filter-limit" onchange="applyFilters()">
+          <option value="50">50 entries</option>
+          <option value="100" selected>100 entries</option>
+          <option value="200">200 entries</option>
+          <option value="500">500 entries</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
       <table>
         <thead>
           <tr>
-            <th>Timestamp</th>
-            <th>User</th>
-            <th>Command/Event</th>
+            <th style="width: 140px;">Timestamp</th>
+            <th style="width: 120px;">User</th>
+            <th style="width: 250px;">Command/Event</th>
             <th>AI Response / Details</th>
-            <th>Status/Type</th>
+            <th style="width: 100px;">Status</th>
           </tr>
         </thead>
         <tbody id="log-rows">
-          <tr><td colspan="5" style="text-align: center; padding: 20px;"><div class="loading"></div> Loading audit log...</td></tr>
+          <tr>
+            <td colspan="5" class="loading-row">
+              <div class="loading"></div> Loading audit log...
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <div class="status-message" id="status-message">
+        <span class="status-text">Ready - Audit log viewer initialized</span>
+      </div>
+      <div class="status-text" id="status-info">
+        ALCOA+ Compliant | Auto-refresh every 30s
+      </div>
+    </div>
   </div>
 
-<script>
-  // ✅ Universal Health Check via Proxy
-  async function updateHealthIndicator() {
-    const healthDot = document.getElementById('health-dot');
-    const healthText = document.getElementById('health-text');
+  <script>
+    // ===============================
+    // GLOBAL VARIABLES
+    // ===============================
+    let allEntries = [];
+    let filteredEntries = [];
+    let autoRefreshInterval = null;
 
-    try {
-      let response = await fetch('/api/system/health');
-      const health = await response.json();
+    // ===============================
+    // INITIALIZATION
+    // ===============================
+    document.addEventListener('DOMContentLoaded', function() {
+      updateHealthIndicator();
+      loadVersionInfo();
+      loadAuditLog();
+      
+      // Auto-refresh every 30 seconds
+      autoRefreshInterval = setInterval(() => {
+        loadAuditLog(true);
+      }, 30000);
+    });
 
-      if (health.status === 'ok' || health.status === 'healthy') {
-        healthDot.className = 'health-dot health-green';
-        healthText.textContent = 'System OK';
-      } else if (health.status === 'error' || health.status === 'unhealthy') {
+    // ===============================
+    // HEALTH & VERSION
+    // ===============================
+    async function updateHealthIndicator() {
+      const healthDot = document.getElementById('health-dot');
+      const healthText = document.getElementById('health-text');
+
+      try {
+        const response = await fetch('/api/health');
+        const health = await response.json();
+
+        if (health.status === 'ok' || health.status === 'healthy') {
+          healthDot.className = 'health-dot health-green';
+          healthText.textContent = 'System OK';
+        } else if (health.status === 'error' || health.status === 'unhealthy') {
+          healthDot.className = 'health-dot health-red';
+          healthText.textContent = 'Error';
+        } else {
+          healthDot.className = 'health-dot health-yellow';
+          healthText.textContent = 'Warning';
+        }
+      } catch (error) {
         healthDot.className = 'health-dot health-red';
-        healthText.textContent = 'Error';
-      } else {
-        healthDot.className = 'health-dot health-yellow';
-        healthText.textContent = 'Warning';
+        healthText.textContent = 'API Error';
+        console.error('Health check failed:', error);
       }
-
-    } catch (error) {
-      healthDot.className = 'health-dot health-red';
-      healthText.textContent = 'API Error';
-      console.error('Health check failed:', error);
     }
-  }
 
-  // ✅ Version Info über Proxy
-  async function loadVersionInfo() {
-    try {
-      const response = await fetch('/api/version');
-      const info = await response.json();
-
-      const appVersion = document.getElementById('app-version');
-      if (appVersion) appVersion.textContent = info.version;
-
-    } catch (error) {
-      console.warn('Could not load version info:', error);
-    }
-  }
-
-  // ✅ Audit Log via Proxy
-  async function loadAuditLog() {
-    try {
-      const res = await fetch("/api/audit");
-      const data = await res.json();
-
-      const tbody = document.getElementById("log-rows");
-      tbody.innerHTML = "";
-
-      let entries = [];
-      if (Array.isArray(data)) {
-        entries = data;
-      } else if (Array.isArray(data.entries)) {
-        entries = data.entries;
-      } else if (data.entries && Array.isArray(data.entries.entries)) {
-        entries = data.entries.entries;
+    async function loadVersionInfo() {
+      try {
+        const response = await fetch('/api/version');
+        const info = await response.json();
+        const appVersion = document.getElementById('app-version');
+        if (appVersion) appVersion.textContent = info.version;
+      } catch (error) {
+        console.warn('Could not load version info:', error);
       }
+    }
+
+    // ===============================
+    // AUDIT LOG LOADING
+    // ===============================
+    async function loadAuditLog(silent = false) {
+      if (!silent) setStatus('Loading audit log...', 'loading');
+
+      try {
+        const limit = document.getElementById('filter-limit').value;
+        const response = await fetch(`/api/audit?limit=${limit}`);
+        const data = await response.json();
+
+        let entries = [];
+        if (Array.isArray(data)) {
+          entries = data;
+        } else if (Array.isArray(data.entries)) {
+          entries = data.entries;
+        } else if (data.entries && Array.isArray(data.entries.entries)) {
+          entries = data.entries.entries;
+        }
+
+        allEntries = entries;
+        updateStatistics(entries);
+        populateUserFilter(entries);
+        applyFilters();
+
+        if (!silent) setStatus(`${entries.length} audit entries loaded successfully`, 'success');
+      } catch (error) {
+        console.error('Failed to load audit log:', error);
+        setStatus('Error loading audit log: ' + error.message, 'error');
+        displayError(error.message);
+      }
+    }
+
+    // ===============================
+    // DISPLAY FUNCTIONS
+    // ===============================
+    function displayAuditLog(entries) {
+      const tbody = document.getElementById('log-rows');
 
       if (entries.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='5' style='text-align: center; color: #6b7280; padding: 30px;'>No audit entries found.</td></tr>";
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No audit entries found matching your filters</p>
+              </div>
+            </td>
+          </tr>
+        `;
         return;
       }
 
-      entries.forEach(entry => {
-        const tr = document.createElement("tr");
+      tbody.innerHTML = entries.map(entry => {
+        const timestamp = entry.timestamp ? 
+          new Date(entry.timestamp).toLocaleString(undefined, {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+          }) : '-';
 
-        const tdTime = document.createElement("td");
-        if (entry.timestamp) {
-          const localTime = new Date(entry.timestamp).toLocaleString(undefined, {
-            year: "numeric", month: "2-digit", day: "2-digit",
-            hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false
-          });
-          tdTime.innerHTML = `<div class="timestamp">${localTime}</div>`;
-        } else {
-          tdTime.innerHTML = "<div class='timestamp'>-</div>";
-        }
-
-        const tdUser = document.createElement("td");
-        tdUser.textContent = entry.user || entry.userName || entry.userId || "-";
-
-        const tdCommand = document.createElement("td");
-        tdCommand.textContent = entry.message || entry.action || entry.event || "-";
-
-        const tdAI = document.createElement("td");
-        tdAI.className = "response";
+        const user = entry.user || entry.userName || entry.userId || '-';
+        const message = entry.message || entry.action || entry.event || '-';
+        
+        let response = '-';
         try {
-          const responseText = entry.response || (entry.details ? JSON.stringify(entry.details, null, 2) : "-");
-          tdAI.textContent = responseText.length > 200 ? responseText.substring(0, 200) + "..." : responseText;
+          response = entry.response || (entry.details ? JSON.stringify(entry.details, null, 2) : '-');
+          if (response.length > 300) response = response.substring(0, 300) + '...';
         } catch (e) {
-          tdAI.textContent = entry.response || String(entry.details) || "-";
+          response = entry.response || String(entry.details) || '-';
         }
 
-        const tdStatus = document.createElement("td");
-        const statusText = (entry.status || entry.type || "").toLowerCase();
-        tdStatus.textContent = entry.status || entry.type || "-";
+        const statusText = (entry.status || entry.type || '').toLowerCase();
+        const statusClass = getStatusClass(statusText);
+        const displayStatus = entry.status || entry.type || '-';
 
-        if (statusText === "success" || statusText === "ok" || statusText === "verified" || statusText === "complete" || statusText.includes("enabled") || statusText.includes("active")) {
-          tdStatus.className = "status-success";
-        } else if (statusText === "error" || statusText === "failed" || statusText === "critical" || statusText.includes("fail") || statusText.includes("issue")) {
-          tdStatus.className = "status-error";
-        } else if (statusText === "warning" || statusText === "pending" || statusText.includes("alert")) {
-          tdStatus.className = "status-warning";
-        } else if (statusText === "info" || statusText === "processing" || statusText.includes("running")) {
-          tdStatus.className = "status-info";
-        } else {
-          tdStatus.className = "status-default";
-        }
-
-        tr.appendChild(tdTime);
-        tr.appendChild(tdUser);
-        tr.appendChild(tdCommand);
-        tr.appendChild(tdAI);
-        tr.appendChild(tdStatus);
-        tbody.appendChild(tr);
-      });
-    } catch (err) {
-      console.error("Failed to load audit log:", err);
-      document.getElementById("log-rows").innerHTML =
-        `<tr class='status-error'><td colspan='5' style='text-align: center; color: #dc2626; padding: 20px;'>Error loading audit log: ${err.message}</td></tr>`;
+        return `
+          <tr>
+            <td><div class="timestamp">${timestamp}</div></td>
+            <td><span class="user-badge">${user}</span></td>
+            <td class="message-cell">${message}</td>
+            <td class="response-cell">${response}</td>
+            <td><span class="status-badge ${statusClass}">${displayStatus}</span></td>
+          </tr>
+        `;
+      }).join('');
     }
-  }
 
-  // Initialisieren
-  document.addEventListener('DOMContentLoaded', () => {
-    updateHealthIndicator();
-    loadVersionInfo();
-    setInterval(updateHealthIndicator, 30000);
-    loadAuditLog();
-  });
-</script>
+    function displayError(message) {
+      const tbody = document.getElementById('log-rows');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5">
+            <div class="empty-state">
+              <i class="fas fa-exclamation-triangle" style="color: #dc3545;"></i>
+              <p>Error loading audit log: ${message}</p>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+
+    function getStatusClass(statusText) {
+      if (statusText === 'success' || statusText === 'ok' || statusText === 'verified' || 
+          statusText === 'complete' || statusText.includes('enabled') || statusText.includes('active')) {
+        return 'status-success';
+      } else if (statusText === 'error' || statusText === 'failed' || statusText === 'critical' || 
+                 statusText.includes('fail') || statusText.includes('issue')) {
+        return 'status-error';
+      } else if (statusText === 'warning' || statusText === 'pending' || statusText.includes('alert')) {
+        return 'status-warning';
+      } else if (statusText === 'info' || statusText === 'processing' || statusText.includes('running')) {
+        return 'status-info';
+      }
+      return 'status-default';
+    }
+
+    // ===============================
+    // STATISTICS
+    // ===============================
+    function updateStatistics(entries) {
+      document.getElementById('stat-total').textContent = entries.length;
+
+      const successCount = entries.filter(e => {
+        const status = (e.status || e.type || '').toLowerCase();
+        return status === 'success' || status === 'ok' || status.includes('complete');
+      }).length;
+
+      const errorCount = entries.filter(e => {
+        const status = (e.status || e.type || '').toLowerCase();
+        return status === 'error' || status === 'failed' || status.includes('fail');
+      }).length;
+
+      const warningCount = entries.filter(e => {
+        const status = (e.status || e.type || '').toLowerCase();
+        return status === 'warning' || status === 'pending';
+      }).length;
+
+      document.getElementById('stat-success').textContent = successCount;
+      document.getElementById('stat-errors').textContent = errorCount;
+      document.getElementById('stat-warnings').textContent = warningCount;
+      document.getElementById('stat-updated').textContent = new Date().toLocaleTimeString();
+    }
+
+    // ===============================
+    // FILTERS
+    // ===============================
+    function populateUserFilter(entries) {
+      const userFilter = document.getElementById('filter-user');
+      const users = [...new Set(entries.map(e => e.user || e.userName || e.userId).filter(u => u))];
+      
+      userFilter.innerHTML = '<option value="">All Users</option>' + 
+        users.map(user => `<option value="${user}">${user}</option>`).join('');
+    }
+
+    function applyFilters() {
+      const typeFilter = document.getElementById('filter-type').value.toLowerCase();
+      const userFilter = document.getElementById('filter-user').value;
+      const searchFilter = document.getElementById('filter-search').value.toLowerCase();
+
+      filteredEntries = allEntries.filter(entry => {
+        const status = (entry.status || entry.type || '').toLowerCase();
+        const user = entry.user || entry.userName || entry.userId || '';
+        const message = (entry.message || entry.action || entry.event || '').toLowerCase();
+        const response = (entry.response || String(entry.details) || '').toLowerCase();
+
+        const matchesType = !typeFilter || status.includes(typeFilter);
+        const matchesUser = !userFilter || user === userFilter;
+        const matchesSearch = !searchFilter || message.includes(searchFilter) || response.includes(searchFilter);
+
+        return matchesType && matchesUser && matchesSearch;
+      });
+
+      displayAuditLog(filteredEntries);
+      setStatus(`Showing ${filteredEntries.length} of ${allEntries.length} entries`, 'info');
+    }
+
+    function clearFilters() {
+      document.getElementById('filter-type').value = '';
+      document.getElementById('filter-user').value = '';
+      document.getElementById('filter-search').value = '';
+      applyFilters();
+    }
+
+    // ===============================
+    // ACTIONS
+    // ===============================
+    function refreshAuditLog() {
+      loadAuditLog();
+    }
+
+    function exportAuditLog() {
+      const csv = convertToCSV(filteredEntries.length > 0 ? filteredEntries : allEntries);
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `audit-log-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      setStatus('Audit log exported successfully', 'success');
+    }
+
+    function convertToCSV(entries) {
+      const headers = ['Timestamp', 'User', 'Command/Event', 'Response', 'Status'];
+      const rows = entries.map(entry => {
+        const timestamp = entry.timestamp ? new Date(entry.timestamp).toISOString() : '';
+        const user = entry.user || entry.userName || entry.userId || '';
+        const message = (entry.message || entry.action || entry.event || '').replace(/"/g, '""');
+        const response = (entry.response || String(entry.details) || '').replace(/"/g, '""');
+        const status = entry.status || entry.type || '';
+        
+        return `"${timestamp}","${user}","${message}","${response}","${status}"`;
+      });
+      
+      return [headers.join(','), ...rows].join('\n');
+    }
+
+    // ===============================
+    // STATUS
+    // ===============================
+    function setStatus(message, type) {
+      const statusElement = document.getElementById('status-message');
+      if (type === 'loading') {
+        statusElement.innerHTML = `<div class="loading"></div> <span class="status-text">${message}</span>`;
+      } else {
+        const icon = {
+          'success': '<i class="fas fa-check-circle" style="color: #28a745;"></i>',
+          'error': '<i class="fas fa-exclamation-circle" style="color: #dc3545;"></i>',
+          'warning': '<i class="fas fa-exclamation-triangle" style="color: #ffc107;"></i>',
+          'info': '<i class="fas fa-info-circle" style="color: #007bff;"></i>'
+        };
+        statusElement.innerHTML = `${icon[type] || ''} <span class="status-text">${message}</span>`;
+      }
+    }
+  </script>
 </body>
 </html>

@@ -1,6 +1,26 @@
+# ========================================================================
+# PHARMACEUTICAL MANUFACTURING AGENT CONFIGURATION
+# ========================================================================
+# 
+# Version: 1.3.0 - Agent Types & What-If Analysis Integration
+# Developer: Markus Schmeckenbecher
+# 
+# Agent Types:
+# - data_collection: Collects and monitors data
+# - rule_based: Applies rules via LLM interpretation
+# - collaborative: Coordinates with other agents
+# - proactive: Goal-oriented planning and optimization
+# - learning: Learns from historical patterns
+# 
+# ========================================================================
+
 agents:
+  # ======================================================================
+  # OEE EXECUTIVE AGENT - Data Collection Type
+  # ======================================================================
   - id: oeeAgent
-    name: "📊 OEE Executive Agent"
+    name: "OEE Executive Agent"
+    agentType: "data_collection"  # Collects and reports OEE data
     description: "Provides real-time OEE reports per line, including running orders and historical benchmarks."
     trigger:
       - "oee report"
@@ -12,8 +32,15 @@ agents:
       - "oee_hot"
       - "mock-data/orders.json"
       - "oee_history.json"
+    
+    # What-If Capabilities
+    whatIfCapabilities:
+      - baseline_monitoring
+      - performance_tracking
+      - historical_comparison
+    
     promptTemplate: |
-      ## 📊 OEE Executive Report (Realtime + Orders + Historical Analysis)
+      ## OEE Executive Report (Realtime + Orders + Historical Analysis)
 
       **1. Realtime OEE per Line (from MQTT):**
       {data.oee_hot}
@@ -30,8 +57,12 @@ agents:
       - Highlight critical alarms in realtime (if present)
       - Recommend corrective actions and targets
 
+  # ======================================================================
+  # PRODUCTION PLANNING AGENT - Proactive Type
+  # ======================================================================
   - id: productionPlanningAgent
-    name: "📅 Production Planning Agent"
+    name: "Production Planning Agent"
+    agentType: "proactive"  # Creates plans and optimizes autonomously
     description: "Optimizes production planning by checking orders, resources and bottlenecks."
     trigger:
       - "plan production"
@@ -41,8 +72,16 @@ agents:
     dataSource:
       - "mock-data/orders.json"
       - "mock-data/batches.json"
+    
+    # What-If Capabilities
+    whatIfCapabilities:
+      - scenario_planning
+      - resource_optimization
+      - bottleneck_analysis
+      - alternative_scheduling
+    
     promptTemplate: |
-      ## 📅 Production Planning Report
+      ## Production Planning Report
 
       **1. Orders scheduled today:**
       {data.orders}
@@ -53,9 +92,15 @@ agents:
       **3. Planning Recommendations**
       - Identify bottlenecks
       - Suggest rescheduling if required
+      - Propose alternative production sequences
+      - Optimize resource allocation
 
+  # ======================================================================
+  # QUALITY ASSURANCE AGENT - Rule-Based Type
+  # ======================================================================
   - id: qualityAgent
-    name: "✅ Quality Assurance Agent"
+    name: "Quality Assurance Agent"
+    agentType: "rule_based"  # Applies QA rules and compliance checks
     description: "Generates QA compliance report, deviations and CAPA overview."
     trigger:
       - "qa report"
@@ -67,8 +112,16 @@ agents:
       - "compliance"
       - "qa"
       - "issues"
+    
+    # What-If Capabilities
+    whatIfCapabilities:
+      - compliance_checking
+      - deviation_assessment
+      - risk_evaluation
+      - regulatory_validation
+    
     promptTemplate: |
-      ## ✅ Quality & Compliance Report
+      ## Quality & Compliance Report
 
       **1. Compliance Metrics (Batch & Regulatory):**
       {data.compliance}
@@ -83,9 +136,14 @@ agents:
       - Highlight critical deviations
       - Propose corrective actions
       - Track follow-ups and pending CAPAs
+      - Assess regulatory compliance risks
 
+  # ======================================================================
+  # EQUIPMENT STATUS AGENT - Data Collection Type
+  # ======================================================================
   - id: equipmentAgent
-    name: "🔧 Equipment Status Agent"
+    name: "Equipment Status Agent"
+    agentType: "data_collection"  # Monitors equipment status
     description: "Provides overview of equipment failures, maintenance and uptime."
     trigger:
       - "equipment status"
@@ -94,13 +152,55 @@ agents:
     priority: "low"
     dataSource:
       - "mock-data/equipment.json"
+    
+    # What-If Capabilities
+    whatIfCapabilities:
+      - status_monitoring
+      - uptime_tracking
+      - maintenance_alerting
+    
     promptTemplate: |
-      ## 🔧 Equipment Status Report
+      ## Equipment Status Report
 
       **1. Current Equipment Failures:**
       {data.equipment}
 
       **2. Maintenance Due / Calibration Alerts**
       - Review upcoming tasks
+      - Highlight overdue maintenance
 
       **3. Uptime & Availability Summary**
+      - Calculate equipment availability
+      - Identify recurring failure patterns
+
+# ========================================================================
+# WHAT-IF SCENARIO MAPPINGS
+# ========================================================================
+# 
+# These mappings help the What-If Analyzer select appropriate agents
+# for different scenario types:
+# 
+# Scenario Type          | Agent(s) Used
+# -----------------------|----------------------------------------
+# oee_issue             | oeeAgent, equipmentAgent
+# equipment_issue       | equipmentAgent, oeeAgent
+# production_delay      | productionPlanningAgent
+# quality_issue         | qualityAgent
+# capacity_change       | productionPlanningAgent, oeeAgent
+# material_shortage     | productionPlanningAgent, qualityAgent
+# 
+# ========================================================================
+
+# ========================================================================
+# AGENT TYPE DISTRIBUTION
+# ========================================================================
+# 
+# data_collection: 2 agents (oeeAgent, equipmentAgent)
+# proactive:       1 agent  (productionPlanningAgent)
+# rule_based:      1 agent  (qualityAgent)
+# collaborative:   0 agents
+# learning:        0 agents
+# 
+# Total: 4 agents
+# 
+# ========================================================================

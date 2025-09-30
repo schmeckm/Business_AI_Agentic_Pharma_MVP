@@ -1,0 +1,78 @@
+# ========================================================================
+# QUICK QUERIES CONFIGURATION
+# ========================================================================
+#
+# External configuration for quick query buttons
+# Edit this file to customize the quick prompts without changing HTML
+#
+# Version: 1.0.0
+# ========================================================================
+
+quick_queries:
+  - label: "Current OEE"
+    query: "What is the current OEE status across all lines?"
+    category: "oee"
+    
+  - label: "Today's Orders"
+    query: "What orders are scheduled for today?"
+    category: "production"
+    
+  - label: "Quality Status"
+    query: "Are there any quality issues or deviations?"
+    category: "quality"
+    
+  - label: "Equipment Issues"
+    query: "Show me equipment failures and maintenance alerts"
+    category: "equipment"
+    
+  - label: "Critical Alarms"
+    query: "Show me all critical alarms and priority items"
+    category: "general"
+    
+  - label: "Production Efficiency"
+    query: "Production efficiency report for all lines"
+    category: "production"
+    
+  - label: "Compliance Check"
+    query: "Compliance status and regulatory overview"
+    category: "quality"
+    
+  - label: "Material Status"
+    query: "Material availability and inventory check"
+    category: "production"
+    
+  - label: "Line Performance"
+    query: "Performance comparison across production lines"
+    category: "oee"
+    
+  - label: "Pending Approvals"
+    query: "Show me pending batch approvals and releases"
+    category: "quality"
+    
+  - label: "Downtime Analysis"
+    query: "Equipment downtime analysis for today"
+    category: "equipment"
+    
+  - label: "Urgent Items"
+    query: "Show me all urgent orders and critical items"
+    category: "general"
+
+# ========================================================================
+# CATEGORY STYLING (used by frontend)
+# ========================================================================
+categories:
+  oee:
+    color: "#28a745"
+    icon: "📊"
+  production:
+    color: "#007bff"
+    icon: "🏭"
+  quality:
+    color: "#ffc107"
+    icon: "✅"
+  equipment:
+    color: "#dc3545"
+    icon: "🔧"
+  general:
+    color: "#6f42c1"
+    icon: "📋"

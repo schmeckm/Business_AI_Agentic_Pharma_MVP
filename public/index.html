@@ -6,53 +6,373 @@
   <title>Pharmaceutical Manufacturing Agent Framework - MVP 1.3.0</title>
   <link rel="stylesheet" href="css/styles.css">
   <style>
-    .formatted-response { white-space: pre-wrap; font-family: monospace; background: #f8f9fa; border: 1px solid #ddd; padding: 10px; border-radius: 6px; margin-top: 5px; line-height: 1.4; }
-    .response-header { display: flex; justify-content: space-between; align-items: center; background: #eef2f6; padding: 5px 10px; border-bottom: 1px solid #ccc; }
-    .response-actions { margin-top: 8px; }
-    .response-actions .action-btn { margin-right: 5px; padding: 3px 8px; font-size: 12px; cursor: pointer; }
-    .version-info { font-size: 11px; color: #666; margin-top: 10px; padding: 5px; background: #f8f9fa; border-radius: 4px; border: 1px solid #ddd; }
-    .header { position: relative; }
-    
-    /* Universal Header Styles */
-    .header {
-      background: linear-gradient(135deg, #0a2540 0%, #2563eb 100%);
-      color: white;
-      padding: 20px;
-      text-align: center;
-      position: relative;
+    /* Override specific styles from styles.css for modern design */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: white;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
 
-    .header h1 {
-      margin: 0;
-      font-size: 24px;
+    body {
+      background: #f5f7fa;
+    }
+
+    /* Main Content Grid */
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 20px 30px;
+      flex: 1;
+    }
+
+    .left-panel, .right-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* Card Styles */
+    .card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 15px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    /* Query Tabs */
+    .query-tabs {
+      display: flex;
+      gap: 10px;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 15px;
+    }
+
+    .query-tab {
+      background: none;
+      border: none;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #6c757d;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+
+    .query-tab:hover {
+      color: #007bff;
+    }
+
+    .query-tab.active {
+      color: #007bff;
+      border-bottom-color: #007bff;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Template Cards */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .template-card {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+
+    .template-card:hover {
+      border-color: #007bff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,123,255,0.15);
+    }
+
+    .template-card.selected {
+      border-color: #007bff;
+      background: linear-gradient(135deg, #e7f3ff 0%, #cfe2ff 100%);
+    }
+
+    .template-title {
+      font-weight: 600;
+      font-size: 13px;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .template-desc {
+      font-size: 11px;
+      color: #6c757d;
+      line-height: 1.4;
+    }
+
+    /* Quick Prompts - visible by default */
+    .quick-prompts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .quick-prompt {
+      background: white;
+      border: 1px solid #ced4da;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .quick-prompt:hover {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+      transform: scale(1.05);
+    }
+
+    /* What-If Examples */
+    .whatif-examples {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .whatif-example {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-left: 4px solid #ffc107;
+      border-radius: 4px;
+      padding: 10px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .whatif-example:hover {
+      background: #ffc107;
+      color: white;
+      transform: translateX(4px);
+    }
+
+    /* Input Section */
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .input-group textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 2px solid #dee2e6;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+
+    .input-group textarea:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+
+    /* Buttons */
+    .input-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: white;
+      flex: 1;
+    }
+
+    .btn-primary:hover {
+      background: #0056b3;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,123,255,0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #6c757d;
+      border: 1px solid #dee2e6;
+    }
+
+    .btn-secondary:hover {
+      background: #f8f9fa;
+    }
+
+    .btn-whatif {
+      background: #ffc107;
+      color: #333;
       font-weight: 600;
     }
 
-    .phase-badge {
-      background: #2563eb;
-      color: #fff;
-      font-size: 10px;
-      font-weight: bold;
-      padding: 4px 4px;
-      border-radius: 10px;
-      margin-left: 6px;
-      display: inline-block;
-      min-width: auto;
+    .btn-whatif:hover {
+      background: #e0a800;
     }
 
-    .health-indicator {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      display: flex;
-      align-items: center;
-      font-size: 12px;
+    /* Response Card - fixed styling */
+    .response-card {
       background: white;
-      color: #333;
-      padding: 5px 10px;
-      border-radius: 15px;
-      border: 1px solid #ddd;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      overflow: hidden;
+      display: none;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .response-card.show {
+      display: block;
+    }
+
+    .response-header {
+      background: linear-gradient(135deg, #0a2540 0%, #2563eb 100%);
+      padding: 12px 15px;
+      border-bottom: 1px solid #dee2e6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .response-title {
+      font-weight: 600;
+      font-size: 13px;
+      color: white;
+    }
+
+    .response-meta {
+      font-size: 11px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .response-content {
+      padding: 15px;
+      max-height: 400px;
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      background: #f8f9fa;
+    }
+
+    .response-actions {
+      padding: 10px 15px;
+      background: #f8f9fa;
+      border-top: 1px solid #dee2e6;
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Action Buttons - properly styled */
+    .action-btn {
+      padding: 6px 14px;
+      background: #2563eb;
+      color: white;
+      border: 1px solid #2563eb;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    /* System Status */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .status-item {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status-label {
+      font-size: 11px;
+      color: #6c757d;
+      font-weight: 500;
+    }
+
+    .status-value {
+      font-size: 12px;
+      font-weight: 600;
+      color: #28a745;
+    }
+
+    /* Event Monitor */
+    .event-list {
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 11px;
+      font-family: 'Courier New', monospace;
+      background: #1e1e1e;
+      color: #e5e7eb;
+      border: 1px solid #404040;
+      border-radius: 6px;
+      padding: 10px;
     }
 
     .health-dot {
@@ -65,449 +385,582 @@
       line-height: 12px;
     }
 
-    .health-green { color: #28a745; }
-    .health-yellow { color: #ffc107; }
-    .health-red { color: #dc3545; }
-    .health-gray { color: #6c757d; }
-    
-    /* Navigation Styles */
-    .nav-menu { 
-      background: #f8f9fa; 
-      padding: 10px; 
-      margin-bottom: 20px; 
-      border-radius: 6px; 
-      border: 1px solid #ddd; 
-    }
-    .nav-menu h3 { 
-      margin: 0 0 10px 0; 
-      color: #333; 
-      font-size: 14px; 
-    }
-    .nav-links { 
-      display: flex; 
-      flex-wrap: wrap; 
-      gap: 10px; 
-    }
-    .nav-link { 
-      background: #007bff; 
-      color: white; 
-      padding: 6px 12px; 
-      text-decoration: none; 
-      border-radius: 4px; 
-      font-size: 12px; 
-      transition: background-color 0.2s; 
-    }
-    .nav-link:hover { 
-      background: #0056b3; 
-      color: white; 
-    }
-    .nav-link.oee { background: #28a745; }
-    .nav-link.oee:hover { background: #1e7e34; }
-    .nav-link.editor { background: #6f42c1; }
-    .nav-link.editor:hover { background: #5a32a3; }
-    .nav-link.active { background: #1d4ed8 !important; font-weight: 600; }
+    .health-green { background-color: #28a745; }
+    .health-yellow { background-color: #ffc107; }
+    .health-red { background-color: #dc3545; }
+    .health-gray { background-color: #6c757d; }
 
-    /* Performance Metrics Display */
-    .performance-metrics {
-      background: #f8f9fa;
-      border: 1px solid #dee2e6;
-      border-radius: 6px;
-      padding: 10px;
-      margin: 10px 0;
-      font-size: 12px;
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+      .template-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
-    .performance-row {
-      display: flex;
-      justify-content: space-between;
-      margin: 3px 0;
-    }
+    /* Event Monitor Log Lines */
+.event-list {
+  font-size: 11px;
+  line-height: 1.3;
+  font-family: 'Courier New', monospace;
+  color: #cbd5e0;
+  background: #1a1a1a;
+  padding: 8px 10px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+}
 
-    .performance-label {
-      font-weight: 600;
-      color: #495057;
-    }
+/* Footer Styling */
+.footer {
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 11px;
+  color: #6c757d;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+  background: #f9f9f9;
+}
 
-    .performance-value {
-      color: #007bff;
-      font-family: monospace;
-    }
+.footer-links {
+  margin-bottom: 6px;
+}
 
-    .response-time-fast { color: #28a745; } /* Grün für < 1s */
-    .response-time-medium { color: #ffc107; } /* Gelb für 1-3s */
-    .response-time-slow { color: #dc3545; } /* Rot für > 3s */
+.footer-link {
+  font-size: 11px;
+  color: #007bff;
+  margin: 0 6px;
+  text-decoration: none;
+}
 
-    .performance-history {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid #dee2e6;
-      font-size: 11px;
-    }
+.footer-link:hover {
+  text-decoration: underline;
+}
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #007bff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 6px;
+  vertical-align: middle;
+}
 
-    .optimization-badge {
-      background: #28a745;
-      color: white;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 10px;
-      margin-left: 5px;
-    }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
-    /* Neue Styles für Prompt-Hilfen */
-    .prompt-help-section {
-      background: #f8f9fa;
-      border: 1px solid #dee2e6;
-      border-radius: 6px;
-      margin-bottom: 15px;
-      padding: 15px;
-    }
-
-    .prompt-help-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .prompt-help-header h4 {
-      margin: 0;
-      color: #495057;
-      font-size: 14px;
-    }
-
-    .toggle-help {
-      background: #6c757d;
-      color: white;
-      border: none;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      cursor: pointer;
-    }
-
-    .quick-prompts {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-
-    .quick-prompt {
-      background: white;
-      border: 1px solid #ced4da;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 12px;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s;
-    }
-
-    .quick-prompt:hover {
-      background: #e9ecef;
-      border-color: #007bff;
-    }
-
-    .quick-prompt.oee { border-left: 4px solid #28a745; }
-    .quick-prompt.orders { border-left: 4px solid #007bff; }
-    .quick-prompt.quality { border-left: 4px solid #ffc107; }
-    .quick-prompt.equipment { border-left: 4px solid #dc3545; }
-    .quick-prompt.general { border-left: 4px solid #6f42c1; }
-
-    .example-prompts-dropdown {
-      margin-bottom: 10px;
-    }
-
-    .example-prompts-dropdown select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ced4da;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-
-    .help-collapsed {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-    }
-
-    .help-expanded {
-      max-height: 400px;
-      transition: max-height 0.3s ease-in;
-    }
-
-    /* Fix Layout Issues */
-    .container {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .input-section {
-      flex: 0 0 auto; /* Don't shrink */
-    }
-
-    .claude-response-box {
-      max-height: 400px;
-      overflow-y: auto;
-      margin-bottom: 20px;
-    }
-
-    .footer-links {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f8f9fa;
-      border-radius: 6px;
-      border: 1px solid #dee2e6;
-      flex-shrink: 0; /* Always visible */
-    }
-
-    /* Ensure content doesn't overlap */
-    .output-section {
-      max-height: 60vh;
-      overflow-y: auto;
-      flex: 1;
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Universal Header Template -->
+    <!-- Header -->
     <div class="header">
       <h1>
-        Pharmaceutical Manufacturing Agentic Business Agent - MAR Process
-        <div class="phase-badge" id="header-performance-badge">MVP <span id="app-version">1.3.0</span></div>
+        Pharmaceutical Manufacturing Agent Framework
+        <span class="phase-badge">MVP 1.3.0</span>
       </h1>
+      <p class="header-subtitle">Enterprise AI Operations Platform - PharmaMinder</p>
       <div id="health-indicator" class="health-indicator">
-        <div class="health-dot" id="health-dot">●</div>
+        <div class="health-dot health-gray" id="health-dot"></div>
         <span id="health-text">Checking...</span>
       </div>
-      <div style="font-size: 14px; opacity: 0.9;">Enterprise AI Operations Platform - PharmaMinder</div>
     </div>
 
-    <!-- Navigation Menu -->
-    <div class="nav-menu">
-      <h3>System Tools & Monitoring</h3>
-      <div class="nav-links">
-        <a href="/" class="nav-link active">Dashboard</a>
-        <a href="/oee-test.html" class="nav-link oee">Live OEE Monitor</a>
-        <a href="/agent-editor.html" class="nav-link editor">Agent Configuration Editor</a>
-        <a href="/audit.html" class="nav-link">Audit Log Viewer</a>
-        <a href="/api/system/health" class="nav-link" target="_blank">System Health</a>
-        <a href="/api/data/oee" class="nav-link oee" target="_blank">OEE API</a>
-        <a href="/api/agents" class="nav-link" target="_blank">Agent Registry</a>
-        <a href="#" class="nav-link" onclick="showPerformanceStats(); return false;">Performance Stats</a>
-      </div>
-    </div>
+    <!-- Navigation -->
+<div class="nav-menu">
+  <div class="nav-links">
+    <a href="/" class="nav-link">Dashboard</a>
+    <a href="/oee-test.html" class="nav-link oee">Live OEE Monitor</a>
+    <a href="/agent-editor.html" class="nav-link editor">Agent Configuration Editor</a>
+    <a href="/audit.html" class="nav-link">Audit Log Viewer</a>
+    <a href="/api/health" class="nav-link" target="_blank">System Health</a>
+    <a href="/api/data/oee" class="nav-link oee" target="_blank">OEE API</a>
+  </div>
+</div>
 
+    <!-- Main Content Grid -->
     <div class="main-content">
-      <div class="input-section">
-        <div class="status" id="status">System Status: Initializing Agent System...</div>
-
-        <div class="gmp-compliance">
-          <div class="gmp-title">GMP Compliance & AI Audit Trail</div>
-          <div class="gmp-indicators">
-            <div class="gmp-indicator"><span>AI Decision Logging:</span><span id="gmp-status">Active</span></div>
-            <div class="gmp-indicator"><span>Data Integrity:</span><span id="data-integrity">Verified</span></div>
-            <div class="gmp-indicator"><span>Audit Trail:</span><span id="audit-trail">Complete</span></div>
-            <div class="gmp-indicator"><span>OEE Integration:</span><span id="oee-status">Real-time</span></div>
-          </div>
-        </div>
-
-        <label for="prompt">Manufacturing Operation Templates</label>
-<select id="prompt">
-    <option value="">-- Select Template to Fill Input Field --</option>
-    <option value="oee_executive">📊 OEE Executive Dashboard</option>
-    <option value="production_planning">📅 Production Planning Optimization</option>
-    <option value="quality_assurance">✅ Quality Assurance Report</option>
-    <option value="equipment_status">🔧 Equipment Status Overview</option>
-</select>
-
-        <!-- PROMPT HELP SECTION -->
-        <div class="prompt-help-section">
-          <div class="prompt-help-header">
-            <h4>💡 Prompt Help & Examples</h4>
-            <button class="toggle-help" onclick="togglePromptHelp()">Expand</button>
-          </div>
+      <!-- Left Panel: Query Builder -->
+      <div class="left-panel">
+        <!-- Query Type Selector -->
+        <div class="card">
+          <h3 class="card-title">Query Builder</h3>
           
-          <div id="prompt-help-content" class="help-collapsed">
-            <!-- Example Prompts Dropdown -->
-            <div class="example-prompts-dropdown">
-              <select id="example-prompts">
-                <option value="">-- Select an Example Query --</option>
-                <optgroup label="🏭 OEE & Production">
-                  <option value="What is the current OEE for LINE-01?">OEE Status LINE-01</option>
-                  <option value="Show me production efficiency for all lines">Production Efficiency Overview</option>
-                  <option value="Which production line has issues?">Identify Problems</option>
-                  <option value="Equipment downtime analysis for today">Downtime Analysis</option>
-                  <option value="Show me current availability and performance metrics">Performance Metrics</option>
-                </optgroup>
-                <optgroup label="📋 Orders & Batches">
-                  <option value="What orders are scheduled for today?">Today's Orders</option>
-                  <option value="Show me urgent orders">Urgent Orders</option>
-                  <option value="Are there any production delays?">Check Delays</option>
-                  <option value="Batch status for today">Batch Overview</option>
-                  <option value="Material availability check">Material Status</option>
-                </optgroup>
-                <optgroup label="✅ Quality & Compliance">
-                  <option value="Are there any quality issues?">Quality Status</option>
-                  <option value="Compliance status today">Compliance Check</option>
-                  <option value="Quality metrics for this week">Quality KPIs</option>
-                  <option value="Deviation reports overview">Deviations</option>
-                </optgroup>
-                <optgroup label="🔧 Equipment & Maintenance">
-                  <option value="Equipment failures today">Equipment Issues</option>
-                  <option value="Maintenance schedule">Maintenance Plan</option>
-                  <option value="Temperature alerts">Temperature Warnings</option>
-                  <option value="Calibration due dates">Calibration</option>
-                </optgroup>
-              </select>
-            </div>
+          <!-- Tabs for different query modes -->
+          <div class="query-tabs">
+            <button class="query-tab active" data-tab="templates">Templates</button>
+            <button class="query-tab" data-tab="quick">Quick Queries</button>
+            <button class="query-tab" data-tab="whatif">What-If Analysis</button>
+            <button class="query-tab" data-tab="custom">Custom</button>
+          </div>
 
-            <!-- Quick Prompt Buttons -->
-            <div class="quick-prompts">
-              <button class="quick-prompt oee" data-prompt="What is the current OEE?">
-                📊 Check OEE Status
-              </button>
-              <button class="quick-prompt orders" data-prompt="What orders are scheduled today?">
-                📋 Today's Orders
-              </button>
-              <button class="quick-prompt quality" data-prompt="Are there any quality issues?">
-                ✅ Check Quality
-              </button>
-              <button class="quick-prompt equipment" data-prompt="Equipment failures today">
-                🔧 Equipment Status
-              </button>
-              <button class="quick-prompt general" data-prompt="Complete production status">
-                🏭 Full Status
-              </button>
-              <button class="quick-prompt general" data-prompt="Show me all critical alarms">
-                🚨 Critical Alarms
-              </button>
+          <!-- Templates Tab -->
+          <div class="tab-content active" id="tab-templates">
+            <div class="template-grid">
+              <div class="template-card" data-template="oee">
+                <div class="template-title">OEE Executive Report</div>
+                <div class="template-desc">Real-time OEE metrics with historical trends</div>
+              </div>
+              <div class="template-card" data-template="production">
+                <div class="template-title">Production Planning</div>
+                <div class="template-desc">Order optimization and resource allocation</div>
+              </div>
+              <div class="template-card" data-template="quality">
+                <div class="template-title">Quality Assurance</div>
+                <div class="template-desc">Compliance checks and deviation reports</div>
+              </div>
+              <div class="template-card" data-template="equipment">
+                <div class="template-title">Equipment Status</div>
+                <div class="template-desc">Failures, maintenance, and uptime analysis</div>
+              </div>
             </div>
+          </div>
+
+          <!-- Quick Queries Tab -->
+          <div class="tab-content" id="tab-quick">
+            <div class="quick-prompts" id="quick-prompts-container">
+              <!-- Will be loaded from quick-queries.yaml -->
+              <button class="quick-prompt" data-query="What is the current OEE?">Current OEE</button>
+              <button class="quick-prompt" data-query="What orders are scheduled today?">Today's Orders</button>
+              <button class="quick-prompt" data-query="Are there any quality issues?">Quality Status</button>
+              <button class="quick-prompt" data-query="Equipment failures today">Equipment Issues</button>
+              <button class="quick-prompt" data-query="Show me all critical alarms">Critical Alarms</button>
+              <button class="quick-prompt" data-query="Production efficiency for all lines">Production Efficiency</button>
+              <button class="quick-prompt" data-query="Compliance status today">Compliance Check</button>
+              <button class="quick-prompt" data-query="Material availability check">Material Status</button>
+            </div>
+          </div>
+
+          <!-- What-If Tab -->
+          <div class="tab-content" id="tab-whatif">
+            <div class="whatif-examples">
+              <div class="whatif-example" data-query="What if OEE on LINE-01 drops below 70%?">
+                What if OEE drops below 70%?
+              </div>
+              <div class="whatif-example" data-query="What if we delay production by 2 days?">
+                What if production is delayed 2 days?
+              </div>
+              <div class="whatif-example" data-query="What if we find contamination in batch B-001?">
+                What if contamination is detected?
+              </div>
+              <div class="whatif-example" data-query="What if equipment fails on LINE-02?">
+                What if equipment fails?
+              </div>
+              <div class="whatif-example" data-query="What if material delivery is delayed by 1 week?">
+                What if material delivery is delayed?
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom Tab -->
+          <div class="tab-content" id="tab-custom">
+            <p style="font-size: 12px; color: #6c757d; margin: 0;">
+              Enter your custom query in the input field below. Use natural language to ask questions about production, quality, equipment, or compliance.
+            </p>
           </div>
         </div>
 
-        <label for="message">Manufacturing Command Input</label>
-<textarea id="message" placeholder="Manufacturing Command Examples:
-Use the Manufacturing Operation Templates dropdown above for guided queries or select from example prompts or enter free text.
-example: 'Show me today's production orders and their status."-></textarea>
-
-        <button id="send" class="primary-button">Execute Manufacturing Command</button>
-
-        <div id="claude-response" class="claude-response-box enhanced" style="display:none;">
-          <div class="response-header">
-            <strong>AI Agent Response</strong>
-            <div class="response-meta" id="response-meta"></div>
+        <!-- Input Section -->
+        <div class="card">
+          <h3 class="card-title">Query Input</h3>
+          <div class="input-group">
+            <label for="message">Your Question</label>
+            <textarea 
+              id="message" 
+              placeholder="Ask about production, quality, equipment, compliance, or run a what-if scenario...&#10;&#10;Tip: Press Ctrl+Enter to execute"
+            ></textarea>
           </div>
-          <div class="response-content">
-            <div id="claude-text" class="formatted-response"></div>
-          </div>
-          <div class="response-actions">
-            <button class="action-btn" onclick="copyResponse()">Copy</button>
-            <button class="action-btn" onclick="exportResponse()">Export</button>
-            <button class="action-btn" onclick="clearResponse()">Clear</button>
+          <div class="input-actions">
+            <button id="send" class="btn btn-primary">Execute Query</button>
+            <button id="send-whatif" class="btn btn-whatif">What-If Analysis</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('message').value=''; document.getElementById('claude-response').classList.remove('show');">Clear</button>
           </div>
         </div>
 
-        <!-- Performance Metrics Display -->
-        <div id="performance-metrics" class="performance-metrics" style="display:none;">
-          <div class="performance-row">
-            <span class="performance-label">Response Time:</span>
-            <span class="performance-value" id="current-response-time">-- ms</span>
-          </div>
-          <div class="performance-row">
-            <span class="performance-label">Agent Used:</span>
-            <span class="performance-value" id="current-agent">--</span>
-          </div>
-          <div class="performance-row">
-            <span class="performance-label">Data Sources:</span>
-            <span class="performance-value" id="data-sources-count">--</span>
-          </div>
-          <div class="performance-row">
-            <span class="performance-label">Events Triggered:</span>
-            <span class="performance-value" id="events-triggered">--</span>
-          </div>
-          
-          <div class="performance-history">
-            <div class="performance-row">
-              <span class="performance-label">Average (last 5):</span>
-              <span class="performance-value" id="average-response-time">-- ms</span>
-            </div>
-            <div class="performance-row">
-              <span class="performance-label">Optimization Status:</span>
-              <span class="performance-value" id="optimization-status">
-                Prompts Optimized <span class="optimization-badge">85% shorter</span>
-              </span>
-            </div>
-          </div>
-        </div>
+        <!-- Response Section -->
+<!-- Response Section -->
+<!-- Response Section -->
+<div class="card response-card" id="claude-response">
+  <div class="response-header">
+    <span class="response-title">AI Agent Response</span>
+    <span class="response-meta" id="response-meta"></span>
+  </div>
+  <div class="response-content" id="claude-text">
+    <span id="spinner" class="spinner" style="display:none;"></span>
+    <span id="response-text"></span>
+  </div>
+  <div class="response-actions">
+    <button class="action-btn" onclick="copyResponse()">Copy</button>
+    <button class="action-btn" onclick="exportResponse()">Export</button>
+    <button class="action-btn" onclick="document.getElementById('claude-response').classList.remove('show');">Close</button>
+  </div>
+</div>
 
-        <!-- Footer Links Section - Always Visible -->
-        <div class="footer-links">
-          <div style="margin-bottom: 8px;">
-            <strong>Audit & System Links:</strong><br>
-            <a href="/api/audit" target="_blank">View Full Audit Log (JSON)</a> | 
-            <a href="/audit.html" target="_blank">Recent Audit Entries</a> |
-            <a href="/api/system/health" target="_blank">System Health</a>
-          </div>
-          <div class="version-info">
-            <strong>System APIs:</strong><br>
-            <a href="/api/system/status" target="_blank">Detailed Status</a> | 
-            <a href="/api/version" target="_blank">API Version Info</a> | 
-            <a href="/api/data" target="_blank">Data Overview</a> | 
-            <a href="/api/events/subscriptions" target="_blank">Event Mappings</a> | 
-            <a href="/api/agents" target="_blank">Agent Registry</a> |
-            <a href="/api/data/oee" target="_blank">Live OEE Data</a> |
-            <a href="/api/oee" target="_blank">OEE Dashboard</a>
-          </div>
-          <div style="margin-top: 8px; font-size: 11px; color: #888;">
-            <span>System Version: </span><span id="manual-version">1.3.0</span> | 
-            <span>Architecture: Real-time OEE + A2A</span> | 
-            <span>Developer: Markus Schmeckenbecher</span>
-             <span>GitHub: <a href="https://github.com/schmeckm/Business_AI_Agentic_Pharma_MVP" target="_blank">Business_AI_Agentic_Pharma_MVP</a></span>
-          </div>
-        </div>
+
       </div>
 
-      <div class="output-section">
-        <div class="system-response-block">
-          <table style="width: 100%; margin-bottom: 5px;">
-            <tr>
-              <td><label for="out">System Response & Audit Log</label></td>
-              <td style="text-align: right;"><button class="clear-button" onclick="clearOutput()">Clear</button></td>
-            </tr>
-          </table>
-          <pre id="out">Pharmaceutical Manufacturing Agent System Ready...
-MVP 1.3.0 - Real-time OEE Integration
+      <!-- Right Panel: System Status & Events -->
+      <div class="right-panel">
+        <!-- System Status -->
+        <div class="card">
+          <h3 class="card-title">System Status</h3>
+          <div class="status-grid">
+            <div class="status-item">
+              <span class="status-label">AI Decision Logging</span>
+              <span class="status-value" id="gmp-status">Active</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Data Integrity</span>
+              <span class="status-value" id="data-integrity">Verified</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Audit Trail</span>
+              <span class="status-value" id="audit-trail">Complete</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">OEE Integration</span>
+              <span class="status-value" id="oee-status">Real-time</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Output -->
+        <div class="card">
+          <h3 class="card-title">System Output</h3>
+          <div class="event-list" id="out" style="background: #111827; color: #e5e7eb;">Pharmaceutical Manufacturing Agent System Ready...
+MVP 1.3.0 - Agent Types & What-If Analysis
 AI Decision Logging: ENABLED
 GMP Compliance Monitoring: ACTIVE
 Event-Driven Agent System: ACTIVE
-OEE MQTT Integration: LIVE (3s updates)</pre>
-          <div class="metrics" id="metrics">Waiting for operation metrics...</div>
+OEE MQTT Integration: LIVE (3s updates)</div>
         </div>
 
-        <div class="event-monitor-block">
-          <table style="width: 100%; margin-bottom: 5px;">
-            <tr>
-              <td><label>Realtime Event Monitor</label></td>
-              <td style="text-align: right;"><button class="clear-button" onclick="clearEvents()">Clear Events</button></td>
-            </tr>
-          </table>
-          <pre id="event-monitor" class="event-monitor">Waiting for events...</pre>
+        <!-- Event Monitor -->
+        <div class="card">
+          <h3 class="card-title">Event Monitor</h3>
+          <div class="event-list" id="event-monitor">Waiting for events...</div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Include the enhanced app.js functionality -->
-  <script src="js/app.js"></script>
+    <!-- Footer -->
+    <div class="footer">
+<div class="footer">
+  <div class="footer-links">
+    <a href="https://github.com/schmeckm/Business_AI_Agentic_Pharma_MVP" target="_blank" class="footer-link">GitHub</a>
+  </div>
+  <div>
+    System Version: 1.3.0 &nbsp;|&nbsp; Architecture: Real-time OEE + A2A + Agent Types &nbsp;|&nbsp; Developer: Markus Schmeckenbecher
+  </div>
+</div>
+    </div>
+  </div>
+<script>
+function showSpinner(show) {
+  const spinner = document.getElementById('spinner');
+  if (spinner) spinner.style.display = show ? 'inline-block' : 'none';
+}
+
+// Load Quick Queries from YAML
+async function loadQuickQueries() {
+  try {
+    const response = await fetch('/quick-queries.yaml');
+    const yamlText = await response.text();
+    
+    // Simple YAML parsing
+    const queries = [];
+    const lines = yamlText.split('\n');
+    let currentQuery = {};
+    
+    for (const line of lines) {
+      if (line.trim().startsWith('- label:')) {
+        if (currentQuery.label) queries.push(currentQuery);
+        currentQuery = { label: line.split('"')[1] };
+      } else if (line.trim().startsWith('query:')) {
+        currentQuery.query = line.split('"')[1];
+      } else if (line.trim().startsWith('category:')) {
+        currentQuery.category = line.split('"')[1];
+      }
+    }
+    if (currentQuery.label) queries.push(currentQuery);
+    
+    // Render quick queries
+    const container = document.getElementById('quick-prompts-container');
+    container.innerHTML = queries.map(q => 
+      `<button class="quick-prompt" data-query="${q.query}">${q.label}</button>`
+    ).join('');
+    
+    // Re-attach event listeners
+    attachQuickPromptListeners();
+    
+  } catch (error) {
+    console.warn('Could not load quick-queries.yaml, using defaults');
+  }
+}
+
+// Attach event listeners to quick prompts
+function attachQuickPromptListeners() {
+  document.querySelectorAll('.quick-prompt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const query = btn.getAttribute('data-query');
+      document.getElementById('message').value = query;
+    });
+  });
+}
+
+// Attach event listeners to what-if examples
+function attachWhatIfListeners() {
+  document.querySelectorAll('.whatif-example').forEach(div => {
+    div.addEventListener('click', () => {
+      const query = div.getAttribute('data-query');
+      document.getElementById('message').value = query;
+    });
+  });
+}
+
+// Tab Switching
+document.querySelectorAll('.query-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.query-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    
+    tab.classList.add('active');
+    const tabId = tab.getAttribute('data-tab');
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+  });
+});
+
+// Template Card Selection
+document.querySelectorAll('.template-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    
+    const template = card.getAttribute('data-template');
+    const queries = {
+      oee: 'Generate comprehensive OEE executive report with real-time metrics, historical trends, and line-by-line analysis',
+      production: 'Optimize production planning with detailed resource allocation, bottleneck analysis, and scheduling recommendations',
+      quality: 'Generate quality assurance compliance report with deviation analysis, CAPA tracking, and regulatory status',
+      equipment: 'Provide complete equipment status overview with failure analysis, maintenance alerts, and uptime metrics'
+    };
+    
+    document.getElementById('message').value = queries[template];
+  });
+});
+
+// Execute Query
+document.getElementById('send').addEventListener('click', async () => {
+  const message = document.getElementById('message').value;
+  if (!message) {
+    alert('Please enter a query');
+    return;
+  }
+
+  const responseCard = document.getElementById('claude-response');
+  const responseText = document.getElementById('response-text');
+  const responseMeta = document.getElementById('response-meta');
+
+  responseText.textContent = 'Processing your query...';
+  responseCard.classList.add('show');
+  showSpinner(true);
+
+  try {
+    const startTime = Date.now();
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
+    });
+
+    const data = await response.json();
+    const duration = Date.now() - startTime;
+
+    responseText.textContent = data.response || JSON.stringify(data, null, 2);
+    responseMeta.textContent = `${duration}ms`;
+  } catch (error) {
+    responseText.textContent = `Error: ${error.message}`;
+    responseMeta.textContent = 'Failed';
+  } finally {
+    showSpinner(false);
+  }
+});
+
+// Execute What-If
+document.getElementById('send-whatif').addEventListener('click', async () => {
+  const message = document.getElementById('message').value;
+  if (!message) {
+    alert('Please enter a what-if scenario');
+    return;
+  }
+
+  const responseCard = document.getElementById('claude-response');
+  const responseText = document.getElementById('response-text');
+  const responseMeta = document.getElementById('response-meta');
+
+  responseText.textContent = 'Analyzing scenario with multiple agents...';
+  responseCard.classList.add('show');
+  showSpinner(true);
+
+  try {
+    const startTime = Date.now();
+    const response = await fetch('/api/chat/whatif', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
+    });
+
+    const data = await response.json();
+    const duration = Date.now() - startTime;
+
+    responseText.textContent = data.response || JSON.stringify(data, null, 2);
+    responseMeta.textContent = `What-If Analysis • ${duration}ms`;
+
+    const out = document.getElementById('out');
+    out.textContent += `\n[${new Date().toLocaleTimeString()}] What-If analysis completed in ${duration}ms`;
+    out.scrollTop = out.scrollHeight;
+  } catch (error) {
+    responseText.textContent = `Error: ${error.message}`;
+    responseMeta.textContent = 'Failed';
+  } finally {
+    showSpinner(false);
+  }
+});
+
+// Copy Response
+function copyResponse() {
+  const text = document.getElementById('response-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Response copied to clipboard!');
+  });
+}
+
+// Export Response
+function exportResponse() {
+  const text = document.getElementById('response-text').textContent;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `pharma-response-${Date.now()}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Health Check
+async function updateHealthIndicator() {
+      const healthDot = document.getElementById('health-dot');
+      const healthText = document.getElementById('health-text');
+
+      try {
+        const response = await fetch('/api/health');
+        const health = await response.json();
+
+        if (health.status === 'ok' || health.status === 'healthy') {
+          healthDot.className = 'health-dot health-green';
+          healthText.textContent = 'System OK';
+        } else if (health.status === 'error' || health.status === 'unhealthy') {
+          healthDot.className = 'health-dot health-red';
+          healthText.textContent = 'Error';
+        } else {
+          healthDot.className = 'health-dot health-yellow';
+          healthText.textContent = 'Warning';
+        }
+      } catch (error) {
+        healthDot.className = 'health-dot health-red';
+        healthText.textContent = 'API Error';
+        console.error('Health check failed:', error);
+      }
+    }
+
+// Event Monitor (Server-Sent Events)
+function connectEventStream() {
+  try {
+    const eventSource = new EventSource('/events');
+    
+    eventSource.onmessage = (event) => {
+      const monitor = document.getElementById('event-monitor');
+      
+      try {
+        let eventData;
+        try {
+          eventData = JSON.parse(event.data);
+        } catch {
+          eventData = { type: 'raw', message: event.data };
+        }
+        
+        const timestamp = new Date().toLocaleTimeString();
+        let line = '';
+        if (eventData.type && eventData.data) {
+          line = `[${timestamp}] ${eventData.type}: ${JSON.stringify(eventData.data)}`;
+        } else if (eventData.type) {
+          line = `[${timestamp}] ${eventData.type}`;
+        } else if (eventData.message) {
+          line = `[${timestamp}] ${eventData.message}`;
+        } else {
+          line = `[${timestamp}] ${JSON.stringify(eventData)}`;
+        }
+        
+        if (monitor.textContent === 'Waiting for events...') {
+          monitor.textContent = line;
+        } else {
+          monitor.textContent += '\n' + line;
+        }
+        
+        monitor.scrollTop = monitor.scrollHeight;
+        
+        const lines = monitor.textContent.split('\n');
+        if (lines.length > 50) {
+          monitor.textContent = lines.slice(-50).join('\n');
+        }
+      } catch (parseError) {
+        console.error('Event parsing error:', parseError);
+      }
+    };
+    
+    eventSource.onopen = () => {
+      const monitor = document.getElementById('event-monitor');
+      monitor.textContent = `[${new Date().toLocaleTimeString()}] Event stream connected`;
+    };
+    
+    eventSource.onerror = (error) => {
+      console.warn('Event stream error:', error);
+      const monitor = document.getElementById('event-monitor');
+      if (monitor.textContent === 'Waiting for events...') {
+        monitor.textContent = `[${new Date().toLocaleTimeString()}] Event stream unavailable (check if /events endpoint is active)`;
+      }
+    };
+  } catch (error) {
+    console.warn('Event stream not available:', error);
+    const monitor = document.getElementById('event-monitor');
+    monitor.textContent = 'Event stream not supported by browser';
+  }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  updateHealthIndicator()
+  loadQuickQueries();
+  connectEventStream();
+  attachQuickPromptListeners();
+  attachWhatIfListeners(); // ✅ new
+  setInterval(updateHealthIndicator, 30000);
+});
+
+// Enter key support
+document.getElementById('message').addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key === 'Enter') {
+    document.getElementById('send').click();
+  }
+});
+</script>
+
+
+
 </body>
 </html>

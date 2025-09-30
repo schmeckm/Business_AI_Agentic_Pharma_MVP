@@ -168,6 +168,15 @@ export class AuditLogger {
   }
 
   /**
+ * Get recent audit entries (for API)
+ */
+getEntries(limit = 100) {
+  const result = this.getAuditLog(null, limit);
+  return result.entries || [];
+}
+
+
+  /**
    * Log Auto-Triggered Agent
    */
   logAutoTriggeredAgent(triggeredAgent, triggerEvent, sourceAgent, response) {

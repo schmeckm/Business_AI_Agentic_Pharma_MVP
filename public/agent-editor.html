@@ -3,18 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YAML Agent Configuration Editor</title>
+  <title>Configuration Editor - Agents & Quick Queries</title>
 
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <!-- CodeMirror CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/dracula.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/styles.css">
-
   <style>
-    /* Universal Header Styles */
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+    }
+
+    /* Universal Header Styles (matching index.html) */
     .header {
       background: linear-gradient(135deg, #0a2540 0%, #2563eb 100%);
       color: white;
@@ -29,17 +49,22 @@
       font-weight: 600;
     }
 
-.phase-badge {
-  background: #2563eb;
-  color: #fff;
-  font-size: 10px;
-  font-weight: bold;
-  padding: 4px 4px;  /* Gleiche Höhe, aber weniger horizontaler Platz */
-  border-radius: 10px;
-  margin-left: 6px;
-  display: inline-block;
-  min-width: auto;
-}
+    .phase-badge {
+      background: #2563eb;
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 10px;
+      margin-left: 6px;
+      display: inline-block;
+    }
+
+    .header-subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 5px;
+    }
 
     .health-indicator {
       position: absolute;
@@ -71,24 +96,19 @@
     .health-red { color: #dc3545; }
     .health-gray { color: #6c757d; }
     
-    /* Navigation Styles */
+    /* Navigation Styles (matching index.html) */
     .nav-menu { 
       background: #f8f9fa; 
-      padding: 10px; 
-      margin-bottom: 20px; 
-      border-radius: 6px; 
-      border: 1px solid #ddd; 
+      padding: 10px 20px;
+      border-bottom: 2px solid #dee2e6;
     }
-    .nav-menu h3 { 
-      margin: 0 0 10px 0; 
-      color: #333; 
-      font-size: 14px; 
-    }
+    
     .nav-links { 
       display: flex; 
       flex-wrap: wrap; 
       gap: 10px; 
     }
+    
     .nav-link { 
       background: #007bff; 
       color: white; 
@@ -96,22 +116,447 @@
       text-decoration: none; 
       border-radius: 4px; 
       font-size: 12px; 
-      transition: background-color 0.2s; 
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
     }
+    
     .nav-link:hover { 
       background: #0056b3; 
-      color: white; 
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+    
     .nav-link.oee { background: #28a745; }
     .nav-link.oee:hover { background: #1e7e34; }
     .nav-link.editor { background: #6f42c1; }
     .nav-link.editor:hover { background: #5a32a3; }
-    .nav-link.active { background: #1d4ed8 !important; font-weight: 600; }
+.nav-link.active { 
+  background: #1d4ed8 !important; 
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
 
-    /* Editor specific styles */
+    /* Tab System */
+    .tab-container {
+      background: #f8f9fa;
+      border-bottom: 2px solid #dee2e6;
+      padding: 0 20px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 5px;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: #6c757d;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab:hover {
+      color: #495057;
+      background: rgba(0,123,255,0.05);
+    }
+
+    .tab.active {
+      color: #007bff;
+      border-bottom-color: #007bff;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Page Header */
+    .page-header {
+      margin: 20px 20px 0 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e9ecef;
+    }
+
+    .page-header h2 {
+      margin: 0;
+      color: #0a2540;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .page-header p {
+      margin: 5px 0 0 0;
+      color: #666;
+      font-size: 13px;
+    }
+
+    /* Main Content Layout */
+    .main-content {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 20px;
+      padding: 20px;
+      min-height: 600px;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 15px;
+      height: fit-content;
+    }
+
+    .sidebar h3 {
+      margin: 0 0 15px 0;
+      font-size: 16px;
+      color: #495057;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 8px;
+    }
+
+    .agent-count, .query-count {
+      background: #e7f3ff;
+      color: #0066cc;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ced4da;
+      background: white;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toggle-btn:hover {
+      background: #e9ecef;
+    }
+
+    .toggle-btn.active {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+
+    .agent-list, .query-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .agent-item, .query-item {
+      padding: 10px;
+      margin-bottom: 8px;
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .agent-item:hover, .query-item:hover {
+      background: #e7f3ff;
+      border-color: #007bff;
+      transform: translateX(3px);
+    }
+
+    .agent-item.active, .query-item.active {
+      background: #007bff;
+      color: white;
+      border-color: #0056b3;
+    }
+
+    .agent-item.active .agent-name,
+    .agent-item.active .agent-trigger,
+    .query-item.active .query-label,
+    .query-item.active .query-category {
+      color: white;
+    }
+
+    .agent-name, .query-label {
+      font-weight: 600;
+      font-size: 13px;
+      color: #212529;
+      margin-bottom: 4px;
+    }
+
+    .agent-trigger, .query-category {
+      font-size: 11px;
+      color: #6c757d;
+    }
+
+    .oee-badge, .a2a-badge, .category-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 9px;
+      border-radius: 3px;
+      margin-left: 5px;
+      font-weight: 600;
+    }
+
+    .oee-badge {
+      background: #28a745;
+      color: white;
+    }
+
+    .a2a-badge {
+      background: #17a2b8;
+      color: white;
+    }
+
+    .category-badge {
+      background: #6c757d;
+      color: white;
+    }
+
+    .category-badge.oee { background: #28a745; }
+    .category-badge.production { background: #007bff; }
+    .category-badge.quality { background: #ffc107; color: #333; }
+    .category-badge.equipment { background: #dc3545; }
+    .category-badge.general { background: #6f42c1; }
+
+    /* Editor Area */
+    .editor-area {
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .editor-header {
+      background: #e9ecef;
+      padding: 12px 15px;
+      border-bottom: 1px solid #dee2e6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .editor-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: #495057;
+    }
+
+    .editor-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0056b3;
+    }
+
+    .btn-primary:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #218838;
+    }
+
+    .btn-warning {
+      background: #ffc107;
+      color: #333;
+    }
+
+    .btn-warning:hover {
+      background: #e0a800;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    /* CodeMirror Editor */
     .CodeMirror {
       height: 600px;
       font-size: 14px;
+      border: none;
+    }
+
+    /* Add Query Form */
+    .add-query-form {
+      padding: 15px;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .add-query-form.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 4px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: inherit;
+    }
+
+    .form-textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      background: #f8f9fa;
+      border-top: 1px solid #dee2e6;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .status-message {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-success {
+      color: #28a745;
+      font-weight: 600;
+    }
+
+    .status-error {
+      color: #dc3545;
+      font-weight: 600;
+    }
+
+    .status-loading {
+      color: #007bff;
+      font-weight: 600;
+    }
+
+    #editorInfo {
+      color: #6c757d;
+      font-style: italic;
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        margin-bottom: 20px;
+      }
+
+      .health-indicator {
+        position: static;
+        margin-top: 10px;
+        justify-content: center;
+      }
     }
   </style>
 </head>
@@ -121,74 +566,153 @@
     <div class="header">
       <h1>
         Pharmaceutical Manufacturing Agentic Business Agent - MAR Process
-        <div class="phase-badge">MVP <span id="app-version">1.3.0</span></div>
+        <span class="phase-badge">MVP <span id="app-version">1.3.0</span></span>
       </h1>
       <div id="health-indicator" class="health-indicator">
         <div class="health-dot" id="health-dot">●</div>
         <span id="health-text">Checking...</span>
       </div>
-      <div style="font-size: 14px; opacity: 0.9;">Enterprise AI Operations Platform - PharmaMinder</div>
+      <p class="header-subtitle">Enterprise AI Operations Platform - PharmaMinder</p>
     </div>
 
     <!-- Navigation Menu -->
-    <div class="nav-menu">
-      <h3>System Tools & Monitoring</h3>
-      <div class="nav-links">
-        <a href="/" class="nav-link">Dashboard</a>
-        <a href="/oee-test.html" class="nav-link oee">Live OEE Monitor</a>
-        <a href="/agent-editor.html" class="nav-link editor active">Agent Configuration Editor</a>
-        <a href="/audit.html" class="nav-link">Audit Log Viewer</a>
-        <a href="/api/system/health" class="nav-link" target="_blank">System Health</a>
-        <a href="/api/data/oee" class="nav-link oee" target="_blank">OEE API</a>
-        <a href="/api/agents" class="nav-link" target="_blank">Agent Registry</a>
+<div class="nav-menu">
+  <div class="nav-links">
+    <a href="/" class="nav-link">Dashboard</a>
+    <a href="/oee-test.html" class="nav-link oee">Live OEE Monitor</a>
+    <a href="/agent-editor.html" class="nav-link editor">Agent Configuration Editor</a>
+    <a href="/audit.html" class="nav-link">Audit Log Viewer</a>
+    <a href="/api/health" class="nav-link" target="_blank">System Health</a>
+    <a href="/api/data/oee" class="nav-link oee" target="_blank">OEE API</a>
+  </div>
+</div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-container">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('agents')">
+          <i class="fas fa-robot"></i> Agent Configuration
+        </button>
+        <button class="tab" onclick="switchTab('queries')">
+          <i class="fas fa-bolt"></i> Quick Queries
+        </button>
       </div>
     </div>
 
-    <!-- Page specific content -->
-    <div style="margin-bottom: 20px; padding: 0 20px;">
-      <h2 style="margin: 0; color: #0a2540;">Agent Configuration Editor</h2>
-      <p style="margin: 5px 0; color: #666;">Edit YAML configuration for pharmaceutical agents</p>
-    </div>
+    <!-- AGENTS TAB -->
+    <div id="agents-tab" class="tab-content active">
+      <div class="page-header">
+        <h2>Agent Configuration Editor</h2>
+        <p>Edit YAML configuration for pharmaceutical agents</p>
+      </div>
 
-    <div class="main-content">
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <h3>Available Agents</h3>
-        <div class="agent-count" id="agentCount">
-          <div class="loading"></div> Loading agents...
-        </div>
-
-        <div class="view-toggle">
-          <button class="toggle-btn active" onclick="setView('individual')">Individual</button>
-          <button class="toggle-btn" onclick="setView('full')">Full</button>
-        </div>
-
-        <ul class="agent-list" id="agentList">
-          <li class="agent-item">
+      <div class="main-content">
+        <div class="sidebar">
+          <h3>Available Agents</h3>
+          <div class="agent-count" id="agentCount">
             <div class="loading"></div> Loading agents...
-          </li>
-        </ul>
-      </div>
-
-      <!-- Editor Area -->
-      <div class="editor-area">
-        <div class="editor-header">
-          <div class="editor-title" id="editorTitle">Select an agent to edit</div>
-          <div class="editor-actions">
-            <button class="btn btn-warning" onclick="reloadAgents()" id="reloadBtn">Reload</button>
-            <button class="btn btn-success" onclick="validateYaml()" id="validateBtn">Validate</button>
-            <button class="btn btn-primary" onclick="saveChanges()" id="saveBtn" disabled>Save</button>
           </div>
+
+          <div class="view-toggle">
+            <button class="toggle-btn active" onclick="setAgentView('individual')">Individual</button>
+            <button class="toggle-btn" onclick="setAgentView('full')">Full YAML</button>
+          </div>
+
+          <ul class="agent-list" id="agentList">
+            <li class="agent-item">
+              <div class="loading"></div> Loading...
+            </li>
+          </ul>
         </div>
 
-        <!-- CodeMirror replaces the textarea -->
-        <textarea id="yamlEditor"></textarea>
+        <div class="editor-area">
+          <div class="editor-header">
+            <div class="editor-title" id="agentEditorTitle">Select an agent to edit</div>
+            <div class="editor-actions">
+              <button class="btn btn-warning" onclick="reloadAgents()" id="reloadAgentsBtn">Reload</button>
+              <button class="btn btn-success" onclick="validateAgentYaml()" id="validateAgentBtn">Validate</button>
+              <button class="btn btn-primary" onclick="saveAgentChanges()" id="saveAgentBtn" disabled>Save</button>
+            </div>
+          </div>
+          <textarea id="agentYamlEditor"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK QUERIES TAB -->
+    <div id="queries-tab" class="tab-content">
+      <div class="page-header">
+        <h2>Quick Queries Configuration</h2>
+        <p>Manage quick query buttons and categories</p>
+      </div>
+
+      <div class="main-content">
+        <div class="sidebar">
+          <h3>Quick Queries</h3>
+          <div class="query-count" id="queryCount">
+            <div class="loading"></div> Loading queries...
+          </div>
+
+          <div class="view-toggle">
+            <button class="toggle-btn active" onclick="setQueryView('individual')">Individual</button>
+            <button class="toggle-btn" onclick="setQueryView('full')">Full YAML</button>
+          </div>
+
+          <button class="btn btn-success" style="width: 100%; margin-bottom: 10px;" onclick="toggleAddQueryForm()">
+            <i class="fas fa-plus"></i> Add New Query
+          </button>
+
+          <!-- Add Query Form -->
+          <div class="add-query-form" id="addQueryForm">
+            <div class="form-group">
+              <label class="form-label">Label</label>
+              <input type="text" class="form-input" id="newQueryLabel" placeholder="e.g., Current OEE">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Query Text</label>
+              <textarea class="form-textarea" id="newQueryText" placeholder="e.g., What is the current OEE status?"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select class="form-select" id="newQueryCategory">
+                <option value="oee">OEE (Chart Line)</option>
+                <option value="production">Production (Industry)</option>
+                <option value="quality">Quality (Check Circle)</option>
+                <option value="equipment">Equipment (Tools)</option>
+                <option value="general">General (Clipboard)</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" onclick="addNewQuery()">Add Query</button>
+              <button class="btn btn-secondary" onclick="toggleAddQueryForm()">Cancel</button>
+            </div>
+          </div>
+
+          <ul class="query-list" id="queryList">
+            <li class="query-item">
+              <div class="loading"></div> Loading...
+            </li>
+          </ul>
+        </div>
+
+        <div class="editor-area">
+          <div class="editor-header">
+            <div class="editor-title" id="queryEditorTitle">Select a query to edit</div>
+            <div class="editor-actions">
+              <button class="btn btn-danger" onclick="deleteQuery()" id="deleteQueryBtn" style="display:none;">Delete</button>
+              <button class="btn btn-warning" onclick="reloadQueries()" id="reloadQueriesBtn">Reload</button>
+              <button class="btn btn-success" onclick="validateQueryYaml()" id="validateQueryBtn">Validate</button>
+              <button class="btn btn-primary" onclick="saveQueryChanges()" id="saveQueryBtn" disabled>Save</button>
+            </div>
+          </div>
+          <textarea id="queryYamlEditor"></textarea>
+        </div>
       </div>
     </div>
 
     <div class="status-bar">
       <div class="status-message" id="statusMessage">
-        Ready - Select an agent to edit
+        Ready - Select an item to edit
       </div>
       <div id="editorInfo">
         Using CodeMirror | YAML Syntax Highlighting
@@ -201,13 +725,71 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/yaml/yaml.min.js"></script>
 
   <script>
-    // Universal Health Check JavaScript
+    // ===============================
+    // GLOBAL VARIABLES
+    // ===============================
+    let agentEditor, queryEditor;
+    let currentAgent = null;
+    let currentQuery = null;
+    let allAgents = [];
+    let allQueries = [];
+    let agentView = 'individual';
+    let queryView = 'individual';
+    let currentTab = 'agents';
+
+    // ===============================
+    // INITIALIZATION
+    // ===============================
+    document.addEventListener('DOMContentLoaded', function () {
+      updateHealthIndicator();
+      loadVersionInfo();
+      setInterval(updateHealthIndicator, 30000);
+
+      // Initialize Agent Editor
+      agentEditor = CodeMirror.fromTextArea(document.getElementById("agentYamlEditor"), {
+        mode: "yaml",
+        theme: "dracula",
+        lineNumbers: true,
+        indentUnit: 2,
+        tabSize: 2,
+        lineWrapping: true,
+        matchBrackets: true,
+        autoCloseBrackets: true
+      });
+
+      agentEditor.on("change", () => {
+        document.getElementById('saveAgentBtn').disabled = false;
+      });
+
+      // Initialize Query Editor
+      queryEditor = CodeMirror.fromTextArea(document.getElementById("queryYamlEditor"), {
+        mode: "yaml",
+        theme: "dracula",
+        lineNumbers: true,
+        indentUnit: 2,
+        tabSize: 2,
+        lineWrapping: true,
+        matchBrackets: true,
+        autoCloseBrackets: true
+      });
+
+      queryEditor.on("change", () => {
+        document.getElementById('saveQueryBtn').disabled = false;
+      });
+
+      loadAgents();
+      loadQueries();
+    });
+
+    // ===============================
+    // UNIVERSAL FUNCTIONS
+    // ===============================
     async function updateHealthIndicator() {
       const healthDot = document.getElementById('health-dot');
       const healthText = document.getElementById('health-text');
 
       try {
-        let response = await fetch('/api/system/health');
+        let response = await fetch('/api/health');
         const health = await response.json();
 
         if (health.status === 'ok' || health.status === 'healthy') {
@@ -220,7 +802,6 @@
           healthDot.className = 'health-dot health-yellow';
           healthText.textContent = 'Warning';
         }
-
       } catch (error) {
         healthDot.className = 'health-dot health-red';
         healthText.textContent = 'API Error';
@@ -228,54 +809,47 @@
       }
     }
 
-    // Load version information
     async function loadVersionInfo() {
       try {
         const response = await fetch('/api/version');
         const info = await response.json();
-
         const appVersion = document.getElementById('app-version');
         if (appVersion) appVersion.textContent = info.version;
-
       } catch (error) {
         console.warn('Could not load version info:', error);
       }
     }
 
-    // Editor specific code
-    let editor;
-    let currentAgent = null;
-    let allAgents = [];
-    let currentView = 'individual';
-
-    // Initialize everything
-    document.addEventListener('DOMContentLoaded', function () {
-      // Initialize universal functions
-      updateHealthIndicator();
-      loadVersionInfo();
-      setInterval(updateHealthIndicator, 30000);
-
-      // Initialize editor
-      editor = CodeMirror.fromTextArea(document.getElementById("yamlEditor"), {
-        mode: "yaml",
-        theme: "dracula",
-        lineNumbers: true,
-        indentUnit: 2,
-        tabSize: 2,
-        lineWrapping: true,
-        matchBrackets: true,
-        autoCloseBrackets: true
-      });
-
-      editor.on("change", () => {
-        document.getElementById('saveBtn').disabled = false;
-      });
-
-      loadAgents();
-    });
+    function setStatus(message, type) {
+      const statusElement = document.getElementById('statusMessage');
+      if (type === 'loading') {
+        statusElement.innerHTML = '<div class="loading"></div> ' + message;
+      } else {
+        statusElement.innerHTML = `<span class="status-${type}">${message}</span>`;
+      }
+    }
 
     // ===============================
-    // LOAD AGENTS & LIST
+    // TAB SWITCHING
+    // ===============================
+    function switchTab(tabName) {
+      currentTab = tabName;
+      
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+
+      setStatus(`Switched to ${tabName === 'agents' ? 'Agent Configuration' : 'Quick Queries'}`, 'success');
+    }
+
+    // ===============================
+    // AGENTS TAB FUNCTIONS
     // ===============================
     async function loadAgents() {
       try {
@@ -315,12 +889,9 @@
     }
 
     function updateAgentCount(count) {
-      document.getElementById('agentCount').innerHTML = `📊 ${count} agents found`;
+      document.getElementById('agentCount').innerHTML = '<i class="fas fa-database"></i> ' + count + ' agents found';
     }
 
-    // ===============================
-    // SELECT AGENT
-    // ===============================
     function selectAgent(agentId) {
       document.querySelectorAll('.agent-item').forEach(item => {
         item.classList.remove('active');
@@ -330,17 +901,17 @@
       const agent = allAgents.find(a => a.id === agentId);
       if (agent) {
         currentAgent = agent;
-        if (currentView === 'individual') {
+        if (agentView === 'individual') {
           displayAgentYaml(agent);
         } else {
-          displayFullYaml();
+          displayFullAgentYaml();
         }
-        document.getElementById('saveBtn').disabled = true;
+        document.getElementById('saveAgentBtn').disabled = true;
       }
     }
 
     function displayAgentYaml(agent) {
-      const title = document.getElementById('editorTitle');
+      const title = document.getElementById('agentEditorTitle');
       title.textContent = `Agent: ${agent.name || agent.id}`;
 
       const agentYaml = `id: "${agent.id}"
@@ -360,19 +931,19 @@ ${agent.events ? `events:\n  publishes:\n${agent.events.publishes ? agent.events
 promptTemplate: |
   ${agent.promptTemplate ? agent.promptTemplate.substring(0, 200) + '...' : 'No prompt template defined'}
 `;
-      editor.setValue(agentYaml);
+      agentEditor.setValue(agentYaml);
       setStatus(`Configuration for ${agent.id} displayed`, 'success');
     }
 
-    async function displayFullYaml() {
+    async function displayFullAgentYaml() {
       try {
         setStatus('Loading full agents.yaml...', 'loading');
         const response = await fetch('/agents.yaml');
         if (response.ok) {
           const yamlContent = await response.text();
-          const title = document.getElementById('editorTitle');
+          const title = document.getElementById('agentEditorTitle');
           title.textContent = 'Full agents.yaml configuration';
-          editor.setValue(yamlContent);
+          agentEditor.setValue(yamlContent);
           setStatus('Full YAML loaded successfully', 'success');
         } else {
           setStatus('Full YAML file not available', 'error');
@@ -382,64 +953,94 @@ promptTemplate: |
       }
     }
 
-    function setView(view) {
-      document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+    function setAgentView(view) {
+      document.querySelectorAll('#agents-tab .toggle-btn').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
-      currentView = view;
+      agentView = view;
 
       if (currentAgent) {
         if (view === 'individual') displayAgentYaml(currentAgent);
-        else displayFullYaml();
+        else displayFullAgentYaml();
       }
     }
 
-    // ===============================
-    // YAML VALIDATION & SAVE
-    // ===============================
-function validateYaml() {
-  let content = editor.getValue();
+    function validateAgentYaml() {
+      let content = agentEditor.getValue();
 
-  if (!content.trim()) {
-    setStatus('⚠️ No content to validate', 'error');
-    return false;
-  }
+      if (!content.trim()) {
+        setStatus('⚠️ No content to validate', 'error');
+        return false;
+      }
 
-  try {
-    if (content.includes('\t')) {
-      setStatus('❌ Error: Tabs found – use spaces only!', 'error');
-      return false;
+      try {
+        if (content.includes('\t')) {
+          setStatus('❌ Error: Tabs found – use spaces only!', 'error');
+          return false;
+        }
+
+        let safeContent = content.replace(
+          /(promptTemplate:\s*\|[\s\S]*?)(\n\s*\w+:|$)/,
+          "promptTemplate: |\n  DUMMY_PROMPT$2"
+        );
+
+        jsyaml.load(safeContent, { schema: jsyaml.FAILSAFE_SCHEMA });
+
+        setStatus('✅ Agent YAML is valid', 'success');
+        return true;
+      } catch (err) {
+        setStatus(`❌ YAML validation error: ${err.message}`, 'error');
+        return false;
+      }
     }
 
-    // 🛠 promptTemplate block neutralisieren
-    let safeContent = content.replace(
-      /(promptTemplate:\s*\|[\s\S]*?)(\n\s*\w+:|$)/,
-      "promptTemplate: |\n  DUMMY_PROMPT$2"
-    );
-
-    // 🚀 nur Struktur validieren
-    jsyaml.load(safeContent, { schema: jsyaml.FAILSAFE_SCHEMA });
-
-    setStatus('✅ YAML is valid', 'success');
-    return true;
-  } catch (err) {
-    setStatus(`❌ YAML validation error: ${err.message}`, 'error');
-    return false;
-  }
-}
-
-function saveChanges() {
-  const content = editor.getValue();
-
-  // ✅ Nur speichern, wenn die YAML valide ist
-  if (!validateYaml()) {
+async function saveAgentChanges() {
+  const content = agentEditor.getValue();
+  
+  if (!validateAgentYaml()) {
     setStatus('❌ Save aborted: YAML not valid', 'error');
     return;
   }
-
-  console.log("💾 Saving:", content);
-  setStatus('💾 Changes saved (Demo)', 'success');
-  document.getElementById('saveBtn').disabled = true;
+  
+  if (!currentAgent || !currentAgent.id) {
+    setStatus('❌ No agent selected', 'error');
+    return;
+  }
+  
+  try {
+    setStatus('Saving agent configuration...', 'loading');
+    
+    const response = await fetch(`/api/agents/${currentAgent.id}`, {
+      method: 'PUT',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        yaml: content 
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      setStatus('✅ Agent saved successfully', 'success');
+      document.getElementById('saveAgentBtn').disabled = true;
+      
+      // Optional: Agents neu laden um Änderungen anzuzeigen
+      await loadAgents();
+      
+      // Optional: Backup-Info in Console
+      if (result.backupPath) {
+        console.log('Backup created:', result.backupPath);
+      }
+    } else {
+      setStatus('❌ Save failed: ' + result.message, 'error');
+    }
+  } catch (error) {
+    setStatus('❌ Error saving: ' + error.message, 'error');
+    console.error('Save error:', error);
+  }
 }
+
 
     async function reloadAgents() {
       try {
@@ -458,15 +1059,272 @@ function saveChanges() {
     }
 
     // ===============================
-    // STATUS DISPLAY
+    // QUERIES TAB FUNCTIONS
     // ===============================
-    function setStatus(message, type) {
-      const statusElement = document.getElementById('statusMessage');
-      if (type === 'loading') {
-        statusElement.innerHTML = '<div class="loading"></div> ' + message;
-      } else {
-        statusElement.innerHTML = `<span class="status-${type}">${message}</span>`;
+    async function loadQueries() {
+      try {
+        setStatus('Loading quick queries...', 'loading');
+        const response = await fetch('/quick-queries.yaml');
+        
+        if (response.ok) {
+          const yamlContent = await response.text();
+          const data = jsyaml.load(yamlContent);
+          
+          allQueries = data.quick_queries || [];
+          displayQueryList(allQueries);
+          updateQueryCount(allQueries.length);
+          
+          setStatus(`${allQueries.length} queries loaded successfully`, 'success');
+        } else {
+          allQueries = [
+            { label: "Current OEE", query: "What is the current OEE status across all lines?", category: "oee" },
+            { label: "Today's Orders", query: "What orders are scheduled for today?", category: "production" },
+            { label: "Quality Status", query: "Are there any quality issues or deviations?", category: "quality" }
+          ];
+          displayQueryList(allQueries);
+          updateQueryCount(allQueries.length);
+          setStatus('Using demo query data', 'success');
+        }
+      } catch (error) {
+        console.error('Error loading queries:', error);
+        setStatus('Error loading queries: ' + error.message, 'error');
       }
+    }
+
+    function displayQueryList(queries) {
+      const queryList = document.getElementById('queryList');
+
+      if (queries.length === 0) {
+        queryList.innerHTML = '<li class="query-item">No queries found</li>';
+        return;
+      }
+
+      queryList.innerHTML = queries.map((query, index) => `
+        <li class="query-item" onclick="selectQuery(${index})">
+          <div class="query-label">
+            ${query.label}
+            <span class="category-badge ${query.category}">${getCategoryIcon(query.category)}</span>
+          </div>
+          <div class="query-category">${query.category}</div>
+        </li>
+      `).join('');
+    }
+
+    function getCategoryIcon(category) {
+      const icons = {
+        'oee': '<i class="fas fa-chart-line"></i>',
+        'production': '<i class="fas fa-industry"></i>',
+        'quality': '<i class="fas fa-check-circle"></i>',
+        'equipment': '<i class="fas fa-tools"></i>',
+        'general': '<i class="fas fa-clipboard-list"></i>'
+      };
+      return icons[category] || '<i class="fas fa-clipboard-list"></i>';
+    }
+
+    function updateQueryCount(count) {
+      document.getElementById('queryCount').innerHTML = '<i class="fas fa-lightning-bolt"></i> ' + count + ' queries found';
+    }
+
+    function selectQuery(index) {
+      document.querySelectorAll('.query-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      event.target.closest('.query-item').classList.add('active');
+
+      const query = allQueries[index];
+      if (query) {
+        currentQuery = { ...query, index };
+        if (queryView === 'individual') {
+          displayQueryYaml(query);
+        } else {
+          displayFullQueryYaml();
+        }
+        document.getElementById('saveQueryBtn').disabled = true;
+        document.getElementById('deleteQueryBtn').style.display = 'inline-block';
+      }
+    }
+
+    function displayQueryYaml(query) {
+      const title = document.getElementById('queryEditorTitle');
+      title.textContent = `Query: ${query.label}`;
+
+      const queryYaml = `label: "${query.label}"
+query: "${query.query}"
+category: "${query.category}"
+`;
+      queryEditor.setValue(queryYaml);
+      setStatus(`Configuration for "${query.label}" displayed`, 'success');
+    }
+
+    async function displayFullQueryYaml() {
+      try {
+        setStatus('Loading full quick-queries.yaml...', 'loading');
+        const response = await fetch('/quick-queries.yaml');
+        
+        if (response.ok) {
+          const yamlContent = await response.text();
+          const title = document.getElementById('queryEditorTitle');
+          title.textContent = 'Full quick-queries.yaml configuration';
+          queryEditor.setValue(yamlContent);
+          setStatus('Full query YAML loaded successfully', 'success');
+        } else {
+          const demoYaml = generateFullQueryYaml();
+          queryEditor.setValue(demoYaml);
+          setStatus('Showing demo query structure', 'success');
+        }
+      } catch (error) {
+        setStatus('Failed to load full YAML: ' + error.message, 'error');
+      }
+    }
+
+    function generateFullQueryYaml() {
+      return `# ========================================================================
+# QUICK QUERIES CONFIGURATION
+# ========================================================================
+#
+# External configuration for quick query buttons
+# Edit this file to customize the quick prompts without changing HTML
+#
+# Version: 1.0.0
+# ========================================================================
+
+quick_queries:
+${allQueries.map(q => `  - label: "${q.label}"
+    query: "${q.query}"
+    category: "${q.category}"`).join('\n\n')}
+
+# ========================================================================
+# CATEGORY STYLING (used by frontend)
+# ========================================================================
+categories:
+  oee:
+    color: "#28a745"
+    icon: "📊"
+  production:
+    color: "#007bff"
+    icon: "🏭"
+  quality:
+    color: "#ffc107"
+    icon: "✅"
+  equipment:
+    color: "#dc3545"
+    icon: "🔧"
+  general:
+    color: "#6f42c1"
+    icon: "📋"
+`;
+    }
+
+    function setQueryView(view) {
+      document.querySelectorAll('#queries-tab .toggle-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      queryView = view;
+
+      if (currentQuery) {
+        if (view === 'individual') displayQueryYaml(allQueries[currentQuery.index]);
+        else displayFullQueryYaml();
+      }
+    }
+
+    function validateQueryYaml() {
+      let content = queryEditor.getValue();
+
+      if (!content.trim()) {
+        setStatus('⚠️ No content to validate', 'error');
+        return false;
+      }
+
+      try {
+        if (content.includes('\t')) {
+          setStatus('❌ Error: Tabs found – use spaces only!', 'error');
+          return false;
+        }
+
+        jsyaml.load(content);
+        setStatus('✅ Query YAML is valid', 'success');
+        return true;
+      } catch (err) {
+        setStatus(`❌ YAML validation error: ${err.message}`, 'error');
+        return false;
+      }
+    }
+
+    function saveQueryChanges() {
+      const content = queryEditor.getValue();
+
+      if (!validateQueryYaml()) {
+        setStatus('❌ Save aborted: YAML not valid', 'error');
+        return;
+      }
+
+      try {
+        const updatedQuery = jsyaml.load(content);
+        
+        if (currentQuery && currentQuery.index !== undefined) {
+          allQueries[currentQuery.index] = updatedQuery;
+          displayQueryList(allQueries);
+          setStatus('💾 Query changes saved (Demo)', 'success');
+        }
+        
+        console.log("💾 Saving query:", content);
+        document.getElementById('saveQueryBtn').disabled = true;
+      } catch (err) {
+        setStatus('❌ Error saving: ' + err.message, 'error');
+      }
+    }
+
+    function deleteQuery() {
+      if (!currentQuery || currentQuery.index === undefined) return;
+
+      if (confirm(`Delete query "${allQueries[currentQuery.index].label}"?`)) {
+        allQueries.splice(currentQuery.index, 1);
+        displayQueryList(allQueries);
+        updateQueryCount(allQueries.length);
+        
+        queryEditor.setValue('');
+        document.getElementById('queryEditorTitle').textContent = 'Select a query to edit';
+        document.getElementById('deleteQueryBtn').style.display = 'none';
+        
+        currentQuery = null;
+        setStatus('🗑️ Query deleted (Demo)', 'success');
+      }
+    }
+
+    async function reloadQueries() {
+      await loadQueries();
+    }
+
+    function toggleAddQueryForm() {
+      const form = document.getElementById('addQueryForm');
+      form.classList.toggle('active');
+      
+      if (form.classList.contains('active')) {
+        document.getElementById('newQueryLabel').focus();
+      }
+    }
+
+    function addNewQuery() {
+      const label = document.getElementById('newQueryLabel').value.trim();
+      const query = document.getElementById('newQueryText').value.trim();
+      const category = document.getElementById('newQueryCategory').value;
+
+      if (!label || !query) {
+        setStatus('❌ Please fill in all fields', 'error');
+        return;
+      }
+
+      const newQuery = { label, query, category };
+      allQueries.push(newQuery);
+      
+      displayQueryList(allQueries);
+      updateQueryCount(allQueries.length);
+      
+      document.getElementById('newQueryLabel').value = '';
+      document.getElementById('newQueryText').value = '';
+      document.getElementById('newQueryCategory').value = 'oee';
+      
+      toggleAddQueryForm();
+      setStatus(`✅ Query "${label}" added successfully (Demo)`, 'success');
     }
   </script>
 </body>

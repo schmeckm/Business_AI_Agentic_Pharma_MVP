@@ -32,7 +32,7 @@ export function createChatRoutes(agentManager, auditLogger, eventBusManager) {
       });
 
     } catch (error) {
-      console.error('Chat processing error:', error);
+      logger.error("Chat processing error", { error: error.message, message, user });
       auditLogger.logError('chat_error', error.message, { message, user });
       
       res.status(500).json({ 

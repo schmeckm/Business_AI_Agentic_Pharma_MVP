@@ -40,7 +40,7 @@ export function createRoutes(agentManager, dataManager, eventBusManager, auditLo
   // ======================================================
   router.get("/agents", (req, res) => {
     try {
-      const agents = agentManager.getAgents();
+      const agents = agentManager.getAllAgents()
       logger.info(`📋 Listing agents: ${agents.length}`);
       res.json({ agents });
     } catch (error) {
@@ -79,16 +79,33 @@ export function createRoutes(agentManager, dataManager, eventBusManager, auditLo
   // ======================================================
   // AUDIT LOG ROUTES
   // ======================================================
-  router.get("/audit", (req, res) => {
-    try {
-      const logs = auditLogger.getLogs();
-      logger.info(`📜 Audit logs retrieved: ${logs.length}`);
-      res.json({ logs });
-    } catch (error) {
-      logger.error(`❌ Audit logs error: ${error.message}`);
-      res.status(500).json({ error: error.message });
-    }
-  });
+ // ======================================================
+// AUDIT LOG ROUTES
+// ======================================================
+router.get("/audit", (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit || "100", 10);
+
+    // Hole die Einträge mit der neuen Methode
+    const entries = auditLogger.getEntries(limit);
+
+    logger.info(`📜 Audit logs retrieved: ${entries.length}`);
+    res.json({ entries });
+  } catch (error) {
+    logger.error(`❌ Audit logs error: ${error.message}`);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/audit/stats", (req, res) => {
+  try {
+    const stats = auditLogger.getAuditStats();
+    res.json(stats);
+  } catch (error) {
+    logger.error(`❌ Audit stats error: ${error.message}`);
+    res.status(500).json({ error: error.message });
+  }
+});;
 
   // ======================================================
   // A2A ROUTES
@@ -117,14 +134,6 @@ export function createRoutes(agentManager, dataManager, eventBusManager, auditLo
       }
     });
   }
-
-  // ======================================================
-  // DEFAULT FALLBACK
-  // ======================================================
-  router.use((req, res) => {
-    logger.warn(`⚠️ 404 Not Found: ${req.originalUrl}`);
-    res.status(404).json({ error: "Endpoint not found" });
-  });
 
   return router;
 }

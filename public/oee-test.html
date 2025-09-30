@@ -1,120 +1,437 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📊 OEE Live MQTT Monitor</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OEE Live Monitor - MQTT Real-time</title>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- MQTT Client -->
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+    }
+
+    /* Universal Header Styles */
+    .header {
+      background: linear-gradient(135deg, #0a2540 0%, #2563eb 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .phase-badge {
+      background: #2563eb;
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 10px;
+      margin-left: 6px;
+      display: inline-block;
+    }
+
+    .header-subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 5px;
+    }
+
+    .health-indicator {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      background: white;
+      color: #333;
+      padding: 5px 10px;
+      border-radius: 15px;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .health-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 5px;
+      font-size: 12px;
+      text-align: center;
+      line-height: 12px;
+    }
+
+    .health-green { color: #28a745; }
+    .health-yellow { color: #ffc107; }
+    .health-red { color: #dc3545; }
+    .health-gray { color: #6c757d; }
+    
+    /* Navigation Styles */
+    .nav-menu { 
+      background: #f8f9fa; 
+      padding: 10px 20px;
+      border-bottom: 2px solid #dee2e6;
+    }
+    
+    .nav-links { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 10px; 
+    }
+    
+    .nav-link { 
+      background: #007bff; 
+      color: white; 
+      padding: 6px 12px; 
+      text-decoration: none; 
+      border-radius: 4px; 
+      font-size: 12px; 
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .nav-link:hover { 
+      background: #0056b3; 
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .nav-link.oee { background: #28a745; }
+    .nav-link.oee:hover { background: #1e7e34; }
+    .nav-link.editor { background: #6f42c1; }
+    .nav-link.editor:hover { background: #5a32a3; }
+    .nav-link.active { 
+      background: #1d4ed8 !important; 
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    /* Page Header */
+    .page-header {
+      margin: 20px 20px 0 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e9ecef;
+    }
+
+    .page-header h2 {
+      margin: 0;
+      color: #0a2540;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .page-header p {
+      margin: 5px 0 0 0;
+      color: #666;
+      font-size: 13px;
+    }
+
+    /* Main Content */
+    .main-content {
+      padding: 20px;
+    }
+
+    .lines-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 20px;
+    }
+
+    /* Line Cards */
+    .line-card {
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+    }
+
+    .line-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .line-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e9ecef;
+    }
+
+    .line-title {
+      font-weight: 600;
+      font-size: 18px;
+      color: #0a2540;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .line-status {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-running { 
+      background: #d4edda; 
+      color: #155724;
+    }
+    
+    .status-stopped { 
+      background: #f8d7da; 
+      color: #721c24;
+    }
+    
+    .status-idle { 
+      background: #fff3cd; 
+      color: #856404;
+    }
+
+    .line-info {
+      margin-bottom: 10px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 13px;
+    }
+
+    .info-label {
+      color: #6c757d;
+      font-weight: 600;
+    }
+
+    .info-value {
+      color: #495057;
+      font-weight: 500;
+    }
+
+    .oee-value {
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      font-size: 16px;
+    }
+
+    .oee-good { 
+      background: #d4edda; 
+      color: #155724;
+    }
+    
+    .oee-medium { 
+      background: #fff3cd; 
+      color: #856404;
+    }
+    
+    .oee-bad { 
+      background: #f8d7da; 
+      color: #721c24;
+    }
+
+    .raw-data {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .raw-data-header {
+      font-size: 11px;
+      color: #6c757d;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .raw-data-content {
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      max-height: 150px;
+      overflow-y: auto;
+      border: 1px solid #e9ecef;
+      color: #495057;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6c757d;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 15px;
+      opacity: 0.5;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    /* Connection Status */
+    .connection-status {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .connection-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .connection-connected .connection-dot {
+      background: #28a745;
+    }
+
+    .connection-disconnected .connection-dot {
+      background: #dc3545;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .connection-text {
+      font-size: 13px;
+      color: #495057;
+      font-weight: 500;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .health-indicator {
+        position: static;
+        margin-top: 10px;
+        justify-content: center;
+      }
+
+      .lines-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <!-- Universal Header Template -->
+    <!-- Universal Header -->
     <div class="header">
       <h1>
         Pharmaceutical Manufacturing Agentic Business Agent - MAR Process
-        <div class="phase-badge">MVP <span id="app-version">1.3.0</span></div>
+        <span class="phase-badge">MVP <span id="app-version">1.3.0</span></span>
       </h1>
       <div id="health-indicator" class="health-indicator">
         <div class="health-dot" id="health-dot">●</div>
         <span id="health-text">Checking...</span>
       </div>
-      <div style="font-size: 14px; opacity: 0.9;">Enterprise AI Operations Platform - PharmaMinder</div>
+      <p class="header-subtitle">Enterprise AI Operations Platform - PharmaMinder</p>
     </div>
 
     <!-- Navigation Menu -->
-    <div class="nav-menu">
-      <h3>System Tools & Monitoring</h3>
-      <div class="nav-links">
-        <a href="/" class="nav-link">Dashboard</a>
-        <a href="/oee-test.html" class="nav-link oee active">Live OEE Monitor</a>
-        <a href="/agent-editor.html" class="nav-link editor">Agent Configuration Editor</a>
-        <a href="/audit.html" class="nav-link">Audit Log Viewer</a>
-        <a href="/api/system/health" class="nav-link" target="_blank">System Health</a>
-        <a href="/api/data/oee" class="nav-link oee" target="_blank">OEE API</a>
-        <a href="/api/agents" class="nav-link" target="_blank">Agent Registry</a>
-      </div>
+<div class="nav-menu">
+  <div class="nav-links">
+    <a href="/" class="nav-link">Dashboard</a>
+    <a href="/oee-test.html" class="nav-link oee">Live OEE Monitor</a>
+    <a href="/agent-editor.html" class="nav-link editor">Agent Configuration Editor</a>
+    <a href="/audit.html" class="nav-link">Audit Log Viewer</a>
+    <a href="/api/health" class="nav-link" target="_blank">System Health</a>
+    <a href="/api/data/oee" class="nav-link oee" target="_blank">OEE API</a>
+  </div>
+</div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h2><i class="fas fa-chart-line"></i> Live OEE Monitor</h2>
+      <p>Real-time monitoring of production lines via HiveMQ MQTT</p>
     </div>
 
-    <!-- Page-specific content -->
-    <div class="main-content" style="flex-direction: column; padding:20px; overflow-y:auto;">
-      <div style="margin-bottom: 20px;">
-        <h2 style="margin: 0; color: #0a2540;">📊 Live OEE Monitor</h2>
-        <p style="margin: 5px 0; color: #666;">Real-time monitoring of production lines via HiveMQ</p>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Connection Status -->
+      <div class="connection-status" id="connection-status">
+        <div class="connection-dot"></div>
+        <div class="connection-text">Connecting to MQTT broker...</div>
       </div>
-      <div id="lines"></div>
+
+      <!-- Lines Grid -->
+      <div class="lines-grid" id="lines">
+        <div class="empty-state">
+          <i class="fas fa-satellite-dish"></i>
+          <p>Waiting for production line data...</p>
+          <p style="font-size: 12px; margin-top: 5px; color: #6c757d;">
+            Listening to plc/+/status on HiveMQ
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <style>
-    .line-card {
-      background: #ffffff;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: transform 0.2s;
-    }
-    .line-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .line-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .line-title {
-      font-weight: 600;
-      font-size: 16px;
-      color: #0a2540;
-    }
-    .line-status {
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-weight: 500;
-    }
-    .status-running { background: #d1fae5; color: #065f46; }
-    .status-stopped { background: #fee2e2; color: #991b1b; }
-    .status-idle { background: #fef3c7; color: #92400e; }
-
-    .oee-value {
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 6px;
-      display: inline-block;
-    }
-    .oee-good { background: #d1fae5; color: #065f46; }
-    .oee-medium { background: #fef3c7; color: #92400e; }
-    .oee-bad { background: #fee2e2; color: #991b1b; }
-
-    .nav-link.active {
-      background: #1d4ed8 !important;
-      font-weight: 600;
-    }
-
-    pre {
-      background: #f9fafb;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      max-height: 150px;
-      overflow-y: auto;
-      border: 1px solid #e5e7eb;
-    }
-  </style>
-
   <script>
-    // Universal Health Check JavaScript
-    async function updateHealthIndicator() {
+    // ===============================
+    // UNIVERSAL FUNCTIONS
+    // ===============================
+ async function updateHealthIndicator() {
       const healthDot = document.getElementById('health-dot');
       const healthText = document.getElementById('health-text');
 
       try {
-        let response = await fetch('/api/system/health');
+        const response = await fetch('/api/health');
         const health = await response.json();
 
         if (health.status === 'ok' || health.status === 'healthy') {
@@ -127,42 +444,44 @@
           healthDot.className = 'health-dot health-yellow';
           healthText.textContent = 'Warning';
         }
-
       } catch (error) {
         healthDot.className = 'health-dot health-red';
         healthText.textContent = 'API Error';
         console.error('Health check failed:', error);
       }
     }
-
-    // Load version information
     async function loadVersionInfo() {
       try {
         const response = await fetch('/api/version');
         const info = await response.json();
-
         const appVersion = document.getElementById('app-version');
         if (appVersion) appVersion.textContent = info.version;
-
       } catch (error) {
         console.warn('Could not load version info:', error);
       }
     }
 
-    // Initialize universal functions
-    document.addEventListener('DOMContentLoaded', () => {
-      updateHealthIndicator();
-      loadVersionInfo();
-      setInterval(updateHealthIndicator, 30000);
-    });
-
-    // OEE Monitor specific code
+    // ===============================
+    // MQTT OEE MONITOR
+    // ===============================
     const client = mqtt.connect("wss://broker.hivemq.com:8884/mqtt");
     const linesDiv = document.getElementById("lines");
+    const connectionStatus = document.getElementById("connection-status");
     const lineData = {};
 
     client.on("connect", () => {
       console.log("✅ Connected to HiveMQ via WebSockets");
+      
+      // Update connection status
+      connectionStatus.className = "connection-status connection-connected";
+      connectionStatus.innerHTML = `
+        <div class="connection-dot"></div>
+        <div class="connection-text">
+          <i class="fas fa-check-circle" style="color: #28a745;"></i>
+          Connected to HiveMQ MQTT Broker
+        </div>
+      `;
+
       client.subscribe("plc/+/status", (err) => {
         if (!err) {
           console.log("📡 Subscribed to plc/+/status");
@@ -170,10 +489,22 @@
       });
     });
 
+    client.on("disconnect", () => {
+      connectionStatus.className = "connection-status connection-disconnected";
+      connectionStatus.innerHTML = `
+        <div class="connection-dot"></div>
+        <div class="connection-text">
+          <i class="fas fa-exclamation-circle" style="color: #dc3545;"></i>
+          Disconnected from MQTT broker
+        </div>
+      `;
+    });
+
     client.on("message", (topic, message) => {
       try {
         const raw = message.toString();
         if (!raw.startsWith("{")) return;
+        
         const payload = JSON.parse(raw);
         if (payload.line) {
           lineData[payload.line] = payload;
@@ -185,7 +516,10 @@
     });
 
     function renderLines() {
+      if (Object.keys(lineData).length === 0) return;
+
       linesDiv.innerHTML = "";
+      
       Object.values(lineData).forEach((line) => {
         const div = document.createElement("div");
         div.className = "line-card";
@@ -194,6 +528,10 @@
                          : line.status === "Stopped" ? "status-stopped"
                          : "status-idle";
 
+        const statusIcon = line.status === "Running" ? "fa-play-circle"
+                        : line.status === "Stopped" ? "fa-stop-circle"
+                        : "fa-pause-circle";
+
         const oee = line.metrics?.oee ?? null;
         let oeeClass = "oee-bad";
         if (oee >= 80) oeeClass = "oee-good";
@@ -201,16 +539,51 @@
 
         div.innerHTML = `
           <div class="line-header">
-            <div class="line-title">${line.line}</div>
-            <div class="line-status ${statusClass}">${line.status}</div>
+            <div class="line-title">
+              <i class="fas fa-industry"></i>
+              ${line.line}
+            </div>
+            <div class="line-status ${statusClass}">
+              <i class="fas ${statusIcon}"></i>
+              ${line.status}
+            </div>
           </div>
-          <p><b>Batch:</b> ${line.batchId || '-'}</p>
-          <p><b>OEE:</b> <span class="oee-value ${oeeClass}">${oee ?? '-' }%</span></p>
-          <pre>${JSON.stringify(line, null, 2)}</pre>
+          
+          <div class="line-info">
+            <div class="info-row">
+              <span class="info-label">Batch ID:</span>
+              <span class="info-value">${line.batchId || '-'}</span>
+            </div>
+            
+            <div class="info-row">
+              <span class="info-label">OEE Performance:</span>
+              <span class="oee-value ${oeeClass}">
+                ${oee !== null ? oee + '%' : '-'}
+              </span>
+            </div>
+          </div>
+
+          <div class="raw-data">
+            <div class="raw-data-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+              <i class="fas fa-code"></i>
+              Raw MQTT Payload (click to toggle)
+            </div>
+            <pre class="raw-data-content" style="display: none;">${JSON.stringify(line, null, 2)}</pre>
+          </div>
         `;
+        
         linesDiv.appendChild(div);
       });
     }
+
+    // ===============================
+    // INITIALIZATION
+    // ===============================
+    document.addEventListener('DOMContentLoaded', () => {
+      updateHealthIndicator();
+      loadVersionInfo();
+      setInterval(updateHealthIndicator, 30000);
+    });
   </script>
 </body>
 </html>
