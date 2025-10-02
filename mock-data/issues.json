@@ -1,38 +1,182 @@
 [
   {
-    "issueId": "ISS-2001",
+    "issueId": "ISS-2000",
     "type": "Equipment",
-    "description": "Filteranlage in Linie 2 blockiert – Wartung erforderlich",
-    "severity": "high",
+    "description": "Issue related to FG-001 batch process",
+    "severity": "low",
     "status": "open",
-    "reportedAt": "2025-09-20T06:45:00Z",
+    "reportedAt": "2025-09-01T08:00:00Z",
     "responsibleDept": "Engineering"
   },
   {
-    "issueId": "ISS-2002",
+    "issueId": "ISS-2001",
     "type": "Quality",
-    "description": "Batch FG-123 in Quarantäne wegen Partikelverunreinigung",
-    "severity": "critical",
-    "status": "open",
-    "reportedAt": "2025-09-20T07:30:00Z",
+    "description": "Issue related to FG-002 batch process",
+    "severity": "medium",
+    "status": "in-progress",
+    "reportedAt": "2025-09-02T08:00:00Z",
     "responsibleDept": "QA"
   },
   {
-    "issueId": "ISS-2003",
+    "issueId": "ISS-2002",
     "type": "Supply Chain",
-    "description": "Verzögerung bei Lieferung von Verpackungsmaterial PM-456",
-    "severity": "medium",
-    "status": "in-progress",
-    "reportedAt": "2025-09-19T18:00:00Z",
+    "description": "Issue related to FG-003 batch process",
+    "severity": "high",
+    "status": "closed",
+    "reportedAt": "2025-09-03T08:00:00Z",
     "responsibleDept": "Procurement"
   },
   {
-    "issueId": "ISS-2004",
+    "issueId": "ISS-2003",
     "type": "Deviation",
-    "description": "Temperaturabweichung im Kühlraum um +3°C",
+    "description": "Issue related to FG-004 batch process",
+    "severity": "critical",
+    "status": "open",
+    "reportedAt": "2025-09-04T08:00:00Z",
+    "responsibleDept": "Facilities"
+  },
+  {
+    "issueId": "ISS-2004",
+    "type": "Equipment",
+    "description": "Issue related to FG-005 batch process",
+    "severity": "low",
+    "status": "in-progress",
+    "reportedAt": "2025-09-05T08:00:00Z",
+    "responsibleDept": "Engineering"
+  },
+  {
+    "issueId": "ISS-2005",
+    "type": "Quality",
+    "description": "Issue related to FG-006 batch process",
+    "severity": "medium",
+    "status": "closed",
+    "reportedAt": "2025-09-06T08:00:00Z",
+    "responsibleDept": "QA"
+  },
+  {
+    "issueId": "ISS-2006",
+    "type": "Supply Chain",
+    "description": "Issue related to FG-007 batch process",
     "severity": "high",
     "status": "open",
-    "reportedAt": "2025-09-20T05:10:00Z",
+    "reportedAt": "2025-09-07T08:00:00Z",
+    "responsibleDept": "Procurement"
+  },
+  {
+    "issueId": "ISS-2007",
+    "type": "Deviation",
+    "description": "Issue related to FG-008 batch process",
+    "severity": "critical",
+    "status": "in-progress",
+    "reportedAt": "2025-09-08T08:00:00Z",
+    "responsibleDept": "Facilities"
+  },
+  {
+    "issueId": "ISS-2008",
+    "type": "Equipment",
+    "description": "Issue related to FG-009 batch process",
+    "severity": "low",
+    "status": "closed",
+    "reportedAt": "2025-09-09T08:00:00Z",
+    "responsibleDept": "Engineering"
+  },
+  {
+    "issueId": "ISS-2009",
+    "type": "Quality",
+    "description": "Issue related to FG-010 batch process",
+    "severity": "medium",
+    "status": "open",
+    "reportedAt": "2025-09-10T08:00:00Z",
+    "responsibleDept": "QA"
+  },
+  {
+    "issueId": "ISS-2010",
+    "type": "Supply Chain",
+    "description": "Issue related to FG-011 batch process",
+    "severity": "high",
+    "status": "in-progress",
+    "reportedAt": "2025-09-11T08:00:00Z",
+    "responsibleDept": "Procurement"
+  },
+  {
+    "issueId": "ISS-2011",
+    "type": "Deviation",
+    "description": "Issue related to FG-012 batch process",
+    "severity": "critical",
+    "status": "closed",
+    "reportedAt": "2025-09-12T08:00:00Z",
+    "responsibleDept": "Facilities"
+  },
+  {
+    "issueId": "ISS-2012",
+    "type": "Equipment",
+    "description": "Issue related to FG-013 batch process",
+    "severity": "low",
+    "status": "open",
+    "reportedAt": "2025-09-13T08:00:00Z",
+    "responsibleDept": "Engineering"
+  },
+  {
+    "issueId": "ISS-2013",
+    "type": "Quality",
+    "description": "Issue related to FG-014 batch process",
+    "severity": "medium",
+    "status": "in-progress",
+    "reportedAt": "2025-09-14T08:00:00Z",
+    "responsibleDept": "QA"
+  },
+  {
+    "issueId": "ISS-2014",
+    "type": "Supply Chain",
+    "description": "Issue related to FG-015 batch process",
+    "severity": "high",
+    "status": "closed",
+    "reportedAt": "2025-09-15T08:00:00Z",
+    "responsibleDept": "Procurement"
+  },
+  {
+    "issueId": "ISS-2015",
+    "type": "Deviation",
+    "description": "Issue related to FG-016 batch process",
+    "severity": "critical",
+    "status": "open",
+    "reportedAt": "2025-09-16T08:00:00Z",
+    "responsibleDept": "Facilities"
+  },
+  {
+    "issueId": "ISS-2016",
+    "type": "Equipment",
+    "description": "Issue related to FG-017 batch process",
+    "severity": "low",
+    "status": "in-progress",
+    "reportedAt": "2025-09-17T08:00:00Z",
+    "responsibleDept": "Engineering"
+  },
+  {
+    "issueId": "ISS-2017",
+    "type": "Quality",
+    "description": "Issue related to FG-018 batch process",
+    "severity": "medium",
+    "status": "closed",
+    "reportedAt": "2025-09-18T08:00:00Z",
+    "responsibleDept": "QA"
+  },
+  {
+    "issueId": "ISS-2018",
+    "type": "Supply Chain",
+    "description": "Issue related to FG-019 batch process",
+    "severity": "high",
+    "status": "open",
+    "reportedAt": "2025-09-19T08:00:00Z",
+    "responsibleDept": "Procurement"
+  },
+  {
+    "issueId": "ISS-2019",
+    "type": "Deviation",
+    "description": "Issue related to FG-020 batch process",
+    "severity": "critical",
+    "status": "in-progress",
+    "reportedAt": "2025-09-20T08:00:00Z",
     "responsibleDept": "Facilities"
   }
 ]

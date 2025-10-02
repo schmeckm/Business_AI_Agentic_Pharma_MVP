@@ -236,58 +236,31 @@ export class AgentManager {
    * @param {string} configPath - Path to agents.yaml configuration file
    * @returns {boolean} Success status of agent loading
    */
-  loadAgents(configPath = "config/agents.yaml") {
-    try {
-      const raw = fs.readFileSync(path.join(configPath), "utf8");
-      const config = yaml.load(raw);
-      this.agents = config.agents || [];
+loadAgents(dir = "config") {
+  this.agents = [];
 
-      // Validate and enhance agent configurations
-      this.agents.forEach((agent, i) => {
-        if (!agent.id) throw new Error(`Agent ${i} missing required 'id' field`);
-        if (!agent.trigger) throw new Error(`Agent ${agent.id} missing required 'trigger' field`);
-        if (!agent.type) agent.type = "data-driven";
-        
-        // Enable OEE by default for pharmaceutical manufacturing
-        if (agent.oeeEnabled === undefined) agent.oeeEnabled = true;
-        
-        // Auto-enable OEE enhancement for order agent (production planning)
-        if (agent.id === 'orderAgent' && !agent.oeeEnhanced) {
-          agent.oeeEnhanced = true;
-          logger.info(`Auto-enabled OEE enhancement for ${agent.id}`);
-        }
-      });
+  // Alle YAML-Dateien im agents/-Ordner laden
+  const files = fs.readdirSync(dir).filter(f => f.endsWith(".yaml"));
 
-      // Update statistics
-      this.agentStats = {
-        loaded: this.agents.length,
-        failed: 0,
-        lastReload: new Date().toISOString(),
-      };
+  for (const file of files) {
+    const raw = fs.readFileSync(path.join(dir, file), "utf8");
+    const config = yaml.load(raw);
 
-      logger.info("Successfully loaded agents:");
-      this.agents.forEach(a => {
-        const oeeStatus = a.oeeEnabled ? ' [OEE]' : '';
-        const enhancedStatus = a.oeeEnhanced ? ' [Enhanced]' : '';
-        logger.info(`  - ${a.id} (${a.trigger})${oeeStatus}${enhancedStatus}`);
-      });
-      
-      // Setup event subscriptions and A2A handlers
-      this.eventBusManager.buildEventSubscriptions(this.agents);
-      this.setupDirectEventSubscriptions();
-      
-      if (this.a2aManager) {
-        this.setupA2AHandlers();
-      }
-      
-      return true;
-      
-    } catch (err) {
-      logger.error(`Failed to load agents.yaml: ${err.message}`);
-      this.agentStats.failed++;
-      return false;
+    if (config.agents) {
+      // Falls Datei ein Array unter "agents:" hat
+      this.agents.push(...config.agents);
+    } else {
+      // Falls Datei nur einen Agent beschreibt
+      this.agents.push(config);
     }
   }
+
+  this.agentStats.loaded = this.agents.length;
+  this.agentStats.lastReload = new Date().toISOString();
+  logger.info(`✅ Loaded ${this.agents.length} agents from ${dir}`);
+  return true;
+}
+
 
   /**
    * Setup Direct Event Subscriptions
@@ -413,41 +386,6 @@ async getOEEData() {
    * @param {string|Object} baseData - Base data for agent processing
    * @returns {string} JSON string with OEE-enriched data
    */
-
-async enrichAgentDataWithOEE(agent, baseData) {
-  if (!agent.oeeEnabled) return baseData;
-
-  try {
-    const oeeData = await this.dataManager.getRealtimeOEEData();
-
-    if (!oeeData || oeeData.length === 0) {
-      baseData.oee = {
-        status: "unavailable",
-        message: "No OEE metrics received from MQTT.",
-        suggestions: [
-          "Verify MQTT broker connection",
-          "Check if 'oee/updated' topic is publishing",
-          "Ensure DataManager cache refresh is working"
-        ],
-        timestamp: new Date().toISOString()
-      };
-    } else {
-      baseData.oee = {
-        status: "available",
-        data: oeeData,
-        timestamp: new Date().toISOString()
-      };
-    }
-  } catch (error) {
-    baseData.oee = {
-      status: "error",
-      message: `Error retrieving OEE data: ${error.message}`,
-      timestamp: new Date().toISOString()
-    };
-  }
-
-  return baseData;
-}
 
   async enrichAgentDataWithOEE(agent, baseData) {
     if (!agent.oeeEnabled) return baseData;

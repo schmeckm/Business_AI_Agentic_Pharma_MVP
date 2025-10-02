@@ -1,20 +1,422 @@
 [
   {
-    "material": "FG-123",
-    "description": "Finished Good - Painkiller 500mg",
+    "material": "FG-001",
+    "description": "Finished Good - Product 1",
     "components": [
-      { "material": "API-001", "qty": 1, "unit": "kg" },
-      { "material": "EXC-010", "qty": 0.5, "unit": "kg" },
-      { "material": "PACK-100", "qty": 2000, "unit": "pcs" }
+      {
+        "material": "API-001",
+        "qty": 1.0,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-010",
+        "qty": 0.5,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-100",
+        "qty": 100,
+        "unit": "pcs"
+      }
     ]
   },
   {
-    "material": "FG-456",
-    "description": "Finished Good - Antibiotic 250mg",
+    "material": "FG-002",
+    "description": "Finished Good - Product 2",
     "components": [
-      { "material": "API-002", "qty": 0.8, "unit": "kg" },
-      { "material": "EXC-011", "qty": 0.3, "unit": "kg" },
-      { "material": "PACK-200", "qty": 1500, "unit": "pcs" }
+      {
+        "material": "API-002",
+        "qty": 1.1,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-011",
+        "qty": 0.55,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-101",
+        "qty": 200,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-003",
+    "description": "Finished Good - Product 3",
+    "components": [
+      {
+        "material": "API-003",
+        "qty": 1.2,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-012",
+        "qty": 0.6,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-102",
+        "qty": 300,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-004",
+    "description": "Finished Good - Product 4",
+    "components": [
+      {
+        "material": "API-004",
+        "qty": 1.3,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-013",
+        "qty": 0.65,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-103",
+        "qty": 400,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-005",
+    "description": "Finished Good - Product 5",
+    "components": [
+      {
+        "material": "API-005",
+        "qty": 1.4,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-014",
+        "qty": 0.7,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-104",
+        "qty": 500,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-006",
+    "description": "Finished Good - Product 6",
+    "components": [
+      {
+        "material": "API-006",
+        "qty": 1.5,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-015",
+        "qty": 0.75,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-105",
+        "qty": 600,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-007",
+    "description": "Finished Good - Product 7",
+    "components": [
+      {
+        "material": "API-007",
+        "qty": 1.6,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-016",
+        "qty": 0.8,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-106",
+        "qty": 700,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-008",
+    "description": "Finished Good - Product 8",
+    "components": [
+      {
+        "material": "API-008",
+        "qty": 1.7000000000000002,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-017",
+        "qty": 0.8500000000000001,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-107",
+        "qty": 800,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-009",
+    "description": "Finished Good - Product 9",
+    "components": [
+      {
+        "material": "API-009",
+        "qty": 1.8,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-018",
+        "qty": 0.9,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-108",
+        "qty": 900,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-010",
+    "description": "Finished Good - Product 10",
+    "components": [
+      {
+        "material": "API-010",
+        "qty": 1.9,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-019",
+        "qty": 0.95,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-109",
+        "qty": 1000,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-011",
+    "description": "Finished Good - Product 11",
+    "components": [
+      {
+        "material": "API-011",
+        "qty": 2.0,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-020",
+        "qty": 1.0,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-110",
+        "qty": 1100,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-012",
+    "description": "Finished Good - Product 12",
+    "components": [
+      {
+        "material": "API-012",
+        "qty": 2.1,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-021",
+        "qty": 1.05,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-111",
+        "qty": 1200,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-013",
+    "description": "Finished Good - Product 13",
+    "components": [
+      {
+        "material": "API-013",
+        "qty": 2.2,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-022",
+        "qty": 1.1,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-112",
+        "qty": 1300,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-014",
+    "description": "Finished Good - Product 14",
+    "components": [
+      {
+        "material": "API-014",
+        "qty": 2.3,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-023",
+        "qty": 1.15,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-113",
+        "qty": 1400,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-015",
+    "description": "Finished Good - Product 15",
+    "components": [
+      {
+        "material": "API-015",
+        "qty": 2.4000000000000004,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-024",
+        "qty": 1.2000000000000002,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-114",
+        "qty": 1500,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-016",
+    "description": "Finished Good - Product 16",
+    "components": [
+      {
+        "material": "API-016",
+        "qty": 2.5,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-025",
+        "qty": 1.25,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-115",
+        "qty": 1600,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-017",
+    "description": "Finished Good - Product 17",
+    "components": [
+      {
+        "material": "API-017",
+        "qty": 2.6,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-026",
+        "qty": 1.3,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-116",
+        "qty": 1700,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-018",
+    "description": "Finished Good - Product 18",
+    "components": [
+      {
+        "material": "API-018",
+        "qty": 2.7,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-027",
+        "qty": 1.35,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-117",
+        "qty": 1800,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-019",
+    "description": "Finished Good - Product 19",
+    "components": [
+      {
+        "material": "API-019",
+        "qty": 2.8,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-028",
+        "qty": 1.4,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-118",
+        "qty": 1900,
+        "unit": "pcs"
+      }
+    ]
+  },
+  {
+    "material": "FG-020",
+    "description": "Finished Good - Product 20",
+    "components": [
+      {
+        "material": "API-020",
+        "qty": 2.9000000000000004,
+        "unit": "kg"
+      },
+      {
+        "material": "EXC-029",
+        "qty": 1.4500000000000002,
+        "unit": "kg"
+      },
+      {
+        "material": "PACK-119",
+        "qty": 2000,
+        "unit": "pcs"
+      }
     ]
   }
 ]

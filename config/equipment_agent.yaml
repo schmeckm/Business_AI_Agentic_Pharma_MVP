@@ -1,0 +1,63 @@
+id: equipmentAgent
+name: "Equipment Status Agent"
+agentType: "data_collection"
+category: "Maintenance"
+description: "Provides overview of equipment failures, maintenance and uptime."
+owner: "Maintenance Team"
+priority: "low"
+
+rolesAllowed:
+  - Admin
+  - Maintenance
+  - Production
+
+trigger:
+  - "equipment status"
+  - "machine health"
+
+dataSource:
+  - "equipment"
+
+keywords:
+  - "equipment"
+  - "downtime"
+  - "maintenance"
+
+a2aCapabilities:
+  - equipmentStatus
+  - maintenancePlanning
+
+a2aPrompts:
+  equipmentStatus: |
+    ## A2A Request: Equipment Status
+    Data: {data.equipment}
+    Respond with JSON:
+    - status
+    - impactedMachines
+    - recommendations
+
+  maintenancePlanning: |
+    ## A2A Request: Maintenance Planning
+    Data: {data.equipment}
+    Respond with JSON:
+    - tasks
+    - priority
+    - schedule
+
+events:
+  subscribes:
+    - "oee/+/status"
+  publishes:
+    - "alerts/maintenance"
+
+promptTemplates:
+  default: |
+    ## Equipment Status Report
+    {data.equipment}
+
+outputFormat:
+  type: markdown
+  sections:
+    - title: "Summary"
+    - title: "Impact"
+    - title: "Recommendations"

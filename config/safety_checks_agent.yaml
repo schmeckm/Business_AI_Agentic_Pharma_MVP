@@ -1,0 +1,64 @@
+id: safetyChecksAgent
+name: "Safety Checks Agent"
+agentType: "rule_based"
+category: "Safety"
+description: "Performs safety and compliance checks for batches and equipment."
+owner: "EHS Team"
+priority: "high"
+
+rolesAllowed:
+  - Admin
+  - QA
+  - Safety
+
+trigger:
+  - "safety check"
+  - "safety status"
+
+dataSource:
+  - "batches"
+  - "equipment"
+  - "issues"
+
+keywords:
+  - "safety"
+  - "risk"
+  - "incident"
+
+a2aCapabilities:
+  - safetyAssessment
+
+a2aPrompts:
+  safetyAssessment: |
+    ## A2A Request: Safety Assessment
+    Batches: {data.batches}
+    Equipment: {data.equipment}
+    Issues: {data.issues}
+    Respond with JSON:
+    - safetyStatus
+    - risks
+    - mitigations
+
+events:
+  subscribes:
+    - "batch/+/status"
+  publishes:
+    - "alerts/safety"
+
+chainedAgents:
+  - qualityAgent
+  - equipmentAgent
+
+promptTemplates:
+  default: |
+    ## Safety & Compliance Report
+    Batches: {data.batches}
+    Equipment: {data.equipment}
+    Issues: {data.issues}
+
+outputFormat:
+  type: markdown
+  sections:
+    - title: "Summary"
+    - title: "Risks"
+    - title: "Recommendations"

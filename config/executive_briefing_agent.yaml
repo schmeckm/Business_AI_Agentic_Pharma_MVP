@@ -1,0 +1,67 @@
+id: executiveBriefingAgent
+name: "Executive Briefing Agent"
+agentType: "collaborative"
+category: "Management"
+description: "Provides executive-level summary across orders, OEE, and QA."
+owner: "Management Team"
+priority: "high"
+
+rolesAllowed:
+  - Admin
+  - Management
+
+trigger:
+  - "executive briefing"
+  - "management summary"
+  - "daily briefing"
+
+dataSource:
+  - "orders"
+  - "oee_hot"
+  - "qa"
+  - "issues"
+
+keywords:
+  - "executive"
+  - "summary"
+  - "briefing"
+
+a2aCapabilities:
+  - executiveSummary
+
+a2aPrompts:
+  executiveSummary: |
+    ## A2A Request: Executive Summary
+    Orders: {data.orders}
+    OEE: {data.oee_hot}
+    QA: {data.qa}
+    Issues: {data.issues}
+    Respond with Markdown summary.
+
+events:
+  subscribes:
+    - "system/heartbeat"
+  publishes:
+    - "reports/executive"
+
+chainedAgents:
+  - productionPlanningAgent
+  - qualityAgent
+  - oeeAgent
+
+promptTemplates:
+  default: |
+    ## Executive Briefing Report
+    Orders: {data.orders}
+    OEE: {data.oee_hot}
+    QA: {data.qa}
+    Issues: {data.issues}
+
+outputFormat:
+  type: markdown
+  sections:
+    - title: "Orders"
+    - title: "OEE"
+    - title: "QA"
+    - title: "Issues"
+    - title: "Summary"

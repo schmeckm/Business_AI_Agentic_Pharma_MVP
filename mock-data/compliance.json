@@ -4,22 +4,236 @@
       "batchId": "BATCH-001",
       "complianceStatus": "compliant",
       "gmpStatus": "verified",
-      "regulatoryChecks": ["FDA", "EMA"],
+      "regulatoryChecks": [
+        "FDA",
+        "EMA"
+      ],
+      "lastAudit": "2025-09-01",
+      "issues": []
+    },
+    {
+      "batchId": "BATCH-002",
+      "complianceStatus": "pending",
+      "gmpStatus": "under_review",
+      "regulatoryChecks": [
+        "FDA"
+      ],
+      "lastAudit": "2025-09-02",
+      "issues": [
+        "documentation_incomplete"
+      ]
+    },
+    {
+      "batchId": "BATCH-003",
+      "complianceStatus": "non_compliant",
+      "gmpStatus": "rejected",
+      "regulatoryChecks": [
+        "FDA",
+        "EMA"
+      ],
+      "lastAudit": "2025-09-03",
+      "issues": []
+    },
+    {
+      "batchId": "BATCH-004",
+      "complianceStatus": "compliant",
+      "gmpStatus": "verified",
+      "regulatoryChecks": [
+        "FDA"
+      ],
+      "lastAudit": "2025-09-04",
+      "issues": [
+        "documentation_incomplete"
+      ]
+    },
+    {
+      "batchId": "BATCH-005",
+      "complianceStatus": "pending",
+      "gmpStatus": "under_review",
+      "regulatoryChecks": [
+        "FDA",
+        "EMA"
+      ],
+      "lastAudit": "2025-09-05",
+      "issues": []
+    },
+    {
+      "batchId": "BATCH-006",
+      "complianceStatus": "non_compliant",
+      "gmpStatus": "rejected",
+      "regulatoryChecks": [
+        "FDA"
+      ],
+      "lastAudit": "2025-09-06",
+      "issues": [
+        "documentation_incomplete"
+      ]
+    },
+    {
+      "batchId": "BATCH-007",
+      "complianceStatus": "compliant",
+      "gmpStatus": "verified",
+      "regulatoryChecks": [
+        "FDA",
+        "EMA"
+      ],
+      "lastAudit": "2025-09-07",
+      "issues": []
+    },
+    {
+      "batchId": "BATCH-008",
+      "complianceStatus": "pending",
+      "gmpStatus": "under_review",
+      "regulatoryChecks": [
+        "FDA"
+      ],
+      "lastAudit": "2025-09-08",
+      "issues": [
+        "documentation_incomplete"
+      ]
+    },
+    {
+      "batchId": "BATCH-009",
+      "complianceStatus": "non_compliant",
+      "gmpStatus": "rejected",
+      "regulatoryChecks": [
+        "FDA",
+        "EMA"
+      ],
+      "lastAudit": "2025-09-09",
+      "issues": []
+    },
+    {
+      "batchId": "BATCH-010",
+      "complianceStatus": "compliant",
+      "gmpStatus": "verified",
+      "regulatoryChecks": [
+        "FDA"
+      ],
+      "lastAudit": "2025-09-10",
+      "issues": [
+        "documentation_incomplete"
+      ]
+    },
+    {
+      "batchId": "BATCH-011",
+      "complianceStatus": "pending",
+      "gmpStatus": "under_review",
+      "regulatoryChecks": [
+        "FDA",
+        "EMA"
+      ],
+      "lastAudit": "2025-09-11",
+      "issues": []
+    },
+    {
+      "batchId": "BATCH-012",
+      "complianceStatus": "non_compliant",
+      "gmpStatus": "rejected",
+      "regulatoryChecks": [
+        "FDA"
+      ],
+      "lastAudit": "2025-09-12",
+      "issues": [
+        "documentation_incomplete"
+      ]
+    },
+    {
+      "batchId": "BATCH-013",
+      "complianceStatus": "compliant",
+      "gmpStatus": "verified",
+      "regulatoryChecks": [
+        "FDA",
+        "EMA"
+      ],
+      "lastAudit": "2025-09-13",
+      "issues": []
+    },
+    {
+      "batchId": "BATCH-014",
+      "complianceStatus": "pending",
+      "gmpStatus": "under_review",
+      "regulatoryChecks": [
+        "FDA"
+      ],
+      "lastAudit": "2025-09-14",
+      "issues": [
+        "documentation_incomplete"
+      ]
+    },
+    {
+      "batchId": "BATCH-015",
+      "complianceStatus": "non_compliant",
+      "gmpStatus": "rejected",
+      "regulatoryChecks": [
+        "FDA",
+        "EMA"
+      ],
       "lastAudit": "2025-09-15",
       "issues": []
     },
     {
-      "batchId": "BATCH-002", 
+      "batchId": "BATCH-016",
+      "complianceStatus": "compliant",
+      "gmpStatus": "verified",
+      "regulatoryChecks": [
+        "FDA"
+      ],
+      "lastAudit": "2025-09-16",
+      "issues": [
+        "documentation_incomplete"
+      ]
+    },
+    {
+      "batchId": "BATCH-017",
       "complianceStatus": "pending",
       "gmpStatus": "under_review",
-      "regulatoryChecks": ["FDA"],
-      "lastAudit": "2025-09-10",
-      "issues": ["documentation_incomplete"]
+      "regulatoryChecks": [
+        "FDA",
+        "EMA"
+      ],
+      "lastAudit": "2025-09-17",
+      "issues": []
+    },
+    {
+      "batchId": "BATCH-018",
+      "complianceStatus": "non_compliant",
+      "gmpStatus": "rejected",
+      "regulatoryChecks": [
+        "FDA"
+      ],
+      "lastAudit": "2025-09-18",
+      "issues": [
+        "documentation_incomplete"
+      ]
+    },
+    {
+      "batchId": "BATCH-019",
+      "complianceStatus": "compliant",
+      "gmpStatus": "verified",
+      "regulatoryChecks": [
+        "FDA",
+        "EMA"
+      ],
+      "lastAudit": "2025-09-19",
+      "issues": []
+    },
+    {
+      "batchId": "BATCH-020",
+      "complianceStatus": "pending",
+      "gmpStatus": "under_review",
+      "regulatoryChecks": [
+        "FDA"
+      ],
+      "lastAudit": "2025-09-20",
+      "issues": [
+        "documentation_incomplete"
+      ]
     }
   ],
   "regulations": {
     "FDA_CFR_211": "active",
-    "ICH_Q7": "active", 
+    "ICH_Q7": "active",
     "EU_GMP": "active"
   }
 }

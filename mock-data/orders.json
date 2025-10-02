@@ -1,93 +1,182 @@
 [
   {
-    "orderId": "ORD-1001",
-    "material": "FG-123",
-    "qty": 2000,
+    "orderId": "ORD-1000",
+    "material": "FG-001",
+    "qty": 100,
     "market": "EU",
     "status": "created",
-    "startDate": "2025-09-28",
-    "endDate": "2025-10-16",
-    "components": [
-      { "materialId": "API-001", "description": "Active Ingredient", "qty": 20, "uom": "kg" },
-      { "materialId": "EXC-010", "description": "Excipient", "qty": 10, "uom": "kg" }
-    ],
-    "operations": [
-      { "opNo": 10, "description": "Granulation", "workCenter": "LINE-01", "durationPlanned": "5h" },
-      { "opNo": 20, "description": "Compression", "workCenter": "LINE-01", "durationPlanned": "7h" }
-    ]
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1001",
+    "material": "FG-002",
+    "qty": 200,
+    "market": "US",
+    "status": "released",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
   },
   {
     "orderId": "ORD-1002",
-    "material": "FG-456",
-    "qty": 1500,
-    "market": "US",
-    "status": "released",
-    "startDate": "2025-09-28",
-    "endDate": "2025-10-16",
-    "components": [
-      { "materialId": "API-002", "description": "API - Antibiotic", "qty": 12, "uom": "kg" },
-      { "materialId": "PACK-100", "description": "Packaging Blisters", "qty": 1500, "uom": "pcs" }
-    ],
-    "operations": [
-      { "opNo": 10, "description": "Weighing", "workCenter": "LINE-02", "durationPlanned": "2h" },
-      { "opNo": 20, "description": "Mixing", "workCenter": "LINE-02", "durationPlanned": "4h" },
-      { "opNo": 30, "description": "Packaging", "workCenter": "LINE-03", "durationPlanned": "3h" }
-    ]
+    "material": "FG-003",
+    "qty": 300,
+    "market": "ROW",
+    "status": "in_progress",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
   },
   {
     "orderId": "ORD-1003",
-    "material": "FG-789",
-    "qty": 500,
-    "market": "ROW",
-    "status": "in_progress",
-    "startDate": "2025-09-29",
-    "endDate": "2025-10-16",
-    "components": [
-      { "materialId": "API-003", "description": "API - Painkiller", "qty": 5, "uom": "kg" },
-      { "materialId": "EXC-020", "description": "Excipient Type B", "qty": 2, "uom": "kg" },
-      { "materialId": "PACK-200", "description": "Bottles", "qty": 500, "uom": "pcs" }
-    ],
-    "operations": [
-      { "opNo": 10, "description": "Preparation", "workCenter": "LINE-01", "durationPlanned": "3h" },
-      { "opNo": 20, "description": "Filling", "workCenter": "LINE-02", "durationPlanned": "6h" },
-      { "opNo": 30, "description": "Labeling", "workCenter": "LINE-02", "durationPlanned": "2h" }
-    ]
+    "material": "FG-004",
+    "qty": 400,
+    "market": "EU",
+    "status": "created",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
   },
   {
     "orderId": "ORD-1004",
-    "material": "FG-321",
-    "qty": 3000,
-    "market": "EU",
-    "status": "closed",
-    "startDate": "2025-09-29",
-    "endDate": "2025-10-16",
-    "components": [
-      { "materialId": "API-004", "description": "API - Antiviral", "qty": 25, "uom": "kg" },
-      { "materialId": "EXC-030", "description": "Excipient Type C", "qty": 15, "uom": "kg" },
-      { "materialId": "PACK-300", "description": "Cartons", "qty": 3000, "uom": "pcs" }
-    ],
-    "operations": [
-      { "opNo": 10, "description": "Granulation", "workCenter": "LINE-03", "durationPlanned": "4h" },
-      { "opNo": 20, "description": "Coating", "workCenter": "LINE-03", "durationPlanned": "6h" },
-      { "opNo": 30, "description": "Packaging", "workCenter": "LINE-01", "durationPlanned": "5h" }
-    ]
+    "material": "FG-005",
+    "qty": 500,
+    "market": "US",
+    "status": "released",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
   },
   {
     "orderId": "ORD-1005",
-    "material": "FG-654",
-    "qty": 1200,
+    "material": "FG-006",
+    "qty": 600,
+    "market": "ROW",
+    "status": "in_progress",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1006",
+    "material": "FG-007",
+    "qty": 700,
+    "market": "EU",
+    "status": "created",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1007",
+    "material": "FG-008",
+    "qty": 800,
     "market": "US",
     "status": "released",
-    "startDate": "2025-09-30",
-    "endDate": "2025-10-16",
-    "components": [
-      { "materialId": "API-005", "description": "API - Antidepressant", "qty": 8, "uom": "kg" },
-      { "materialId": "EXC-040", "description": "Excipient Type D", "qty": 6, "uom": "kg" }
-    ],
-    "operations": [
-      { "opNo": 10, "description": "Mixing", "workCenter": "LINE-02", "durationPlanned": "3h" },
-      { "opNo": 20, "description": "Compression", "workCenter": "LINE-02", "durationPlanned": "7h" },
-      { "opNo": 30, "description": "Packaging", "workCenter": "LINE-03", "durationPlanned": "4h" }
-    ]
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1008",
+    "material": "FG-009",
+    "qty": 900,
+    "market": "ROW",
+    "status": "in_progress",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1009",
+    "material": "FG-010",
+    "qty": 1000,
+    "market": "EU",
+    "status": "created",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1010",
+    "material": "FG-011",
+    "qty": 1100,
+    "market": "US",
+    "status": "released",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1011",
+    "material": "FG-012",
+    "qty": 1200,
+    "market": "ROW",
+    "status": "in_progress",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1012",
+    "material": "FG-013",
+    "qty": 1300,
+    "market": "EU",
+    "status": "created",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1013",
+    "material": "FG-014",
+    "qty": 1400,
+    "market": "US",
+    "status": "released",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1014",
+    "material": "FG-015",
+    "qty": 1500,
+    "market": "ROW",
+    "status": "in_progress",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1015",
+    "material": "FG-016",
+    "qty": 1600,
+    "market": "EU",
+    "status": "created",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1016",
+    "material": "FG-017",
+    "qty": 1700,
+    "market": "US",
+    "status": "released",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1017",
+    "material": "FG-018",
+    "qty": 1800,
+    "market": "ROW",
+    "status": "in_progress",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1018",
+    "material": "FG-019",
+    "qty": 1900,
+    "market": "EU",
+    "status": "created",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
+  },
+  {
+    "orderId": "ORD-1019",
+    "material": "FG-020",
+    "qty": 2000,
+    "market": "US",
+    "status": "released",
+    "startDate": "2025-10-02",
+    "endDate": "2025-11-30"
   }
 ]

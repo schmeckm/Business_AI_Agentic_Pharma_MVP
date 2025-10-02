@@ -1,0 +1,84 @@
+id: oeeAgent
+name: "OEE Executive Agent"
+agentType: "data_collection"
+category: "Operations"
+description: "Provides real-time OEE reports per line, including running orders and historical benchmarks."
+owner: "Operations Team"
+priority: "high"
+sla: "3s response time"
+oeeEnabled: true
+
+rolesAllowed:
+  - Admin
+  - Operations
+  - Management
+
+trigger:
+  - "oee report"
+  - "oee status"
+
+dataSource:
+  - "oee_hot"
+  - "orders"
+  - "oee_history"
+
+keywords:
+  - "OEE"
+  - "availability"
+  - "performance"
+  - "machine efficiency"
+  - "line"
+
+a2aCapabilities:
+  - oeeSnapshot
+  - oeeComparison
+
+a2aPrompts:
+  oeeSnapshot: |
+    ## A2A Request: OEE Snapshot
+    Data: {data.oee_hot}
+    Respond with JSON:
+    - line
+    - oee
+    - availability
+    - performance
+    - quality
+
+  oeeComparison: |
+    ## A2A Request: OEE Comparison
+    Realtime: {data.oee_hot}
+    History: {data.oee_history}
+    Respond with JSON:
+    - line
+    - currentOEE
+    - historicalAvg
+    - deviation
+    - recommendations
+
+events:
+  subscribes:
+    - "plc/+/status"
+  publishes:
+    - "alerts/oee"
+
+chainedAgents:
+  - productionPlanningAgent
+  - equipmentAgent
+
+promptTemplates:
+  default: |
+    ## OEE Executive Report
+    {data.oee_hot}
+
+  whatIf: |
+    ## What-If Analysis (OEE)
+    Question: {userMessage}
+    OEE: {data.oee_hot}
+    History: {data.oee_history}
+
+outputFormat:
+  type: markdown
+  sections:
+    - title: "Summary"
+    - title: "Impact"
+    - title: "Recommendations"

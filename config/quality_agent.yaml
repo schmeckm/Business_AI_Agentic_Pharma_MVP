@@ -1,0 +1,72 @@
+id: qualityAgent
+name: "Quality Assurance Agent"
+agentType: "rule_based"
+category: "Quality"
+description: "Generates QA compliance report, deviations and CAPA overview."
+owner: "QA Team"
+priority: "medium"
+
+rolesAllowed:
+  - Admin
+  - QA
+  - Compliance
+
+trigger:
+  - "qa report"
+  - "quality status"
+
+dataSource:
+  - "compliance"
+  - "qa"
+  - "issues"
+
+keywords:
+  - "QA"
+  - "quality"
+  - "compliance"
+  - "deviation"
+
+a2aCapabilities:
+  - qaCheck
+  - complianceAssessment
+
+a2aPrompts:
+  qaCheck: |
+    ## A2A Request: QA Check
+    QA Data: {data.qa}
+    Issues: {data.issues}
+    Respond with JSON:
+    - batch
+    - status
+    - priority
+    - risks
+
+  complianceAssessment: |
+    ## A2A Request: Compliance Assessment
+    Compliance: {data.compliance}
+    Respond with JSON:
+    - rulesViolated
+    - riskLevel
+    - recommendations
+
+events:
+  subscribes:
+    - "batch/+/status"
+  publishes:
+    - "alerts/qa"
+
+chainedAgents:
+  - equipmentAgent
+
+promptTemplates:
+  default: |
+    ## Quality & Compliance Report
+    QA: {data.qa}
+    Issues: {data.issues}
+
+outputFormat:
+  type: markdown
+  sections:
+    - title: "Summary"
+    - title: "Deviations"
+    - title: "CAPA"

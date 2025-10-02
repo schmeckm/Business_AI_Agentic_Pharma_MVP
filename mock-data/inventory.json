@@ -1,14 +1,122 @@
 [
   {
-    "material": "FG-123",
+    "material": "FG-001",
     "batch": "BATCH-001",
-    "quantity": 1200,
-    "expiry": "2026-01-01"
+    "quantity": 50,
+    "expiry": "2026-12-01"
   },
   {
-    "material": "FG-456",
+    "material": "FG-002",
     "batch": "BATCH-002",
+    "quantity": 100,
+    "expiry": "2026-12-02"
+  },
+  {
+    "material": "FG-003",
+    "batch": "BATCH-003",
+    "quantity": 150,
+    "expiry": "2026-12-03"
+  },
+  {
+    "material": "FG-004",
+    "batch": "BATCH-004",
+    "quantity": 200,
+    "expiry": "2026-12-04"
+  },
+  {
+    "material": "FG-005",
+    "batch": "BATCH-005",
+    "quantity": 250,
+    "expiry": "2026-12-05"
+  },
+  {
+    "material": "FG-006",
+    "batch": "BATCH-006",
+    "quantity": 300,
+    "expiry": "2026-12-06"
+  },
+  {
+    "material": "FG-007",
+    "batch": "BATCH-007",
+    "quantity": 350,
+    "expiry": "2026-12-07"
+  },
+  {
+    "material": "FG-008",
+    "batch": "BATCH-008",
+    "quantity": 400,
+    "expiry": "2026-12-08"
+  },
+  {
+    "material": "FG-009",
+    "batch": "BATCH-009",
+    "quantity": 450,
+    "expiry": "2026-12-09"
+  },
+  {
+    "material": "FG-010",
+    "batch": "BATCH-010",
     "quantity": 500,
-    "expiry": "2025-12-15"
+    "expiry": "2026-12-10"
+  },
+  {
+    "material": "FG-011",
+    "batch": "BATCH-011",
+    "quantity": 550,
+    "expiry": "2026-12-11"
+  },
+  {
+    "material": "FG-012",
+    "batch": "BATCH-012",
+    "quantity": 600,
+    "expiry": "2026-12-12"
+  },
+  {
+    "material": "FG-013",
+    "batch": "BATCH-013",
+    "quantity": 650,
+    "expiry": "2026-12-13"
+  },
+  {
+    "material": "FG-014",
+    "batch": "BATCH-014",
+    "quantity": 700,
+    "expiry": "2026-12-14"
+  },
+  {
+    "material": "FG-015",
+    "batch": "BATCH-015",
+    "quantity": 750,
+    "expiry": "2026-12-15"
+  },
+  {
+    "material": "FG-016",
+    "batch": "BATCH-016",
+    "quantity": 800,
+    "expiry": "2026-12-16"
+  },
+  {
+    "material": "FG-017",
+    "batch": "BATCH-017",
+    "quantity": 850,
+    "expiry": "2026-12-17"
+  },
+  {
+    "material": "FG-018",
+    "batch": "BATCH-018",
+    "quantity": 900,
+    "expiry": "2026-12-18"
+  },
+  {
+    "material": "FG-019",
+    "batch": "BATCH-019",
+    "quantity": 950,
+    "expiry": "2026-12-19"
+  },
+  {
+    "material": "FG-020",
+    "batch": "BATCH-020",
+    "quantity": 1000,
+    "expiry": "2026-12-20"
   }
 ]

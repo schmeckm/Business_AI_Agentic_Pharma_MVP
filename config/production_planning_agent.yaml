@@ -1,0 +1,114 @@
+id: productionPlanningAgent
+name: "Production Planning Agent"
+agentType: "proactive"
+category: "Production"
+description: "Optimizes production planning by checking orders, resources and bottlenecks."
+owner: "Manufacturing Team"
+sla: "5s response time"
+priority: "medium"
+
+rolesAllowed:
+  - Admin
+  - Production
+  - Planning
+
+trigger:
+  - "plan production"
+  - "orders today"
+  - "production schedule"
+  - "delay production"
+
+dataSource:
+  - "orders"
+  - "batches"
+
+keywords:
+  - "delay"
+  - "reschedule"
+  - "order"
+  - "bottleneck"
+
+a2aCapabilities:
+  - productionSchedule
+  - capacityCheck
+
+a2aPrompts:
+  productionSchedule: |
+    ## A2A Request: Production Schedule
+    Orders: {data.orders}
+    Respond with JSON:
+    - scheduledOrders
+    - conflicts
+    - bottlenecks
+    - recommendations
+
+  capacityCheck: |
+    ## A2A Request: Capacity Check
+    Orders: {data.orders}
+    Batches: {data.batches}
+    Respond with JSON:
+    - availableCapacity
+    - overloadRisks
+    - mitigationSteps
+
+events:
+  subscribes:
+    - "orders/created"
+    - "orders/released"
+  publishes:
+    - "planning/updates"
+    - "alerts/bottlenecks"
+
+chainedAgents:
+  - qualityAgent
+  - equipmentAgent
+  - oeeAgent
+
+promptTemplates:
+  whatIf: |
+    ## What-If Analysis (Production)
+
+    Question: {userMessage}
+
+    {% if data.orders and data.orders|length > 0 %}
+    **Orders Context:**
+    {data.orders}
+    {% else %}
+    ⚠️ No production orders available in the system.
+    {% endif %}
+
+    {% if data.batches and data.batches|length > 0 %}
+    **Batch Status:**
+    {data.batches}
+    {% else %}
+    ⚠️ No batch data currently available.
+    {% endif %}
+
+    ---
+    Please:
+    - Analyze the impact of the proposed scenario
+    - Suggest scheduling adjustments
+    - Propose alternative production sequences
+    - Recommend resource allocation
+    - Highlight risks and opportunities
+
+  default: |
+    ## Production Planning Report
+
+    Orders:
+    {data.orders}
+
+    Batches:
+    {data.batches}
+
+    Recommendations:
+    - Identify bottlenecks
+    - Suggest rescheduling
+    - Optimize resources
+
+outputFormat:
+  type: markdown
+  sections:
+    - title: "Impact"
+    - title: "Recommendations"
+    - title: "Data Gaps"

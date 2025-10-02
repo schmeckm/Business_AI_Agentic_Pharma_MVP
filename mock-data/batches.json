@@ -1,53 +1,142 @@
 [
   {
     "id": "BATCH-001",
-    "material": "FG-123",
-    "quantity": 2000,
+    "material": "FG-001",
+    "quantity": 100,
     "status": "in_production",
-    "productionLine": "PCK-01",
-    "startDate": "2025-01-15T08:00:00Z",
-    "expectedCompletion": "2025-01-16T16:00:00Z",
-    "qualityStatus": "pending",
-    "temperature": 22.5,
-    "humidity": 45,
-    "batchRecord": {
-      "operator": "OP-001",
-      "supervisor": "SUP-001",
-      "qaApproval": null
-    }
+    "qualityStatus": "pending"
   },
   {
-    "id": "BATCH-002", 
-    "material": "FG-456",
-    "quantity": 1500,
+    "id": "BATCH-002",
+    "material": "FG-002",
+    "quantity": 200,
     "status": "quality_check",
-    "productionLine": "PCK-02",
-    "startDate": "2025-01-14T10:00:00Z",
-    "expectedCompletion": "2025-01-15T18:00:00Z",
-    "qualityStatus": "in_progress",
-    "temperature": 21.8,
-    "humidity": 42,
-    "batchRecord": {
-      "operator": "OP-002",
-      "supervisor": "SUP-001",
-      "qaApproval": null
-    }
+    "qualityStatus": "in_progress"
   },
   {
     "id": "BATCH-003",
-    "material": "FG-789",
-    "quantity": 3000,
+    "material": "FG-003",
+    "quantity": 300,
     "status": "completed",
-    "productionLine": "PCK-01",
-    "startDate": "2025-01-13T06:00:00Z",
-    "expectedCompletion": "2025-01-14T14:00:00Z",
-    "qualityStatus": "approved",
-    "temperature": 22.1,
-    "humidity": 44,
-    "batchRecord": {
-      "operator": "OP-003",
-      "supervisor": "SUP-002",
-      "qaApproval": "QA-001"
-    }
+    "qualityStatus": "approved"
+  },
+  {
+    "id": "BATCH-004",
+    "material": "FG-004",
+    "quantity": 400,
+    "status": "in_production",
+    "qualityStatus": "pending"
+  },
+  {
+    "id": "BATCH-005",
+    "material": "FG-005",
+    "quantity": 500,
+    "status": "quality_check",
+    "qualityStatus": "in_progress"
+  },
+  {
+    "id": "BATCH-006",
+    "material": "FG-006",
+    "quantity": 600,
+    "status": "completed",
+    "qualityStatus": "approved"
+  },
+  {
+    "id": "BATCH-007",
+    "material": "FG-007",
+    "quantity": 700,
+    "status": "in_production",
+    "qualityStatus": "pending"
+  },
+  {
+    "id": "BATCH-008",
+    "material": "FG-008",
+    "quantity": 800,
+    "status": "quality_check",
+    "qualityStatus": "in_progress"
+  },
+  {
+    "id": "BATCH-009",
+    "material": "FG-009",
+    "quantity": 900,
+    "status": "completed",
+    "qualityStatus": "approved"
+  },
+  {
+    "id": "BATCH-010",
+    "material": "FG-010",
+    "quantity": 1000,
+    "status": "in_production",
+    "qualityStatus": "pending"
+  },
+  {
+    "id": "BATCH-011",
+    "material": "FG-011",
+    "quantity": 1100,
+    "status": "quality_check",
+    "qualityStatus": "in_progress"
+  },
+  {
+    "id": "BATCH-012",
+    "material": "FG-012",
+    "quantity": 1200,
+    "status": "completed",
+    "qualityStatus": "approved"
+  },
+  {
+    "id": "BATCH-013",
+    "material": "FG-013",
+    "quantity": 1300,
+    "status": "in_production",
+    "qualityStatus": "pending"
+  },
+  {
+    "id": "BATCH-014",
+    "material": "FG-014",
+    "quantity": 1400,
+    "status": "quality_check",
+    "qualityStatus": "in_progress"
+  },
+  {
+    "id": "BATCH-015",
+    "material": "FG-015",
+    "quantity": 1500,
+    "status": "completed",
+    "qualityStatus": "approved"
+  },
+  {
+    "id": "BATCH-016",
+    "material": "FG-016",
+    "quantity": 1600,
+    "status": "in_production",
+    "qualityStatus": "pending"
+  },
+  {
+    "id": "BATCH-017",
+    "material": "FG-017",
+    "quantity": 1700,
+    "status": "quality_check",
+    "qualityStatus": "in_progress"
+  },
+  {
+    "id": "BATCH-018",
+    "material": "FG-018",
+    "quantity": 1800,
+    "status": "completed",
+    "qualityStatus": "approved"
+  },
+  {
+    "id": "BATCH-019",
+    "material": "FG-019",
+    "quantity": 1900,
+    "status": "in_production",
+    "qualityStatus": "pending"
+  },
+  {
+    "id": "BATCH-020",
+    "material": "FG-020",
+    "quantity": 2000,
+    "status": "quality_check",
+    "qualityStatus": "in_progress"
   }
 ]
