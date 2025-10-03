@@ -26,6 +26,35 @@ keywords:
   - "compliance"
   - "deviation"
 
+# ⬇️ REQUIRED: Root-level promptTemplate
+promptTemplate: |
+  You are the Quality Assurance Agent for pharmaceutical manufacturing.
+  
+  Current Time: {timestamp}
+  User Query: {userMessage}
+  
+  === COMPLIANCE STATUS ===
+  {data.compliance}
+  
+  === QA RECORDS ===
+  {data.qa}
+  
+  === ACTIVE ISSUES ===
+  {data.issues}
+  
+  === INSTRUCTIONS ===
+  Generate a comprehensive Quality & Compliance report including:
+  
+  1. **Executive Summary** - Overall compliance status and critical findings
+  2. **QA Status by Material** - Batch-level quality status, pending approvals
+  3. **Deviations** - Active deviations with severity and impact assessment
+  4. **CAPA Overview** - Corrective and Preventive Actions status
+  5. **Compliance Gaps** - Regulatory risks and required remediations
+  6. **Recommendations** - Prioritized quality improvement actions
+  
+  Format: Professional markdown with clear sections.
+  Focus: GMP compliance, patient safety, and regulatory readiness.
+
 a2aCapabilities:
   - qaCheck
   - complianceAssessment
@@ -33,21 +62,30 @@ a2aCapabilities:
 a2aPrompts:
   qaCheck: |
     ## A2A Request: QA Check
+    Timestamp: {timestamp}
     QA Data: {data.qa}
     Issues: {data.issues}
+    
     Respond with JSON:
-    - batch
-    - status
-    - priority
-    - risks
+    {{
+      "batch": "batch identifier",
+      "status": "approved/pending/rejected",
+      "priority": "high/medium/low",
+      "risks": ["risk description"]
+    }}
 
   complianceAssessment: |
     ## A2A Request: Compliance Assessment
+    Timestamp: {timestamp}
     Compliance: {data.compliance}
+    
     Respond with JSON:
-    - rulesViolated
-    - riskLevel
-    - recommendations
+    {{
+      "rulesViolated": ["regulation reference"],
+      "riskLevel": "critical/high/medium/low",
+      "complianceScore": 85,
+      "recommendations": ["action1", "action2"]
+    }}
 
 events:
   subscribes:
@@ -58,15 +96,12 @@ events:
 chainedAgents:
   - equipmentAgent
 
-promptTemplates:
-  default: |
-    ## Quality & Compliance Report
-    QA: {data.qa}
-    Issues: {data.issues}
-
 outputFormat:
   type: markdown
   sections:
-    - title: "Summary"
+    - title: "Executive Summary"
+    - title: "QA Status"
     - title: "Deviations"
     - title: "CAPA"
+    - title: "Compliance Gaps"
+    - title: "Recommendations"

@@ -25,19 +25,55 @@ keywords:
   - "risk"
   - "incident"
 
+# ⬇️ REQUIRED: Root-level promptTemplate
+promptTemplate: |
+  You are the Safety Checks Agent for pharmaceutical manufacturing operations.
+  
+  Current Time: {timestamp}
+  User Query: {userMessage}
+  
+  === BATCH STATUS ===
+  {data.batches}
+  
+  === EQUIPMENT STATUS ===
+  {data.equipment}
+  
+  === ACTIVE ISSUES ===
+  {data.issues}
+  
+  === INSTRUCTIONS ===
+  Generate a comprehensive Safety & Compliance report including:
+  
+  1. **Safety Status Summary** - Overall safety posture and critical alerts
+  2. **Batch Safety Assessment** - Material handling risks, containment status
+  3. **Equipment Safety** - Machine safeguards, lockout/tagout status, maintenance risks
+  4. **Incident Analysis** - Active safety issues and their severity
+  5. **Risk Assessment** - Potential hazards ranked by likelihood and impact
+  6. **Mitigation Actions** - Required safety interventions with urgency levels
+  
+  Format: Professional markdown with clear sections.
+  Focus: Worker safety, environmental protection, and regulatory compliance (OSHA, EPA, GMP).
+
 a2aCapabilities:
   - safetyAssessment
 
 a2aPrompts:
   safetyAssessment: |
     ## A2A Request: Safety Assessment
+    Timestamp: {timestamp}
     Batches: {data.batches}
     Equipment: {data.equipment}
     Issues: {data.issues}
+    
     Respond with JSON:
-    - safetyStatus
-    - risks
-    - mitigations
+    {{
+      "safetyStatus": "safe/warning/critical",
+      "overallRiskLevel": "high/medium/low",
+      "risks": [
+        {{"category": "chemical/mechanical/ergonomic", "description": "...", "severity": "critical/high/medium/low"}}
+      ],
+      "mitigations": ["action1", "action2"]
+    }}
 
 events:
   subscribes:
@@ -49,16 +85,12 @@ chainedAgents:
   - qualityAgent
   - equipmentAgent
 
-promptTemplates:
-  default: |
-    ## Safety & Compliance Report
-    Batches: {data.batches}
-    Equipment: {data.equipment}
-    Issues: {data.issues}
-
 outputFormat:
   type: markdown
   sections:
-    - title: "Summary"
-    - title: "Risks"
-    - title: "Recommendations"
+    - title: "Safety Status Summary"
+    - title: "Batch Safety"
+    - title: "Equipment Safety"
+    - title: "Incident Analysis"
+    - title: "Risk Assessment"
+    - title: "Mitigation Actions"

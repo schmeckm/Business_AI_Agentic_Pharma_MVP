@@ -54,6 +54,11 @@ const PORT = process.env.PORT || 4000;
 const HOST = '0.0.0.0';
 
 // Middleware
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || 'http://localhost:4000',
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
 app.use(express.json());
 app.use(express.static('public'));
 app.use(
@@ -107,6 +112,8 @@ async function initializeSystem() {
       process.exit(1);
     }
 
+    await agentManager.initializePlatform();
+
     logger.info('✅ System initialization complete');
   } catch (err) {
     logger.error(`System init error: ${err.message}`, { stack: err.stack });
@@ -120,9 +127,21 @@ await initializeSystem();
 // ------------------------------------------------------------------------
 
 try {
+  // Load AgentType enhancement
   const agentEnhancer = enhanceServerWithAgentTypes(app, agentManager);
-  enhanceServerWithWhatIf(app, agentManager, agentEnhancer);
-  logger.info('✅ AgentTypes + WhatIf installed');
+  
+  // Load WhatIf enhancement and store the analyzer
+  const whatIfResult = enhanceServerWithWhatIf(app, agentManager, agentEnhancer);
+  app.locals.whatIfAnalyzer = whatIfResult?.whatIfAnalyzer || whatIfResult;
+  
+  // Store in app.locals for routes to access
+  if (whatIfResult && whatIfResult.whatIfAnalyzer) {
+    app.locals.whatIfAnalyzer = whatIfResult.whatIfAnalyzer;
+    logger.info('✅ AgentTypes + WhatIf installed');
+  } else {
+    logger.warn('⚠️ WhatIf analyzer not returned - feature may be limited');
+  }
+  
 } catch (err) {
   logger.error('AgentType/WhatIf error', err);
 }
@@ -161,7 +180,7 @@ app.use('/api/oee', createOEERoutes(dataManager, eventBusManager));
 app.use('/api/health', createHealthRoutes(agentManager, dataManager, eventBusManager));
 app.use('/api/agents', createAgentRoutes(agentManager));
 
-// Root-level Routes (Frontend compatibility)
+// Root-level Routes
 app.get('/templates', (req, res) => {
   const templates = agentManager.getTemplates();
   res.json({
@@ -171,7 +190,6 @@ app.get('/templates', (req, res) => {
   });
 });
 
-// Version endpoint
 app.get('/api/version', (req, res) => {
   res.json({
     version: packageJson.version,
@@ -180,15 +198,6 @@ app.get('/api/version', (req, res) => {
   });
 });
 
-const corsOptions = {
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || 'http://localhost:4000',
-  credentials: true,
-  optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
-
-// Agents YAML
 app.get('/agents.yaml', (req, res) => {
   const yamlPath = path.join(process.cwd(), 'agents.yaml');
   res.sendFile(yamlPath, (err) => {
@@ -198,6 +207,90 @@ app.get('/agents.yaml', (req, res) => {
     }
   });
 });
+
+// ------------------------------------------------------------------------
+// SERVER-SENT EVENTS (SSE) - SINGLE ENDPOINT
+// ------------------------------------------------------------------------
+
+const activeSSEConnections = new Set();
+
+app.get('/events', (req, res) => {
+  const clientIp = req.ip || req.connection.remoteAddress;
+  logger.info(`SSE connection established from ${clientIp}`);
+
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'Access-Control-Allow-Origin': '*',
+    'X-Accel-Buffering': 'no'
+  });
+
+  // Add to active connections
+  activeSSEConnections.add(res);
+
+  // Initial connection message
+  res.write(`data: ${JSON.stringify({ 
+    type: 'connected', 
+    message: 'SSE connection established',
+    timestamp: new Date().toISOString()
+  })}\n\n`);
+
+  // Heartbeat every 30 seconds
+  const heartbeatInterval = setInterval(() => {
+    if (!res.writableEnded) {
+      res.write(`data: ${JSON.stringify({ 
+        type: 'heartbeat', 
+        timestamp: new Date().toISOString()
+      })}\n\n`);
+    }
+  }, 30000);
+
+  // Forward system events to client
+  const eventHandler = (eventData) => {
+    try {
+      if (!res.writableEnded) {
+        res.write(`data: ${JSON.stringify({
+          type: 'system_event',
+          data: eventData,
+          timestamp: new Date().toISOString()
+        })}\n\n`);
+      }
+    } catch (error) {
+      logger.error(`Failed to send SSE event: ${error.message}`);
+    }
+  };
+
+  // Subscribe to events
+  if (eventBusManager && typeof eventBusManager.subscribe === 'function') {
+    eventBusManager.subscribe('agent/*', eventHandler);
+    eventBusManager.subscribe('oee/*', eventHandler);
+    eventBusManager.subscribe('system/*', eventHandler);
+  }
+
+  // Cleanup on disconnect
+  req.on('close', () => {
+    clearInterval(heartbeatInterval);
+    activeSSEConnections.delete(res);
+    
+    if (eventBusManager) {
+      if (typeof eventBusManager.unsubscribe === 'function') {
+        eventBusManager.unsubscribe('agent/*', eventHandler);
+        eventBusManager.unsubscribe('oee/*', eventHandler);
+        eventBusManager.unsubscribe('system/*', eventHandler);
+      }
+    }
+    
+    logger.info(`SSE connection closed from ${clientIp}`);
+  });
+});
+
+// System heartbeat
+setInterval(() => {
+  if (eventBusManager && typeof eventBusManager.publishEvent === 'function') {
+    eventBusManager.publishEvent('system/heartbeat', { status: 'alive' }, 'system');
+  }
+}, 30000);
 
 // ------------------------------------------------------------------------
 // ERROR HANDLING
@@ -222,68 +315,35 @@ app.use((err, req, res, next) => {
 });
 
 // ------------------------------------------------------------------------
-// SERVER-SENT EVENTS (SSE) - REALTIME EVENT STREAM
-// ------------------------------------------------------------------------
-
-const activeSSEConnections = new Set();
-
-app.get('/events', (req, res) => {
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
-  res.setHeader('X-Accel-Buffering', 'no'); // Disable nginx buffering
-  res.flushHeaders();
-
-  const onEvent = (event) => {
-    try {
-      res.write(`data: ${JSON.stringify(event)}\n\n`);
-    } catch (err) {
-      // Connection closed
-      cleanup();
-    }
-  };
-
-  const cleanup = () => {
-    eventBusManager.removeListener('event', onEvent);
-    activeSSEConnections.delete(res);
-    if (!res.writableEnded) res.end();
-  };
-
-  activeSSEConnections.add(res);
-  eventBusManager.on('event', onEvent);
-  
-  req.on('close', cleanup);
-  req.on('error', cleanup);
-  
-  // Send initial connection event
-  res.write(`data: ${JSON.stringify({
-    type: 'connected',
-    timestamp: new Date().toISOString()
-  })}\n\n`);
-});
-
-// Cleanup on shutdown
-process.on('SIGTERM', () => {
-  activeSSEConnections.forEach(res => {
-    if (!res.writableEnded) res.end();
-  });
-  activeSSEConnections.clear();
-});
-
-// Send heartbeat every 10 seconds to keep SSE connection alive
-setInterval(() => {
-  eventBusManager.publishEvent('system/heartbeat', { status: 'alive' }, 'system');
-}, 10000);
-
-// ------------------------------------------------------------------------
 // GRACEFUL SHUTDOWN
 // ------------------------------------------------------------------------
 
 function gracefulShutdown(signal) {
-  logger.info(`${signal} received, shutting down...`);
-  if (oeeSimulator) oeeSimulator.stop();
+  logger.info(`${signal} received, shutting down gracefully...`);
+  
+  // Close all SSE connections
+  activeSSEConnections.forEach(res => {
+    if (!res.writableEnded) {
+      res.write(`data: ${JSON.stringify({ type: 'shutdown' })}\n\n`);
+      res.end();
+    }
+  });
+  activeSSEConnections.clear();
+  
+  // Stop OEE simulator
+  if (oeeSimulator) {
+    oeeSimulator.stop();
+  }
+  
+  // Cleanup data manager
+  if (dataManager && typeof dataManager.cleanup === 'function') {
+    dataManager.cleanup();
+  }
+  
+  logger.info('Shutdown complete');
   process.exit(0);
 }
+
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
@@ -302,7 +362,7 @@ app.listen(PORT, HOST, () => {
   logger.info('  /api/health');
   logger.info('  /api/agents');
   logger.info('  /templates');
-  logger.info('  /events');
+  logger.info('  /events (SSE)');
   logger.info('  /api/version');
   logger.info('  /agents.yaml');
   logger.info('='.repeat(70));

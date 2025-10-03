@@ -1,0 +1,305 @@
+# ========================================================================
+# PLATFORM CONFIGURATION - ZERO HARDCODED LOGIC
+# ========================================================================
+# Define ALL platform behavior here - no code changes needed for customization
+# ========================================================================
+
+platform:
+  name: "Pharmaceutical AI Agent Platform"
+  version: "2.0"
+  domain: "pharmaceutical_manufacturing"
+  description: "Open platform for AI-driven manufacturing operations"
+
+# ========================================================================
+# AGENT TYPE DEFINITIONS
+# ========================================================================
+agentTypes:
+  data_collector:
+    description: "Collects and monitors data without decision logic"
+    capabilities:
+      - "data_retrieval"
+      - "monitoring"
+      - "reporting"
+    whatIfPrompt: |
+      You are a data collection agent providing factual information.
+      
+      **Your Task:**
+      1. Show current baseline data (before scenario)
+      2. Estimate what data would change under this scenario
+      3. Highlight key metrics that would be affected
+      4. Present data clearly for decision-making
+      
+      **Remember:** Focus on data presentation, not recommendations.
+      
+      Scenario: {scenario}
+      Available Data: {data}
+      Real-time Metrics: {realtimeOEE}
+    
+  rule_based:
+    description: "Applies rules and regulations via LLM interpretation"
+    capabilities:
+      - "rule_validation"
+      - "compliance_check"
+      - "risk_assessment"
+    whatIfPrompt: |
+      You are a rule-based agent applying regulations via LLM interpretation.
+      
+      **Your Task:**
+      1. Identify which rules/regulations apply to this scenario
+      2. Determine if the scenario violates any rules
+      3. Assess compliance risk level (low/medium/high/critical)
+      4. Suggest how to modify scenario to stay compliant
+      5. Provide clear pass/fail assessment with reasoning
+      
+      **Remember:** Apply rules but use LLM to interpret complex cases.
+      
+      Scenario: {scenario}
+      Compliance Data: {data}
+    
+  collaborative:
+    description: "Coordinates information from multiple sources and agents"
+    capabilities:
+      - "cross_agent_communication"
+      - "workflow_coordination"
+      - "information_synthesis"
+    whatIfPrompt: |
+      You coordinate information from multiple sources and agents.
+      
+      **Your Task:**
+      1. Analyze impact across all relevant areas:
+         - Production orders
+         - Quality assurance
+         - Compliance requirements
+         - Material availability
+      2. Identify which other agents/systems would be affected
+      3. Suggest coordination steps needed
+      4. Provide comprehensive system-wide impact assessment
+      
+      **Remember:** Consider the entire system, not just one area.
+      
+      Scenario: {scenario}
+      Multi-source Data: {data}
+    
+  proactive:
+    description: "Goal-oriented planning and optimization with alternatives"
+    capabilities:
+      - "planning"
+      - "optimization"
+      - "alternative_generation"
+      - "decision_support"
+    whatIfPrompt: |
+      You are goal-oriented and create alternative plans.
+      
+      **Your Task:**
+      1. Analyze how this scenario affects your goals
+      2. Create 2-3 alternative plans to handle this scenario
+      3. Evaluate each alternative against objectives
+      4. Recommend the best option with clear rationale
+      5. Explain trade-offs and risks
+      
+      **Remember:** Be proactive - suggest solutions, not just problems.
+      
+      Scenario: {scenario}
+      Context & Data: {data}
+      OEE Data for capacity planning: {realtimeOEE}
+    
+  learning:
+    description: "Learns from historical patterns to predict outcomes"
+    capabilities:
+      - "pattern_recognition"
+      - "prediction"
+      - "historical_analysis"
+      - "trend_analysis"
+    whatIfPrompt: |
+      You learn from historical data to predict outcomes.
+      
+      **Your Task:**
+      1. Search historical data for similar scenarios
+      2. Analyze outcomes from past similar situations
+      3. Predict likely outcome of this scenario
+      4. Provide confidence level based on historical patterns
+      5. Suggest adjustments based on learned patterns
+      
+      **Remember:** Use historical data to make informed predictions.
+      
+      Scenario: {scenario}
+      Historical Data: {data}
+      Previous Patterns: {previousPredictions}
+
+# ========================================================================
+# WHAT-IF TRIGGER PATTERNS
+# ========================================================================
+whatIfTriggers:
+  # User-initiated What-If queries
+  userPatterns:
+    - pattern: "what\\s+if"
+      language: "en"
+      description: "English what-if queries"
+    
+    - pattern: "was\\s+wäre\\s+wenn"
+      language: "de"
+      description: "German what-if queries"
+    
+    - pattern: "suppose"
+      language: "en"
+      description: "Suppose/hypothetical queries"
+    
+    - pattern: "angenommen"
+      language: "de"
+      description: "German hypothetical"
+    
+    - pattern: "scenario"
+      language: "en"
+      description: "Scenario analysis"
+    
+    - pattern: "szenario"
+      language: "de"
+      description: "German scenario"
+    
+    - pattern: "alternative"
+      language: "multi"
+      description: "Alternative analysis"
+
+  # Autonomous What-If triggering (for future Phase 2)
+  autonomousRules:
+    - name: "oee_degradation"
+      eventType: "oee/degradation"
+      condition: "event.data.oee < 70"
+      questionTemplate: "What if {line} OEE continues to degrade to {projected_value}%?"
+      priority: "high"
+    
+    - name: "order_risk"
+      eventType: "order/risk_detected"
+      condition: "event.data.risk_level > 0.7"
+      questionTemplate: "What if order {orderId} is delayed by {estimated_delay} hours?"
+      priority: "medium"
+
+# ========================================================================
+# SCENARIO PATTERN DEFINITIONS
+# ========================================================================
+scenarioPatterns:
+  - name: "oee_issue"
+    description: "Overall Equipment Effectiveness issues"
+    keywords:
+      - "oee"
+      - "equipment effectiveness"
+      - "availability"
+      - "performance"
+    agentSelection:
+      method: "tag_match"
+      tags: ["equipment", "operations", "oee"]
+      fallback: ["oeeAgent", "equipmentAgent"]
+  
+  - name: "delay"
+    description: "Schedule delays and postponements"
+    keywords:
+      - "delay"
+      - "postpone"
+      - "verschieben"
+      - "verschoben"
+      - "schedule"
+      - "reschedule"
+    agentSelection:
+      method: "tag_match"
+      tags: ["planning", "scheduling", "production", "briefing"]
+      fallback: ["orderAgent", "productionPlanningAgent", "briefingAgent"]
+  
+  - name: "material_shortage"
+    description: "Material and inventory shortages"
+    keywords:
+      - "material"
+      - "inventory"
+      - "bestand"
+      - "shortage"
+      - "mangel"
+      - "supply"
+    agentSelection:
+      method: "tag_match"
+      tags: ["supply_chain", "planning", "compliance", "production"]
+      fallback: ["orderAgent", "productionPlanningAgent", "complianceAgent"]
+  
+  - name: "process_change"
+    description: "Process parameter changes"
+    keywords:
+      - "temperature"
+      - "pressure"
+      - "parameter"
+      - "prozess"
+      - "process"
+    agentSelection:
+      method: "tag_match"
+      tags: ["quality", "assessment", "qa", "process"]
+      fallback: ["assessmentAgent", "qualityAgent"]
+  
+  - name: "quality_issue"
+    description: "Quality defects and contamination"
+    keywords:
+      - "quality"
+      - "defect"
+      - "fehler"
+      - "contamination"
+      - "qa"
+      - "out of spec"
+    agentSelection:
+      method: "tag_match"
+      tags: ["quality", "compliance", "assessment", "qa"]
+      fallback: ["qualityAgent", "complianceAgent", "assessmentAgent"]
+  
+  - name: "capacity_change"
+    description: "Production capacity changes"
+    keywords:
+      - "capacity"
+      - "increase"
+      - "decrease"
+      - "production"
+      - "throughput"
+    agentSelection:
+      method: "tag_match"
+      tags: ["planning", "production", "operations", "briefing"]
+      fallback: ["orderAgent", "productionPlanningAgent", "briefingAgent"]
+  
+  - name: "equipment_issue"
+    description: "Equipment breakdown and maintenance"
+    keywords:
+      - "equipment"
+      - "machine"
+      - "maintenance"
+      - "breakdown"
+      - "failure"
+      - "malfunction"
+    agentSelection:
+      method: "tag_match"
+      tags: ["equipment", "oee", "maintenance", "operations"]
+      fallback: ["equipmentAgent", "oeeAgent"]
+  
+  - name: "general"
+    description: "General scenarios without specific pattern match"
+    keywords: []
+    agentSelection:
+      method: "proactive_first"
+      tags: ["planning", "production"]
+      fallback: "all"
+      maxAgents: 2
+
+# ========================================================================
+# PLATFORM BEHAVIOR SETTINGS
+# ========================================================================
+behavior:
+  whatIfAnalysis:
+    parallelProcessing: true
+    cacheResults: true
+    cacheDuration: 300  # seconds
+    maxAgentsPerAnalysis: 5
+    timeout: 30000  # milliseconds
+    minAgents: 1  # minimum agents to consult
+  
+  agentCollaboration:
+    enableA2A: true
+    defaultTimeout: 10000
+    retryAttempts: 2
+    fallbackToEvents: true
+  
+  logging:
+    logScenarioMatching: true
+    logAgentSelection: true
+    logPerformanceMetrics: true

@@ -26,17 +26,53 @@ keywords:
   - "summary"
   - "briefing"
 
+# ⬇️ REQUIRED: Root-level promptTemplate
+promptTemplate: |
+  You are the Executive Briefing Agent for pharmaceutical manufacturing leadership.
+  
+  Current Time: {timestamp}
+  User Query: {userMessage}
+  
+  === PRODUCTION ORDERS ===
+  {data.orders}
+  
+  === REAL-TIME OEE ===
+  {data.oee_hot}
+  
+  === QUALITY STATUS ===
+  {data.qa}
+  
+  === ACTIVE ISSUES ===
+  {data.issues}
+  
+  === INSTRUCTIONS ===
+  Generate an executive-level briefing including:
+  
+  1. **Executive Summary** - Top 3 critical points requiring immediate attention
+  2. **Production Status** - Order fulfillment progress and capacity utilization
+  3. **Equipment Performance** - OEE trends and production bottlenecks
+  4. **Quality Overview** - QA status, compliance risks, batch releases
+  5. **Key Issues** - Active problems ranked by business impact
+  6. **Recommendations** - Strategic actions with priority levels
+  
+  Format: Concise, executive-friendly markdown. Use metrics, percentages, and clear action items.
+
 a2aCapabilities:
   - executiveSummary
 
 a2aPrompts:
   executiveSummary: |
     ## A2A Request: Executive Summary
+    Timestamp: {timestamp}
     Orders: {data.orders}
     OEE: {data.oee_hot}
     QA: {data.qa}
     Issues: {data.issues}
-    Respond with Markdown summary.
+    
+    Provide a concise executive summary in markdown format with:
+    - Key metrics
+    - Critical issues
+    - Recommended actions
 
 events:
   subscribes:
@@ -49,19 +85,12 @@ chainedAgents:
   - qualityAgent
   - oeeAgent
 
-promptTemplates:
-  default: |
-    ## Executive Briefing Report
-    Orders: {data.orders}
-    OEE: {data.oee_hot}
-    QA: {data.qa}
-    Issues: {data.issues}
-
 outputFormat:
   type: markdown
   sections:
-    - title: "Orders"
-    - title: "OEE"
-    - title: "QA"
-    - title: "Issues"
-    - title: "Summary"
+    - title: "Executive Summary"
+    - title: "Production Status"
+    - title: "Equipment Performance"
+    - title: "Quality Overview"
+    - title: "Key Issues"
+    - title: "Recommendations"

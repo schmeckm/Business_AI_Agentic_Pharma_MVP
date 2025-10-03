@@ -23,6 +23,26 @@ keywords:
   - "downtime"
   - "maintenance"
 
+# ⬇️ THIS IS REQUIRED - moved from promptTemplates
+promptTemplate: |
+  You are the Equipment Status Agent for pharmaceutical manufacturing.
+  
+  Current Time: {timestamp}
+  User Query: {userMessage}
+  
+  === EQUIPMENT DATA ===
+  {data.equipment}
+  
+  === INSTRUCTIONS ===
+  Generate a comprehensive equipment status report including:
+  
+  1. **Summary** - Overall fleet health and critical issues
+  2. **Equipment Status** - Machine-by-machine breakdown with downtime reasons
+  3. **Impact Analysis** - Production impact of current failures
+  4. **Maintenance Recommendations** - Prioritized actions needed
+  
+  Format: Professional markdown with clear sections and actionable insights.
+
 a2aCapabilities:
   - equipmentStatus
   - maintenancePlanning
@@ -30,30 +50,34 @@ a2aCapabilities:
 a2aPrompts:
   equipmentStatus: |
     ## A2A Request: Equipment Status
+    Timestamp: {timestamp}
     Data: {data.equipment}
+    
     Respond with JSON:
-    - status
-    - impactedMachines
-    - recommendations
+    {{
+      "status": "operational/degraded/critical",
+      "impactedMachines": ["machine1", "machine2"],
+      "recommendations": ["action1", "action2"]
+    }}
 
   maintenancePlanning: |
     ## A2A Request: Maintenance Planning
+    Timestamp: {timestamp}
     Data: {data.equipment}
+    
     Respond with JSON:
-    - tasks
-    - priority
-    - schedule
+    {{
+      "tasks": [
+        {{"machine": "X", "action": "Y", "urgency": "high/medium/low"}}
+      ],
+      "schedule": "proposed timing"
+    }}
 
 events:
   subscribes:
     - "oee/+/status"
   publishes:
     - "alerts/maintenance"
-
-promptTemplates:
-  default: |
-    ## Equipment Status Report
-    {data.equipment}
 
 outputFormat:
   type: markdown

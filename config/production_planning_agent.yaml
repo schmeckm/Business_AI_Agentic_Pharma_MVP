@@ -28,6 +28,31 @@ keywords:
   - "order"
   - "bottleneck"
 
+# ⬇️ REQUIRED: Root-level promptTemplate
+promptTemplate: |
+  You are the Production Planning Agent for pharmaceutical manufacturing.
+  
+  Current Time: {timestamp}
+  User Query: {userMessage}
+  
+  === PRODUCTION ORDERS ===
+  {data.orders}
+  
+  === BATCH STATUS ===
+  {data.batches}
+  
+  === INSTRUCTIONS ===
+  Generate a comprehensive production planning report including:
+  
+  1. **Order Status** - Current production schedule and progress
+  2. **Capacity Analysis** - Available capacity vs. demand
+  3. **Bottleneck Identification** - Resource constraints and conflicts
+  4. **Risk Assessment** - Potential delays and their impact
+  5. **Optimization Recommendations** - Rescheduling and resource reallocation suggestions
+  
+  Format: Professional markdown with clear sections, priorities, and actionable recommendations.
+  Focus: Maximize throughput while maintaining GMP compliance and quality standards.
+
 a2aCapabilities:
   - productionSchedule
   - capacityCheck
@@ -35,21 +60,30 @@ a2aCapabilities:
 a2aPrompts:
   productionSchedule: |
     ## A2A Request: Production Schedule
+    Timestamp: {timestamp}
     Orders: {data.orders}
+    
     Respond with JSON:
-    - scheduledOrders
-    - conflicts
-    - bottlenecks
-    - recommendations
+    {{
+      "scheduledOrders": ["order1", "order2"],
+      "conflicts": ["conflict description"],
+      "bottlenecks": ["resource name"],
+      "recommendations": ["action1", "action2"]
+    }}
 
   capacityCheck: |
     ## A2A Request: Capacity Check
+    Timestamp: {timestamp}
     Orders: {data.orders}
     Batches: {data.batches}
+    
     Respond with JSON:
-    - availableCapacity
-    - overloadRisks
-    - mitigationSteps
+    {{
+      "availableCapacity": 85,
+      "utilizationPercent": 72,
+      "overloadRisks": ["risk description"],
+      "mitigationSteps": ["step1", "step2"]
+    }}
 
 events:
   subscribes:
@@ -64,51 +98,11 @@ chainedAgents:
   - equipmentAgent
   - oeeAgent
 
-promptTemplates:
-  whatIf: |
-    ## What-If Analysis (Production)
-
-    Question: {userMessage}
-
-    {% if data.orders and data.orders|length > 0 %}
-    **Orders Context:**
-    {data.orders}
-    {% else %}
-    ⚠️ No production orders available in the system.
-    {% endif %}
-
-    {% if data.batches and data.batches|length > 0 %}
-    **Batch Status:**
-    {data.batches}
-    {% else %}
-    ⚠️ No batch data currently available.
-    {% endif %}
-
-    ---
-    Please:
-    - Analyze the impact of the proposed scenario
-    - Suggest scheduling adjustments
-    - Propose alternative production sequences
-    - Recommend resource allocation
-    - Highlight risks and opportunities
-
-  default: |
-    ## Production Planning Report
-
-    Orders:
-    {data.orders}
-
-    Batches:
-    {data.batches}
-
-    Recommendations:
-    - Identify bottlenecks
-    - Suggest rescheduling
-    - Optimize resources
-
 outputFormat:
   type: markdown
   sections:
-    - title: "Impact"
+    - title: "Order Status"
+    - title: "Capacity Analysis"
+    - title: "Bottlenecks"
+    - title: "Risk Assessment"
     - title: "Recommendations"
-    - title: "Data Gaps"

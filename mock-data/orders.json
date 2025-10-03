@@ -2,181 +2,318 @@
   {
     "orderId": "ORD-1000",
     "material": "FG-001",
+    "productName": "Aspirin 100mg Tablets",
     "qty": 100,
     "market": "EU",
     "status": "created",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "medium"
   },
   {
     "orderId": "ORD-1001",
     "material": "FG-002",
+    "productName": "Metformin 500mg Tablets",
     "qty": 200,
     "market": "US",
     "status": "released",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "high",
+    "currentAssignment": {
+      "line": "LINE-02",
+      "scheduledDate": "2025-10-03",
+      "shift": "Night",
+      "startTime": "20:00",
+      "endTime": "04:00"
+    }
   },
   {
     "orderId": "ORD-1002",
     "material": "FG-003",
+    "productName": "Lisinopril 10mg Tablets",
     "qty": 300,
     "market": "ROW",
     "status": "in_progress",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "high",
+    "currentAssignment": {
+      "line": "LINE-01",
+      "scheduledDate": "2025-10-03",
+      "shift": "Day",
+      "startTime": "08:00",
+      "endTime": "16:00",
+      "progress": 45
+    }
   },
   {
     "orderId": "ORD-1003",
     "material": "FG-004",
+    "productName": "Amoxicillin 250mg Capsules",
     "qty": 400,
     "market": "EU",
     "status": "created",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "low"
   },
   {
     "orderId": "ORD-1004",
     "material": "FG-005",
+    "productName": "Omeprazole 20mg Capsules",
     "qty": 500,
     "market": "US",
     "status": "released",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "medium",
+    "currentAssignment": {
+      "line": "LINE-04",
+      "scheduledDate": "2025-10-04",
+      "shift": "Day",
+      "startTime": "08:00",
+      "endTime": "16:00"
+    }
   },
   {
     "orderId": "ORD-1005",
     "material": "FG-006",
+    "productName": "Atorvastatin 40mg Tablets",
     "qty": 600,
     "market": "ROW",
     "status": "in_progress",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "high",
+    "currentAssignment": {
+      "line": "LINE-03",
+      "scheduledDate": "2025-10-03",
+      "shift": "Day",
+      "startTime": "06:00",
+      "endTime": "14:00",
+      "progress": 72
+    }
   },
   {
     "orderId": "ORD-1006",
     "material": "FG-007",
+    "productName": "Levothyroxine 50mcg Tablets",
     "qty": 700,
     "market": "EU",
     "status": "created",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "medium"
   },
   {
     "orderId": "ORD-1007",
     "material": "FG-008",
+    "productName": "Amlodipine 5mg Tablets",
     "qty": 800,
     "market": "US",
     "status": "released",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "high",
+    "currentAssignment": {
+      "line": "LINE-01",
+      "scheduledDate": "2025-10-03",
+      "shift": "Night",
+      "startTime": "16:00",
+      "endTime": "00:00"
+    }
   },
   {
     "orderId": "ORD-1008",
     "material": "FG-009",
+    "productName": "Simvastatin 20mg Tablets",
     "qty": 900,
     "market": "ROW",
     "status": "in_progress",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "medium",
+    "currentAssignment": {
+      "line": "LINE-05",
+      "scheduledDate": "2025-10-03",
+      "shift": "Day",
+      "startTime": "08:00",
+      "endTime": "16:00",
+      "progress": 28
+    }
   },
   {
     "orderId": "ORD-1009",
     "material": "FG-010",
+    "productName": "Losartan 50mg Tablets",
     "qty": 1000,
     "market": "EU",
     "status": "created",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "low"
   },
   {
     "orderId": "ORD-1010",
     "material": "FG-011",
+    "productName": "Gabapentin 300mg Capsules",
     "qty": 1100,
     "market": "US",
     "status": "released",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "medium",
+    "currentAssignment": {
+      "line": "LINE-06",
+      "scheduledDate": "2025-10-04",
+      "shift": "Day",
+      "startTime": "08:00",
+      "endTime": "16:00"
+    }
   },
   {
     "orderId": "ORD-1011",
     "material": "FG-012",
+    "productName": "Sertraline 50mg Tablets",
     "qty": 1200,
     "market": "ROW",
     "status": "in_progress",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "high",
+    "currentAssignment": {
+      "line": "LINE-02",
+      "scheduledDate": "2025-10-03",
+      "shift": "Day",
+      "startTime": "08:00",
+      "endTime": "16:00",
+      "progress": 61
+    }
   },
   {
     "orderId": "ORD-1012",
     "material": "FG-013",
+    "productName": "Clopidogrel 75mg Tablets",
     "qty": 1300,
     "market": "EU",
     "status": "created",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "medium"
   },
   {
     "orderId": "ORD-1013",
     "material": "FG-014",
+    "productName": "Furosemide 40mg Tablets",
     "qty": 1400,
     "market": "US",
     "status": "released",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "high",
+    "currentAssignment": {
+      "line": "LINE-03",
+      "scheduledDate": "2025-10-03",
+      "shift": "Night",
+      "startTime": "14:00",
+      "endTime": "22:00"
+    }
   },
   {
     "orderId": "ORD-1014",
     "material": "FG-015",
+    "productName": "Pantoprazole 40mg Tablets",
     "qty": 1500,
     "market": "ROW",
     "status": "in_progress",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "high",
+    "currentAssignment": {
+      "line": "LINE-04",
+      "scheduledDate": "2025-10-03",
+      "shift": "Day",
+      "startTime": "06:00",
+      "endTime": "14:00",
+      "progress": 83
+    }
   },
   {
     "orderId": "ORD-1015",
     "material": "FG-016",
+    "productName": "Metoprolol 50mg Tablets",
     "qty": 1600,
     "market": "EU",
     "status": "created",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "low"
   },
   {
     "orderId": "ORD-1016",
     "material": "FG-017",
+    "productName": "Escitalopram 10mg Tablets",
     "qty": 1700,
     "market": "US",
     "status": "released",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "medium",
+    "currentAssignment": {
+      "line": "LINE-05",
+      "scheduledDate": "2025-10-04",
+      "shift": "Day",
+      "startTime": "08:00",
+      "endTime": "16:00"
+    }
   },
   {
     "orderId": "ORD-1017",
     "material": "FG-018",
+    "productName": "Tramadol 50mg Capsules",
     "qty": 1800,
     "market": "ROW",
     "status": "in_progress",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "high",
+    "currentAssignment": {
+      "line": "LINE-06",
+      "scheduledDate": "2025-10-03",
+      "shift": "Day",
+      "startTime": "08:00",
+      "endTime": "16:00",
+      "progress": 15
+    }
   },
   {
     "orderId": "ORD-1018",
     "material": "FG-019",
+    "productName": "Prednisone 20mg Tablets",
     "qty": 1900,
     "market": "EU",
     "status": "created",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "medium"
   },
   {
     "orderId": "ORD-1019",
     "material": "FG-020",
+    "productName": "Montelukast 10mg Tablets",
     "qty": 2000,
     "market": "US",
     "status": "released",
     "startDate": "2025-10-02",
-    "endDate": "2025-11-30"
+    "endDate": "2025-11-30",
+    "priority": "high",
+    "currentAssignment": {
+      "line": "LINE-02",
+      "scheduledDate": "2025-10-04",
+      "shift": "Night",
+      "startTime": "16:00",
+      "endTime": "00:00"
+    }
   }
 ]

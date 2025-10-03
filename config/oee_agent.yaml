@@ -16,6 +16,10 @@ rolesAllowed:
 trigger:
   - "oee report"
   - "oee status"
+  - "oee"
+  - "equipment effectiveness"
+  - "line performance"
+  - "Generate comprehensive OEE"
 
 dataSource:
   - "oee_hot"
@@ -29,6 +33,34 @@ keywords:
   - "machine efficiency"
   - "line"
 
+# ⚠️ CRITICAL: This is what AgentManager.processAgent() uses
+promptTemplate: |
+  You are the OEE Executive Agent for pharmaceutical manufacturing.
+  
+  Current Time: {timestamp}
+  User Query: {userMessage}
+  
+  === REAL-TIME OEE DATA ===
+  {data.oee_hot}
+  
+  === ACTIVE PRODUCTION ORDERS ===
+  {data.orders}
+  
+  === HISTORICAL OEE BENCHMARKS ===
+  {data.oee_history}
+  
+  === INSTRUCTIONS ===
+  Generate a comprehensive OEE Executive Report including:
+  
+  1. **Current OEE Status** - Line-by-line breakdown with OEE, Availability, Performance, Quality
+  2. **Active Production Orders** - Which orders are running on which lines
+  3. **24-Hour Trends** - Compare current metrics to historical averages
+  4. **Performance Insights** - Identify best/worst performing lines
+  5. **Recommendations** - Actionable steps to improve OEE
+  
+  Format: Professional markdown with clear sections and data tables.
+  Focus: Real-time metrics, historical context, actionable insights.
+
 a2aCapabilities:
   - oeeSnapshot
   - oeeComparison
@@ -36,49 +68,72 @@ a2aCapabilities:
 a2aPrompts:
   oeeSnapshot: |
     ## A2A Request: OEE Snapshot
-    Data: {data.oee_hot}
+    Timestamp: {timestamp}
+    Data: {data}
+    
     Respond with JSON:
-    - line
-    - oee
-    - availability
-    - performance
-    - quality
+    {{
+      "line": "LINE-XX",
+      "oee": 0.00,
+      "availability": 0.00,
+      "performance": 0.00,
+      "quality": 0.00,
+      "status": "running/idle/maintenance"
+    }}
 
   oeeComparison: |
     ## A2A Request: OEE Comparison
+    Timestamp: {timestamp}
     Realtime: {data.oee_hot}
     History: {data.oee_history}
+    
     Respond with JSON:
-    - line
-    - currentOEE
-    - historicalAvg
-    - deviation
-    - recommendations
+    {{
+      "line": "LINE-XX",
+      "currentOEE": 0.00,
+      "historicalAvg": 0.00,
+      "deviation": 0.00,
+      "trend": "improving/declining/stable",
+      "recommendations": ["action1", "action2"]
+    }}
 
 events:
   subscribes:
     - "plc/+/status"
+    - "oee/updated"
   publishes:
     - "alerts/oee"
+    - "reports/oee"
 
 chainedAgents:
   - productionPlanningAgent
   - equipmentAgent
 
+# Additional prompt templates (optional, for future use)
 promptTemplates:
-  default: |
-    ## OEE Executive Report
-    {data.oee_hot}
-
   whatIf: |
     ## What-If Analysis (OEE)
-    Question: {userMessage}
-    OEE: {data.oee_hot}
-    History: {data.oee_history}
+    Scenario: {userMessage}
+    
+    Current OEE State:
+    {data.oee_hot}
+    
+    Historical Context:
+    {data.oee_history}
+    
+    Analyze the impact of this scenario on:
+    - Production output
+    - Equipment utilization
+    - Order fulfillment
+    - Resource allocation
+    
+    Provide risk assessment and mitigation strategies.
 
 outputFormat:
   type: markdown
   sections:
-    - title: "Summary"
-    - title: "Impact"
+    - title: "Executive Summary"
+    - title: "Real-Time Metrics"
+    - title: "Historical Comparison"
+    - title: "Impact Analysis"
     - title: "Recommendations"
