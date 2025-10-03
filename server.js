@@ -268,6 +268,10 @@ app.get('/events', (req, res) => {
     eventBusManager.subscribe('system/*', eventHandler);
   }
 
+// MQTT Messages (If needed)
+
+eventBusManager.subscribe('mqtt/*', eventHandler);  // ← Alle MQTT Messages
+
   // Cleanup on disconnect
   req.on('close', () => {
     clearInterval(heartbeatInterval);

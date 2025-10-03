@@ -118,6 +118,27 @@ class DataManager {
     logger.info("⚙️ Default config applied");
   }
 
+  // In der handleOEEMessage Methode
+handleOEEMessage(topic, message) {
+  try {
+    const data = JSON.parse(message.toString());
+    
+    // Bestehender Code...
+    this.realtimeOEEData.set(lineId, oeeMetrics);
+    
+    // NEU: Publiziere RAW MQTT Message
+    if (this.eventBusManager) {
+      this.eventBusManager.publishEvent(`mqtt/${topic}`, {
+        topic,
+        payload: data,
+        timestamp: new Date().toISOString()
+      }, 'mqtt');
+    }
+  } catch (err) {
+    // ...
+  }
+}
+
   // ------------------------------------------------------------------------
   // Daten Laden + Cache
   // ------------------------------------------------------------------------
