@@ -13,6 +13,7 @@ import { BufferMemory } from 'langchain/memory';
 import path from 'path';
 import { createRequire } from 'module';
 import rateLimit from 'express-rate-limit';
+import cors from 'cors';
 
 // Core components
 import { EventBusManager } from './src/eventBus/EventBusManager.js';
@@ -179,6 +180,14 @@ app.get('/api/version', (req, res) => {
   });
 });
 
+const corsOptions = {
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || 'http://localhost:4000',
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
 // Agents YAML
 app.get('/agents.yaml', (req, res) => {
   const yamlPath = path.join(process.cwd(), 'agents.yaml');
@@ -195,35 +204,70 @@ app.get('/agents.yaml', (req, res) => {
 // ------------------------------------------------------------------------
 
 app.use((err, req, res, next) => {
-  logger.error('Unhandled error', {
-    message: err.message,
+  logger.error('Error:', { 
+    message: err.message, 
     stack: err.stack,
-    url: req.url,
-    method: req.method,
+    url: req.url 
   });
-  res.status(500).json({ error: 'Internal server error' });
+  
+  const response = {
+    error: 'Internal server error',
+    ...(process.env.NODE_ENV === 'development' && {
+      details: err.message,
+      stack: err.stack
+    })
+  };
+  
+  res.status(err.status || 500).json(response);
 });
 
 // ------------------------------------------------------------------------
 // SERVER-SENT EVENTS (SSE) - REALTIME EVENT STREAM
 // ------------------------------------------------------------------------
 
+const activeSSEConnections = new Set();
+
 app.get('/events', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no'); // Disable nginx buffering
   res.flushHeaders();
 
   const onEvent = (event) => {
-    res.write(`data: ${JSON.stringify(event)}\n\n`);
+    try {
+      res.write(`data: ${JSON.stringify(event)}\n\n`);
+    } catch (err) {
+      // Connection closed
+      cleanup();
+    }
   };
 
-  eventBusManager.on('event', onEvent);
-
-  req.on('close', () => {
+  const cleanup = () => {
     eventBusManager.removeListener('event', onEvent);
-    res.end();
+    activeSSEConnections.delete(res);
+    if (!res.writableEnded) res.end();
+  };
+
+  activeSSEConnections.add(res);
+  eventBusManager.on('event', onEvent);
+  
+  req.on('close', cleanup);
+  req.on('error', cleanup);
+  
+  // Send initial connection event
+  res.write(`data: ${JSON.stringify({
+    type: 'connected',
+    timestamp: new Date().toISOString()
+  })}\n\n`);
+});
+
+// Cleanup on shutdown
+process.on('SIGTERM', () => {
+  activeSSEConnections.forEach(res => {
+    if (!res.writableEnded) res.end();
   });
+  activeSSEConnections.clear();
 });
 
 // Send heartbeat every 10 seconds to keep SSE connection alive

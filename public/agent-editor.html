@@ -745,21 +745,51 @@
       loadVersionInfo();
       setInterval(updateHealthIndicator, 30000);
 
-      // Initialize Agent Editor
-      agentEditor = CodeMirror.fromTextArea(document.getElementById("agentYamlEditor"), {
-        mode: "yaml",
-        theme: "dracula",
-        lineNumbers: true,
-        indentUnit: 2,
-        tabSize: 2,
-        lineWrapping: true,
-        matchBrackets: true,
-        autoCloseBrackets: true
-      });
+    try {
+  if (typeof CodeMirror === 'undefined') {
+    throw new Error('CodeMirror not loaded');
+  }
+  
+  agentEditor = CodeMirror.fromTextArea(
+    document.getElementById("agentYamlEditor"), 
+    {
+      mode: "yaml",
+      theme: "dracula",
+      lineNumbers: true,
+      indentUnit: 2,
+      tabSize: 2,
+      lineWrapping: true,
+      matchBrackets: true,
+      autoCloseBrackets: true
+    }
+  );
+  
+    let changeTimeout;
+agentEditor.on("change", () => {
+  clearTimeout(changeTimeout);
+  changeTimeout = setTimeout(() => {
+    document.getElementById('saveAgentBtn').disabled = false;
+    // Optional: Auto-validate
+    validateAgentYaml();
+  }, 500); // Debounce 500ms
+});
+} catch (error) {
+  console.error('CodeMirror initialization failed:', error);
+  alert('Editor failed to load. Please refresh the page.');
+}  // Initialize Agent Editor
+    
+    
+      let changeTimeout;
+agentEditor.on("change", () => {
+  clearTimeout(changeTimeout);
+  changeTimeout = setTimeout(() => {
+    document.getElementById('saveAgentBtn').disabled = false;
+    // Optional: Auto-validate
+    validateAgentYaml();
+  }, 500); // Debounce 500ms
+});
 
-      agentEditor.on("change", () => {
-        document.getElementById('saveAgentBtn').disabled = false;
-      });
+
 
       // Initialize Query Editor
       queryEditor = CodeMirror.fromTextArea(document.getElementById("queryYamlEditor"), {
@@ -936,23 +966,34 @@ promptTemplate: |
     }
 
     async function displayFullAgentYaml() {
-      try {
-        setStatus('Loading full agents.yaml...', 'loading');
-        const response = await fetch('/agents.yaml');
-        if (response.ok) {
-          const yamlContent = await response.text();
-          const title = document.getElementById('agentEditorTitle');
-          title.textContent = 'Full agents.yaml configuration';
-          agentEditor.setValue(yamlContent);
-          setStatus('Full YAML loaded successfully', 'success');
-        } else {
-          setStatus('Full YAML file not available', 'error');
-        }
-      } catch (error) {
-        setStatus('Failed to load full YAML: ' + error.message, 'error');
-      }
+  try {
+    setStatus('Loading full agents.yaml...', 'loading');
+    
+    const response = await fetch('/agents.yaml');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
     }
+    
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let yamlContent = '';
+    
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      yamlContent += decoder.decode(value, { stream: true });
+    }
+    
+    agentEditor.setValue(yamlContent);
+    setStatus('Full YAML loaded successfully', 'success');
+  } catch (error) {
+    setStatus('Failed to load full YAML: ' + error.message, 'error');
+  }
+}
 
+
+    
     function setAgentView(view) {
       document.querySelectorAll('#agents-tab .toggle-btn').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
@@ -994,15 +1035,8 @@ promptTemplate: |
     }
 
 async function saveAgentChanges() {
-  const content = agentEditor.getValue();
-  
   if (!validateAgentYaml()) {
     setStatus('❌ Save aborted: YAML not valid', 'error');
-    return;
-  }
-  
-  if (!currentAgent || !currentAgent.id) {
-    setStatus('❌ No agent selected', 'error');
     return;
   }
   
@@ -1011,36 +1045,28 @@ async function saveAgentChanges() {
     
     const response = await fetch(`/api/agents/${currentAgent.id}`, {
       method: 'PUT',
-      headers: { 
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ 
-        yaml: content 
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ yaml: agentEditor.getValue() })
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
     
     const result = await response.json();
     
     if (result.success) {
       setStatus('✅ Agent saved successfully', 'success');
       document.getElementById('saveAgentBtn').disabled = true;
-      
-      // Optional: Agents neu laden um Änderungen anzuzeigen
       await loadAgents();
-      
-      // Optional: Backup-Info in Console
-      if (result.backupPath) {
-        console.log('Backup created:', result.backupPath);
-      }
     } else {
-      setStatus('❌ Save failed: ' + result.message, 'error');
+      throw new Error(result.message || 'Unknown error');
     }
   } catch (error) {
-    setStatus('❌ Error saving: ' + error.message, 'error');
-    console.error('Save error:', error);
+    setStatus(`❌ Save failed: ${error.message}`, 'error');
+    console.error('Agent save error:', error);
   }
 }
-
 
     async function reloadAgents() {
       try {

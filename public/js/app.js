@@ -16,8 +16,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Prompt-Hilfe Event Listeners hinzufügen
   setupPromptHelpers();
+  const cache = {
+  health: { data: null, timestamp: 0, ttl: 30000 }
+};
 
-  setInterval(updateHealthIndicator, 30000);
+async function updateHealthIndicator() {
+  const now = Date.now();
+  
+  // Use cached data if fresh
+  if (cache.health.data && (now - cache.health.timestamp) < cache.health.ttl) {
+    updateHealthDisplay(cache.health.data);
+    return;
+  }
+  
+  try {
+    const response = await fetch('/api/health');
+    const health = await response.json();
+    
+    cache.health = { data: health, timestamp: now, ttl: 30000 };
+    updateHealthDisplay(health);
+  } catch (error) {
+    console.error('Health check failed:', error);
+  }
+}
+
   setInterval(refreshBackgroundData, 30000);
 });
 

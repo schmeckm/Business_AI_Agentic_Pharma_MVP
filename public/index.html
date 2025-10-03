@@ -662,9 +662,14 @@ OEE MQTT Integration: LIVE (3s updates)</div>
     </div>
   </div>
 <script>
-function showSpinner(show) {
-  const spinner = document.getElementById('spinner');
-  if (spinner) spinner.style.display = show ? 'inline-block' : 'none';
+  
+function showSpinner(show, container = 'spinner') {
+  const spinner = document.getElementById(container);
+  if (!spinner) {
+    console.warn(`Spinner element '${container}' not found`);
+    return;
+  }
+  spinner.style.display = show ? 'inline-block' : 'none';
 }
 
 // Load Quick Queries from YAML

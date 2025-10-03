@@ -89,27 +89,35 @@ class EventMonitor {
    * Add an event to the list and render
    * @private
    */
-  addEvent(event) {
-    this.events.push(event);
-    this.render();
+addEvent(event) {
+  this.events.push(event);
+  
+  // Limit to last 100 events
+  if (this.events.length > 100) {
+    this.events.shift();
   }
+  
+  this.render();
+}
 
   /**
    * Render all events
    */
   render() {
-    const monitor = document.getElementById('event-monitor');
-    if (!monitor) return;
+  const monitor = document.getElementById('event-monitor');
+  if (!monitor) return;
 
-    monitor.innerHTML = '';
-
-    this.events.forEach(event => {
-      const element = this.createEventElement(event);
-      monitor.appendChild(element);
-    });
-
-    monitor.scrollTop = monitor.scrollHeight;
-  }
+  const fragment = document.createDocumentFragment();
+  
+  this.events.forEach(event => {
+    const element = this.createEventElement(event);
+    fragment.appendChild(element);
+  });
+  
+  monitor.innerHTML = '';
+  monitor.appendChild(fragment);
+  monitor.scrollTop = monitor.scrollHeight;
+}
 
   /**
    * Create a DOM element for an event

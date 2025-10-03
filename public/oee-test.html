@@ -464,7 +464,17 @@
     // ===============================
     // MQTT OEE MONITOR
     // ===============================
-    const client = mqtt.connect("wss://broker.hivemq.com:8884/mqtt");
+    const MQTT_CONFIG = {
+  broker: window.MQTT_BROKER_URL || "wss://broker.hivemq.com:8884/mqtt",
+  reconnectPeriod: 5000,
+  connectTimeout: 30000
+};
+
+const client = mqtt.connect(MQTT_CONFIG.broker, {
+  reconnectPeriod: MQTT_CONFIG.reconnectPeriod,
+  connectTimeout: MQTT_CONFIG.connectTimeout
+});
+
     const linesDiv = document.getElementById("lines");
     const connectionStatus = document.getElementById("connection-status");
     const lineData = {};
