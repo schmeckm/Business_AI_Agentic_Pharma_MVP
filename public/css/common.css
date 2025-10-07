@@ -1,0 +1,435 @@
+/* ========================================================================
+   COMMON STYLES - Pharmaceutical Manufacturing Agent Framework
+   ========================================================================
+   Shared styles for all HTML pages (header, navigation, buttons, etc.)
+   Version: 1.0.0
+   ======================================================================== */
+
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #f5f7fa;
+  color: #333;
+}
+
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  background: white;
+  min-height: 100vh;
+}
+
+/* ========================================================================
+   UNIVERSAL HEADER STYLES
+   ======================================================================== */
+.header {
+  background: linear-gradient(135deg, #0a2540 0%, #2563eb 100%);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.phase-badge {
+  background: #2563eb;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 10px;
+  margin-left: 6px;
+  display: inline-block;
+}
+
+.header-subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-top: 5px;
+}
+
+/* Health Indicator */
+.health-indicator {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  background: white;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.health-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 5px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 12px;
+}
+
+.health-green { color: #28a745; }
+.health-yellow { color: #ffc107; }
+.health-red { color: #dc3545; }
+.health-gray { color: #6c757d; }
+
+/* ========================================================================
+   NAVIGATION STYLES
+   ======================================================================== */
+.nav-menu { 
+  background: #f8f9fa; 
+  padding: 10px 20px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.nav-links { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 10px; 
+}
+
+.nav-link { 
+  background: #007bff; 
+  color: white; 
+  padding: 6px 12px; 
+  text-decoration: none; 
+  border-radius: 4px; 
+  font-size: 12px; 
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-link:hover { 
+  background: #0056b3; 
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-link.oee { background: #28a745; }
+.nav-link.oee:hover { background: #1e7e34; }
+.nav-link.editor { background: #6f42c1; }
+.nav-link.editor:hover { background: #5a32a3; }
+.nav-link.active { 
+  background: #1d4ed8 !important; 
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* ========================================================================
+   PAGE HEADER
+   ======================================================================== */
+.page-header {
+  margin: 20px 20px 0 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.page-header h2 {
+  margin: 0;
+  color: #0a2540;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.page-header p {
+  margin: 5px 0 0 0;
+  color: #666;
+  font-size: 13px;
+}
+
+/* Page Header with Actions (two-column layout) */
+.page-header.with-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-header-text h2 {
+  margin: 0;
+  color: #0a2540;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.page-header-text p {
+  margin: 5px 0 0 0;
+  color: #666;
+  font-size: 13px;
+}
+
+.page-header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ========================================================================
+   BUTTON STYLES
+   ======================================================================== */
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+.btn-success {
+  background: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #218838;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+.btn-warning {
+  background: #ffc107;
+  color: #333;
+}
+
+.btn-warning:hover {
+  background: #e0a800;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+/* ========================================================================
+   STATISTICS CARDS
+   ======================================================================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+.stat-card {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #6c757d;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0a2540;
+}
+
+.stat-card.success .stat-value { color: #28a745; }
+.stat-card.error .stat-value { color: #dc3545; }
+.stat-card.warning .stat-value { color: #ffc107; }
+.stat-card.info .stat-value { color: #007bff; }
+
+/* ========================================================================
+   FILTER BAR
+   ======================================================================== */
+.filter-bar {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.filter-select, .filter-input {
+  padding: 6px 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 13px;
+  background: white;
+}
+
+/* ========================================================================
+   TAB SYSTEM
+   ======================================================================== */
+.tab-container {
+  background: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  padding: 0 20px;
+}
+
+.tabs {
+  display: flex;
+  gap: 5px;
+}
+
+.tab {
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: #495057;
+  background: rgba(0,123,255,0.05);
+}
+
+.tab.active {
+  color: #007bff;
+  border-bottom-color: #007bff;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ========================================================================
+   UTILITY CLASSES
+   ======================================================================== */
+.timestamp {
+  font-size: 11px;
+  color: #6c757d;
+  font-family: 'Courier New', monospace;
+}
+
+.user-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #e7f3ff;
+  color: #0066cc;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.loading {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ========================================================================
+   RESPONSIVE DESIGN
+   ======================================================================== */
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .header h1 {
+    font-size: 18px;
+  }
+
+  .health-indicator {
+    position: static;
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .nav-links {
+    flex-direction: column;
+  }
+
+  .page-header.with-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
