@@ -432,4 +432,59 @@ body {
     flex-direction: column;
     align-items: flex-start;
   }
+/* ========================================================================
+   WHAT-IF ANALYSIS RESPONSE FORMATTING
+   ======================================================================== */
+.response-content h1 {
+  font-weight: bold !important;
+  margin: 0 0 15px 0 !important;
+  text-indent: 0 !important;
+  padding-left: 0 !important;
+  color: #0a2540 !important;
+  border-bottom: 2px solid #e0e0e0 !important;
+  padding-bottom: 8px !important;
+  font-size: 18px !important;
+}
+
+.response-content h2 {
+  font-weight: 600 !important;
+  margin: 20px 0 10px 0 !important;
+  color: #333 !important;
+  font-size: 16px !important;
+}
+
+.response-content h3 {
+  font-weight: 500 !important;
+  margin: 15px 0 8px 0 !important;
+  color: #555 !important;
+  font-size: 14px !important;
+}
+
+/* Verbesserte Tabellen in What-If Analysen */
+.response-content table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: 10px 0 !important;
+  font-size: 12px !important;
+}
+
+.response-content th,
+.response-content td {
+  border: 1px solid #ddd !important;
+  padding: 8px !important;
+  text-align: left !important;
+}
+
+.response-content th {
+  background-color: #f8f9fa !important;
+  font-weight: 600 !important;
+  color: #0a2540 !important;
+}
+
+/* Spezielle Formatierung für die erste Überschrift */
+.response-content > h1:first-child {
+  color: #2563eb !important;
+  border-bottom: 3px solid #2563eb !important;
+}
+  
 }

@@ -786,7 +786,16 @@ document.getElementById('send').addEventListener('click', async () => {
     const data = await response.json();
     const duration = Date.now() - startTime;
 
-    responseText.textContent = data.result || data.response || JSON.stringify(data, null, 2);
+    let content = data.result || data.response || JSON.stringify(data, null, 2);
+content = content
+  .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+  .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+  .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+  .replace(/\n/g, '<br>');
+responseText.innerHTML = content;
+
+
     responseMeta.textContent = `${duration}ms`;
   } catch (error) {
     responseText.textContent = `Error: ${error.message}`;
@@ -795,7 +804,7 @@ document.getElementById('send').addEventListener('click', async () => {
     showSpinner(false);
   }
 });
-
+// Execute What-If
 // Execute What-If
 document.getElementById('send-whatif').addEventListener('click', async () => {
   const message = document.getElementById('message').value;
@@ -823,7 +832,7 @@ document.getElementById('send-whatif').addEventListener('click', async () => {
     const data = await response.json();
     const duration = Date.now() - startTime;
 
-    responseText.textContent = data.response || JSON.stringify(data, null, 2);
+    responseText.innerHTML = data.result || data.response || JSON.stringify(data, null, 2);
     responseMeta.textContent = `What-If Analysis • ${duration}ms`;
 
     const out = document.getElementById('out');
@@ -836,7 +845,6 @@ document.getElementById('send-whatif').addEventListener('click', async () => {
     showSpinner(false);
   }
 });
-
 // Copy Response
 function copyResponse() {
   const text = document.getElementById('response-text').textContent;
