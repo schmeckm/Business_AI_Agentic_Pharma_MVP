@@ -940,31 +940,41 @@ agentEditor.on("change", () => {
       }
     }
 
-    function displayAgentYaml(agent) {
-      const title = document.getElementById('agentEditorTitle');
-      title.textContent = `Agent: ${agent.name || agent.id}`;
+function displayAgentYaml(agent) {
+  const title = document.getElementById('agentEditorTitle');
+  title.textContent = `Agent: ${agent.name || agent.id}`;
 
-      const agentYaml = `id: "${agent.id}"
-name: "${agent.name || ''}"
-description: "${agent.description || ''}"
-trigger: "${agent.trigger || ''}"
-type: "${agent.type || 'data-driven'}"
-oeeEnabled: ${agent.oeeEnabled || false}
-oeeEnhanced: ${agent.oeeEnhanced || false}
+  try {
+    // Agent-Objekt in perfekt formatiertes YAML konvertieren
+    const yamlString = jsyaml.dump(agent, {
+      indent: 2,
+      lineWidth: 120,
+      noRefs: true,
+      sortKeys: false,
+      quotingType: '"',
+      forceQuotes: false
+    });
+    
+    // Header hinzufügen
+    const yamlWithHeader = `# ========================================================================
+# Agent Configuration: ${agent.id}
+# ========================================================================
+# Name: ${agent.name || 'N/A'}
+# Type: ${agent.type || 'data-driven'}
+# OEE Enabled: ${agent.oeeEnabled || false}
+# ========================================================================
 
-${agent.dataSource ? `dataSource:\n${agent.dataSource.map(ds => `  - "${ds}"`).join('\n')}` : '# No dataSource configured'}
-
-${agent.a2aCapabilities && agent.a2aCapabilities.length > 0 ? `a2aCapabilities:\n${agent.a2aCapabilities.map(cap => `  - "${cap}"`).join('\n')}` : '# No A2A capabilities'}
-
-${agent.events ? `events:\n  publishes:\n${agent.events.publishes ? agent.events.publishes.map(p => `    - "${p}"`).join('\n') : '    # No events published'}\n  subscribes:\n${agent.events.subscribes ? agent.events.subscribes.map(s => `    - "${s}"`).join('\n') : '    # No events subscribed'}` : '# No events configured'}
-
-promptTemplate: |
-  ${agent.promptTemplate ? agent.promptTemplate.substring(0, 200) + '...' : 'No prompt template defined'}
-`;
-      agentEditor.setValue(agentYaml);
-      setStatus(`Configuration for ${agent.id} displayed`, 'success');
-    }
-
+${yamlString}`;
+    
+    agentEditor.setValue(yamlWithHeader);
+    setStatus(`✅ Full configuration for "${agent.name || agent.id}" displayed`, 'success');
+    
+  } catch (error) {
+    setStatus(`❌ Error displaying YAML: ${error.message}`, 'error');
+    console.error('YAML display error:', error);
+    agentEditor.setValue(JSON.stringify(agent, null, 2));
+  }
+}
     async function displayFullAgentYaml() {
   try {
     setStatus('Loading full agents.yaml...', 'loading');

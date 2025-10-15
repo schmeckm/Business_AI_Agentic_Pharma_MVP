@@ -72,19 +72,34 @@ export class WhatIfAnalyzer {
   }
 
   extractScenario(message) {
-    const availableAgents = this.agentManager.agents;
+  const availableAgents = this.agentManager.agents;
 
-    if (this.platformEngine) {
-      return this.platformEngine.extractScenario(message, availableAgents);
-    }
-
-    logger.warn('PlatformEngine not available, using fallback scenario extraction');
-    return {
-      original: message,
-      type: 'general',
-      affectedAgents: availableAgents.slice(0, 2)
-    };
+  if (this.platformEngine) {
+    return this.platformEngine.extractScenario(message, availableAgents);
   }
+
+  logger.warn('PlatformEngine not available, using fallback scenario extraction');
+  
+  // IMPROVED: Smart agent selection based on query content
+  let selectedAgents = [];
+  const lowerMessage = message.toLowerCase();
+  
+  if (lowerMessage.includes('oee') || lowerMessage.includes('line-01') || lowerMessage.includes('equipment efficiency')) {
+    const oeeAgent = availableAgents.find(a => a.id === 'oeeAgent');
+    if (oeeAgent) selectedAgents.push(oeeAgent);
+  }
+  
+  // Fallback: use first 2 agents if no specific matches
+  if (selectedAgents.length === 0) {
+    selectedAgents = availableAgents.slice(0, 2);
+  }
+  
+  return {
+    original: message,
+    type: 'general',
+    affectedAgents: selectedAgents
+  };
+}
 
   async analyzeWhatIf(message) {
     const startTime = Date.now();
@@ -121,87 +136,91 @@ export class WhatIfAnalyzer {
   /**
    * Analyze with agents sequentially (FIXED VERSION)
    */
-  async analyzeSequential(message, scenario) {
-    const analyses = [];
+async analyzeSequential(message, scenario) {
+   logger.info(`🔍 ENTERING analyzeSequential with ${scenario.affectedAgents.length} agents`);
+  const analyses = [];
 
-    for (const agent of scenario.affectedAgents) {
-      const agentTypeInfo = this.agentEnhancer.getAgentTypeInfo(agent.id);
-      const agentType = agentTypeInfo?.type || 'basic';
+  for (const agent of scenario.affectedAgents) {
+    logger.info(`🔍 PROCESSING AGENT: ${agent.id}`);
+    const agentTypeInfo = this.agentEnhancer.getAgentTypeInfo(agent.id);
+    const agentType = agentTypeInfo?.type || 'basic';
 
-      logger.info(`Analyzing with ${agent.id} (${agentType})...`);
+    logger.info(`Analyzing with ${agent.id} (${agentType})...`);
 
-      try {
-        // FIX: Enrich data before calling agent
-        const baseData = await this.agentManager.resolveAgentData(agent);
-        const enrichedData = await this.agentManager.enrichAgentDataWithOEE(agent, baseData);
-        
-        // Create prompt with actual data included
-        const whatIfPrompt = this.createWhatIfPromptWithData(message, agentType, enrichedData);
+    try {
+      // FIX: Use same data method as regular chat
+      const baseData = this.agentManager.dataManager.getMockDataForAgent(agent);
+      const enrichedData = await this.agentManager.enrichAgentDataWithOEE(agent, baseData);
+      
+      // Use simple prompt
+      const whatIfPrompt = this.createWhatIfPromptWithData(message, agentType, enrichedData);
 
-        const analysis = await this.agentManager.processAgent(
-          agent,
-          whatIfPrompt,
-          false
-        );
+      const analysis = await this.agentManager.processAgent(
+        agent,
+        whatIfPrompt,
+        false
+      );
 
-        analyses.push({
-          agentId: agent.id,
-          agentType,
-          analysis
-        });
+      // ADD DEBUG LINE HERE:
+      logger.info(`🔍 What-If DEBUG - Analysis result: ${typeof analysis} - Length: ${analysis?.length} - Content: ${analysis?.substring(0, 200)}...`);
 
-        logger.info(`${agent.id} analysis complete`);
-        
-      } catch (error) {
-        logger.error(`Error analyzing with ${agent.id}: ${error.message}`);
-      }
+      analyses.push({
+        agentId: agent.id,
+        agentType,
+        analysis
+      });
+      logger.info(`🔍 PUSHED TO ANALYSES - ${agent.id}: ${analysis ? `HAS ${analysis.length} chars` : 'NO CONTENT'} - Preview: ${analysis?.substring(0, 100)}...`);
+      
+    } catch (error) {
+      logger.error(`Error analyzing with ${agent.id}: ${error.message}`);
     }
-
-    return analyses;
   }
+
+  return analyses;
+}
 
   /**
    * Analyze with agents in parallel (FIXED VERSION)
    */
-  async analyzeParallel(message, scenario) {
-    const promises = scenario.affectedAgents.map(async (agent) => {
-      const agentTypeInfo = this.agentEnhancer.getAgentTypeInfo(agent.id);
-      const agentType = agentTypeInfo?.type || 'basic';
+async analyzeParallel(message, scenario) {
+  const promises = scenario.affectedAgents.map(async (agent) => {
+    const agentTypeInfo = this.agentEnhancer.getAgentTypeInfo(agent.id);
+    const agentType = agentTypeInfo?.type || 'basic';
 
-      logger.info(`Analyzing with ${agent.id} (${agentType})...`);
+    logger.info(`Analyzing with ${agent.id} (${agentType})...`);
 
-      try {
-        // FIX: Enrich data before calling agent
-        const baseData = await this.agentManager.resolveAgentData(agent);
-        const enrichedData = await this.agentManager.enrichAgentDataWithOEE(agent, baseData);
-        
-        // Create prompt with actual data included
-        const whatIfPrompt = this.createWhatIfPromptWithData(message, agentType, enrichedData);
+    try {
+      // FIX: Use same data method as regular chat
+      const baseData = this.agentManager.dataManager.getMockDataForAgent(agent);
+      const enrichedData = await this.agentManager.enrichAgentDataWithOEE(agent, baseData);
+      
+      const whatIfPrompt = this.createWhatIfPromptWithData(message, agentType, enrichedData);
 
-        const analysis = await this.agentManager.processAgent(
-          agent,
-          whatIfPrompt,
-          false
-        );
+      const analysis = await this.agentManager.processAgent(
+        agent,
+        whatIfPrompt,
+        false
+      );
 
-        logger.info(`${agent.id} analysis complete`);
+      logger.info(`🔍 What-If DEBUG - Analysis result: ${typeof analysis} - Length: ${analysis?.length} - Content: ${analysis?.substring(0, 200)}...`);
 
-        return {
-          agentId: agent.id,
-          agentType,
-          analysis
-        };
-        
-      } catch (error) {
-        logger.error(`Error analyzing with ${agent.id}: ${error.message}`);
-        return null;
-      }
-    });
+      logger.info(`${agent.id} analysis complete`);
 
-    const results = await Promise.all(promises);
-    return results.filter(r => r !== null);
-  }
+      return {
+        agentId: agent.id,
+        agentType,
+        analysis
+      };
+      
+    } catch (error) {
+      logger.error(`Error analyzing with ${agent.id}: ${error.message}`);
+      return null;
+    }
+  });
 
+  const results = await Promise.all(promises);
+  return results.filter(r => r !== null);
+}
   /**
    * Create What-If prompt based on agent type (LEGACY - without data)
    */
@@ -217,21 +236,24 @@ export class WhatIfAnalyzer {
   /**
    * Create What-If prompt WITH actual data included (NEW - FIXED)
    */
-  createWhatIfPromptWithData(message, agentType, enrichedData) {
-    let prompt = `WHAT-IF SCENARIO ANALYSIS
-
-Question: ${message}
-
-AVAILABLE MANUFACTURING DATA:
-${JSON.stringify(enrichedData, null, 2)}
-
-INSTRUCTIONS:
-Analyze this what-if scenario based on the real manufacturing data provided above.
-Provide insights specific to your domain expertise.
-Focus on actionable recommendations and impact assessment.`;
-
+createWhatIfPromptWithData(message, agentType, enrichedData) {
+  // Check if we have the agent available
+  const agent = this.agentManager.agents.find(a => a.agentType === agentType);
+  
+  if (agent && agent.promptTemplates && agent.promptTemplates.whatIf) {
+    // Use the agent's What-If template
+    let prompt = agent.promptTemplates.whatIf;
+    prompt = prompt.replace(/{userMessage}/g, message);
+    prompt = prompt.replace(/{timestamp}/g, new Date().toISOString());
+    prompt = prompt.replace(/{data.oee_hot}/g, JSON.stringify(enrichedData.oee_hot || {}, null, 2));
+    prompt = prompt.replace(/{data.oee_history}/g, JSON.stringify(enrichedData.oee_history || {}, null, 2));
     return prompt;
   }
+  
+  // Fallback to simple message
+  return message;
+
+}
 
   synthesizeAnalyses(message, scenario, analyses) {
     logger.debug('Synthesizing analyses from multiple agents');
@@ -247,9 +269,11 @@ Focus on actionable recommendations and impact assessment.`;
       if (!grouped[a.agentType]) grouped[a.agentType] = [];
       grouped[a.agentType].push(a);
     }
+    // After grouping
+    logger.info(`🔍 GROUPED ANALYSES: ${JSON.stringify(Object.keys(grouped))} - data_collection count: ${grouped['data_collection']?.length || 0}`);
 
     // Present results by priority
-    const typeOrder = ['proactive', 'collaborative', 'learning', 'rule_based', 'data_collector'];
+    const typeOrder = ['proactive', 'collaborative', 'learning', 'rule_based', 'data_collector', 'basic'];
     const typeLabels = {
       proactive: '🎯 Strategic Solutions (Proactive Agents)',
       collaborative: '🤝 System-Wide Impact (Collaborative Agents)',
@@ -258,15 +282,11 @@ Focus on actionable recommendations and impact assessment.`;
       data_collector: '📊 Baseline Data (Data Collection Agents)'
     };
 
-    for (const type of typeOrder) {
-      if (grouped[type]) {
-        result += `## ${typeLabels[type]}\n\n`;
-        for (const a of grouped[type]) {
-          result += `### ${a.agentId}\n${a.analysis}\n\n`;
-        }
-      }
-    }
-
+    // Simple direct output of all analyses
+for (const a of analyses) {
+  result += `## 📊 ${a.agentId} Analysis (${a.agentType})\n\n`;
+  result += `${a.analysis || 'No analysis content'}\n\n`;
+}
     result += `---\n\n`;
     result += `## 💡 Recommendation\n\n`;
     result += `This scenario was evaluated from ${analyses.length} different perspectives `;
@@ -274,6 +294,7 @@ Focus on actionable recommendations and impact assessment.`;
     result += `Review the analyses above to make an informed decision.\n`;
 
     logger.debug('Synthesis complete');
+    logger.info(`🔍 FINAL RESULT LENGTH: ${result.length} - Content preview: ${result.substring(0, 500)}...`);
     return result;
   }
 }
@@ -319,12 +340,12 @@ export function enhanceServerWithWhatIf(app, agentManager, agentEnhancer) {
       const result = await whatIfAnalyzer.analyzeWhatIf(message);
       const duration = Date.now() - startTime;
 
-      res.json({
-        success: true,
-        result,
-        duration,
-        timestamp: new Date().toISOString()
-      });
+res.json({
+  success: true,
+  response: result,  // ← Now matches regular chat API
+  duration,
+  timestamp: new Date().toISOString()
+});
 
     } catch (error) {
       const duration = Date.now() - startTime;
